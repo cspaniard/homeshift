@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <data name="VerbCreate" xml:space="preserve">
+        <value>Create a snaphot.</value>
+    </data>
+    <data name="VerbConfig" xml:space="preserve">
+        <value>Configure default values.</value>
+    </data>
+    <data name="CreateUser" xml:space="preserve">
+        <value>Takes snapshot for the specifed user.</value>
+    </data>
+    <data name="CreateComments" xml:space="preserve">
+        <value>Set snapshot description.</value>
+    </data>
+    <data name="ConfigScheduleMonthly" xml:space="preserve">
+        <value>Enable monthly snapshots. (bool)</value>
+    </data>
+    <data name="ConfigScheduleWeekly" xml:space="preserve">
+        <value>Enable weekly snapshots. (bool)</value>
+    </data>
+    <data name="ConfigScheduleDaily" xml:space="preserve">
+        <value>Enable daily snapshots. (bool)</value>
+    </data>
+    <data name="ConfigScheduleHourly" xml:space="preserve">
+        <value>Enable hourly snapshots. (bool)</value>
+    </data>
+    <data name="ConfigSnapshotPath" xml:space="preserve">
+        <value>Path to store the snapshots.</value>
+    </data>
+    <data name="VerbList" xml:space="preserve">
+        <value>List snapshots.</value>
+    </data>
+    <data name="VerbRestore" xml:space="preserve">
+        <value>Restore snapshot.</value>
+    </data>
+    <data name="RestoreSnapshot" xml:space="preserve">
+        <value>Specify snapshot to restore.</value>
+    </data>
+    <data name="DeleteSnapshot" xml:space="preserve">
+        <value>Delete snapshot.</value>
+    </data>
+    <data name="DeleteAll" xml:space="preserve">
+        <value>Delete all snapshots.</value>
+    </data>
+    <data name="VerbDelete" xml:space="preserve">
+        <value>Deletes snapshots.</value>
+    </data>
+</root>

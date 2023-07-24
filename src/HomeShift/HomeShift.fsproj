@@ -11,7 +11,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Program.fs"/>
+        <Compile Include="Options.fs" />
+        <Compile Include="Program.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CommandLineParser.FSharp" Version="2.9.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\HomeShift.Infrastructure\HomeShift.Infrastructure.fsproj" />
+        <ProjectReference Include="..\HomeShift.Loc\HomeShift.Loc.csproj" />
     </ItemGroup>
 
 </Project>
