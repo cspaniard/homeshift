@@ -1,0 +1,66 @@
+#!/bin/bash
+
+function _homeshift()
+{
+    local cur opt prev
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[$COMP_CWORD - 1]}"
+
+    # Completion of commands.
+    if [[ $COMP_CWORD == 1 ]]; then
+        COMPREPLY=( $(compgen -W '
+            list config create restore delete help version
+            ' -- "$cur" ) )
+        return 0
+    fi
+
+    case "${prev}" in
+    "--schedule-monthly"|"--schedule-weekly"|"--schedule-daily"|"--schedule-hourly")
+        COMPREPLY=( $(compgen -W '
+            true false
+            ' -- "$cur" ) )
+        return 0
+        ;;
+
+    "--snapshot-path")
+        _filedir
+        return 0
+        ;;
+
+    esac
+
+    opt="${COMP_WORDS[1]}"
+
+    case $opt in
+    "create")
+        COMPREPLY=( $(compgen -W '
+            --user --comment --help --version
+            ' -- "$cur" ) )
+        return 0
+        ;;
+
+    "config")
+        COMPREPLY=( $(compgen -W '
+            --snapshot-path --schedule-monthly --schedule-weekly --schedule-daily --schedule-hourly --help --version
+            ' -- "$cur" ) )
+        return 0
+        ;;
+
+    "restore")
+        COMPREPLY=( $(compgen -W '
+            --snapshot --help --version
+            ' -- "$cur" ) )
+        return 0
+        ;;
+
+    "delete")
+        COMPREPLY=( $(compgen -W '
+            --snapshot --help --version
+            ' -- "$cur" ) )
+        return 0
+        ;;
+
+    esac
+}
+
+complete -F _homeshift homeshift
