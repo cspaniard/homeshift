@@ -2,7 +2,7 @@
 open System
 
 open CommandLine
-open HomeShiftCore
+open AppCore
 open Model
 
 type IHelpService = DI.Services.HelpDI.IHelpService

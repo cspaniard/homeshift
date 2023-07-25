@@ -1,4 +1,4 @@
-module HomeShiftCore.Restore
+module AppCore.Restore
 
 open System
 open Model

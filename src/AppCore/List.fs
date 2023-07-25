@@ -1,4 +1,4 @@
-module HomeShiftCore.List
+module AppCore.List
 
 open System
 

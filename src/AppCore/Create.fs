@@ -1,4 +1,4 @@
-module HomeShiftCore.Create
+module AppCore.Create
 
 open System
 open Model

@@ -28,7 +28,7 @@ namespace HomeShift.Loc {
         public static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("HomeShift.Loc.LocSentenceBuilder", typeof(LocSentenceBuilder).Assembly);
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("Localization.LocSentenceBuilder", typeof(LocSentenceBuilder).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

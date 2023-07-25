@@ -19,9 +19,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\HomeShift.Infrastructure\HomeShift.Infrastructure.fsproj" />
-        <ProjectReference Include="..\HomeShift.Loc\HomeShift.Loc.csproj" />
-        <ProjectReference Include="..\HomeShiftCore\HomeShiftCore.fsproj" />
+        <ProjectReference Include="..\Infrastructure\Infrastructure.fsproj" />
+        <ProjectReference Include="..\Localization\Localization.csproj" />
+        <ProjectReference Include="..\AppCore\AppCore.fsproj" />
         <ProjectReference Include="..\Model\Model.fsproj" />
     </ItemGroup>
 

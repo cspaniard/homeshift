@@ -9,11 +9,11 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "HomeShift", "src\HomeShift\
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "HomeShiftGtk", "src\HomeShiftGtk\HomeShiftGtk.fsproj", "{A33BFA67-E5B2-4373-881C-BCD834561336}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "HomeShiftCore", "src\HomeShiftCore\HomeShiftCore.fsproj", "{C0B487F5-798C-4523-A7F5-058E35F9279A}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AppCore", "src\AppCore\AppCore.fsproj", "{C0B487F5-798C-4523-A7F5-058E35F9279A}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "HomeShift.Infrastructure", "src\HomeShift.Infrastructure\HomeShift.Infrastructure.fsproj", "{9E11D658-4236-486D-91A2-BBCCC20F7840}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Infrastructure", "src\Infrastructure\Infrastructure.fsproj", "{9E11D658-4236-486D-91A2-BBCCC20F7840}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeShift.Loc", "src\HomeShift.Loc\HomeShift.Loc.csproj", "{65573EE7-469F-4794-BB6F-E770A7419068}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization", "src\Localization\Localization.csproj", "{65573EE7-469F-4794-BB6F-E770A7419068}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Model", "src\Model\Model.fsproj", "{96719011-10B9-4EAD-AD73-1C9D576B6DF9}"
 EndProject

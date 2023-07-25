@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\HomeShift.Loc\HomeShift.Loc.csproj" />
+      <ProjectReference Include="..\Localization\Localization.csproj" />
     </ItemGroup>
 
 </Project>
