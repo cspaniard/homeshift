@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="Options.fs" />
+        <Compile Include="CommandData.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CommandLineParser.FSharp" Version="2.9.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\HomeShift.Loc\HomeShift.Loc.csproj" />
+    </ItemGroup>
+
+</Project>

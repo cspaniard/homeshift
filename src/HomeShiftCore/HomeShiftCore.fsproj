@@ -10,7 +10,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Library.fs"/>
+        <Compile Include="List.fs" />
+        <Compile Include="Config.fs" />
+        <Compile Include="Create.fs" />
+        <Compile Include="Restore.fs" />
+        <Compile Include="Delete.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Model\Model.fsproj" />
     </ItemGroup>
 
 </Project>

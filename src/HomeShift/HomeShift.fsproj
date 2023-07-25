@@ -11,7 +11,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Options.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
@@ -22,6 +21,8 @@
     <ItemGroup>
         <ProjectReference Include="..\HomeShift.Infrastructure\HomeShift.Infrastructure.fsproj" />
         <ProjectReference Include="..\HomeShift.Loc\HomeShift.Loc.csproj" />
+        <ProjectReference Include="..\HomeShiftCore\HomeShiftCore.fsproj" />
+        <ProjectReference Include="..\Model\Model.fsproj" />
     </ItemGroup>
 
 </Project>
