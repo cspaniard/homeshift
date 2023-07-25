@@ -2,9 +2,9 @@ namespace Model
 
 open System
 open CommandLine
-open HomeShift.Loc
+open Localization
 
-open type HomeShift.Loc.LocaleText
+open type Localization.LocaleText
 
 
 //----------------------------------------------------------------------------------------------------------------------

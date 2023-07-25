@@ -2,4 +2,5 @@ namespace DI.Services
 
 module LocalizationDI =
 
-    type ISentenceBuilder = HomeShift.Loc.SentenceBuilder.LocalizedSentenceBuilder
+    type ILocaleText = Localization.LocaleText
+    type ISentenceBuilder = Localization.LocalizedText.LocalizedSentenceBuilder

@@ -60,4 +60,7 @@
     <data name="VerbDelete" xml:space="preserve">
         <value>Elimina instantáneas.</value>
     </data>
+    <data name="ErrorNeedsRoot" xml:space="preserve">
+        <value>Necesita acceso root para ejecutar esta acción.</value>
+    </data>
 </root>

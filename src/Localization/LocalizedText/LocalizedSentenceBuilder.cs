@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace HomeShift.Loc.SentenceBuilder
+namespace Localization.LocalizedText
 {
 
     public class LocalizedSentenceBuilder : CommandLine.Text.SentenceBuilder

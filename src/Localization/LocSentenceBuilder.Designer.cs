@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HomeShift.Loc {
+namespace Localization {
     using System;
     
     

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HomeShift.Loc {
+namespace Localization {
     using System;
     
     
@@ -132,6 +132,12 @@ namespace HomeShift.Loc {
         public static string VerbDelete {
             get {
                 return ResourceManager.GetString("VerbDelete", resourceCulture);
+            }
+        }
+        
+        public static string ErrorNeedsRoot {
+            get {
+                return ResourceManager.GetString("ErrorNeedsRoot", resourceCulture);
             }
         }
     }

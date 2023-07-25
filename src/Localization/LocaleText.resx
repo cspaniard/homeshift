@@ -67,4 +67,7 @@
     <data name="VerbDelete" xml:space="preserve">
         <value>Deletes snapshots.</value>
     </data>
+    <data name="ErrorNeedsRoot" xml:space="preserve">
+        <value>Need root access to perform the required action.</value>
+    </data>
 </root>
