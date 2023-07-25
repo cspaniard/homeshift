@@ -7,7 +7,17 @@
 
     <ItemGroup>
         <Folder Include="Brokers\" />
-        <Folder Include="Services\" />
+        <Compile Include="Services\Localization\LocalizationDI.fs" />
+        <Compile Include="Services\Help\HelpText.fs" />
+        <Compile Include="Services\Help\HelpDI.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CommandLineParser.FSharp" Version="2.9.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\HomeShift.Loc\HomeShift.Loc.csproj" />
     </ItemGroup>
 
 </Project>
