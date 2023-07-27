@@ -3,8 +3,8 @@ module AppCore.Helpers
 open System
 open Motsoft.Util
 
-type ILocaleText = DI.Services.LocalizationDI.ILocaleText
+type IErrors = DI.Services.LocalizationDI.IErrors
 
 let checkRootUserOrException () =
 
-    Environment.UserName = "root" |> failWithIfFalse ILocaleText.ErrorNeedsRoot
+    Environment.UserName = "root" |> failWithIfFalse IErrors.NeedRootAccess

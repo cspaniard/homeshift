@@ -142,7 +142,6 @@ namespace Localization.LocalizedText
                                             select e)
                                         .Distinct()
                                     select $"'{x.NameInfo.NameText}', ").ToArray());
-                            //TODO: Pluralize by namesCount
                             return
                                 string.Format("  " + LocSentenceBuilder.SentenceMutuallyExclusiveSetErrors,
                                     names[..^2], incompat.Substring(0, incompat.Length - 2));

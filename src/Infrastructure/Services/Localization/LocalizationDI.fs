@@ -2,5 +2,5 @@ namespace DI.Services
 
 module LocalizationDI =
 
-    type ILocaleText = Localization.LocaleText
+    type IErrors = Localization.Errors
     type ISentenceBuilder = Localization.LocalizedText.LocalizedSentenceBuilder

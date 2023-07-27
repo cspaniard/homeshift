@@ -1,4 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+        </xsd:element>
+    </xsd:schema>
     <resheader name="resmimetype">
         <value>text/microsoft-resx</value>
     </resheader>
@@ -16,51 +23,48 @@
         </value>
     </resheader>
     <data name="VerbCreate" xml:space="preserve">
-        <value>Crea una instantánea.</value>
+        <value>Create a snaphot.</value>
     </data>
     <data name="VerbConfig" xml:space="preserve">
-        <value>Configura valores por defecto.</value>
+        <value>Configure default values.</value>
     </data>
     <data name="CreateUser" xml:space="preserve">
-        <value>Realiza una instantánea del usuario especificado.</value>
+        <value>Takes snapshot for the specifed user.</value>
     </data>
     <data name="CreateComments" xml:space="preserve">
-        <value>Especifica la descripción de la instantánea.</value>
-    </data>
-    <data name="ConfigScheduleDaily" xml:space="preserve">
-        <value>Habilita instantáneas diarias. (bool)</value>
-    </data>
-    <data name="ConfigScheduleHourly" xml:space="preserve">
-        <value>Habilita instantáneas cada hora. (bool)</value>
+        <value>Set snapshot description.</value>
     </data>
     <data name="ConfigScheduleMonthly" xml:space="preserve">
-        <value>Habilita instantáneas mensuales. (bool)</value>
+        <value>Enable monthly snapshots. (bool)</value>
     </data>
     <data name="ConfigScheduleWeekly" xml:space="preserve">
-        <value>Habilita instantáneas semanales. (bool)</value>
+        <value>Enable weekly snapshots. (bool)</value>
+    </data>
+    <data name="ConfigScheduleDaily" xml:space="preserve">
+        <value>Enable daily snapshots. (bool)</value>
+    </data>
+    <data name="ConfigScheduleHourly" xml:space="preserve">
+        <value>Enable hourly snapshots. (bool)</value>
     </data>
     <data name="ConfigSnapshotPath" xml:space="preserve">
-        <value>Senda de almacenamiento de las instantáneas.</value>
+        <value>Path to store the snapshots.</value>
     </data>
     <data name="VerbList" xml:space="preserve">
-        <value>Lista las instantáneas.</value>
+        <value>List snapshots.</value>
     </data>
     <data name="VerbRestore" xml:space="preserve">
-        <value>Restaura instantánea.</value>
+        <value>Restore snapshot.</value>
     </data>
     <data name="RestoreSnapshot" xml:space="preserve">
-        <value>Instantánea a restaurar.</value>
+        <value>Specify snapshot to restore.</value>
     </data>
     <data name="DeleteSnapshot" xml:space="preserve">
-        <value>Elimina instantánea.</value>
+        <value>Delete snapshot.</value>
     </data>
     <data name="DeleteAll" xml:space="preserve">
-        <value>Elimina todas las instantáneas.</value>
+        <value>Delete all snapshots.</value>
     </data>
     <data name="VerbDelete" xml:space="preserve">
-        <value>Elimina instantáneas.</value>
-    </data>
-    <data name="ErrorNeedsRoot" xml:space="preserve">
-        <value>Necesita acceso root para ejecutar esta acción.</value>
+        <value>Deletes snapshots.</value>
     </data>
 </root>
