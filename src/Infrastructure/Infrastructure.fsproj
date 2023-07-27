@@ -7,9 +7,9 @@
 
     <ItemGroup>
         <Folder Include="Brokers\" />
-        <Compile Include="Services\Localization\LocalizationDI.fs" />
         <Compile Include="Services\Help\HelpText.fs" />
-        <Compile Include="Services\Help\HelpDI.fs" />
+        <Folder Include="Services\Config\" />
+        <Compile Include="Services\ServicesDI.fs" />
     </ItemGroup>
 
     <ItemGroup>
