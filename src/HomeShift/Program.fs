@@ -5,7 +5,7 @@ open CommandLine
 open AppCore
 open Model
 
-type IHelpService = DI.Services.HelpDI.IHelpService
+type IHelpService = DI.Services.IHelpTextService
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ try
             match parser.ParseArguments<DeleteOptionsAtLeastOne> args with
             | :? Parsed<DeleteOptionsAtLeastOne> -> DeleteData.ofOptions o |> Delete.Run
             | :? NotParsed<DeleteOptionsAtLeastOne> as notParsed ->
-                    IHelpService.HelpTextFromResult notParsed |> Console.WriteLine
+                    IHelpService.helpTextFromResult notParsed |> Console.WriteLine
             | _ -> Console.WriteLine "Should not get here 3."
 
         | _ -> Console.WriteLine "Should not get here 1."
@@ -36,7 +36,7 @@ try
     | :? NotParsed<obj> as notParsed when notParsed.Errors.IsVersion() ->
             IHelpService.Heading |> printfn "%s\n"
     | :? NotParsed<obj> as notParsed ->
-            IHelpService.HelpTextFromResult notParsed |> Console.WriteLine
+            IHelpService.helpTextFromResult notParsed |> Console.WriteLine
     | _ -> Console.WriteLine "Should not get here 2."
 
 with e ->

@@ -5,6 +5,6 @@ open Motsoft.Util
 
 type IErrors = DI.Services.LocalizationDI.IErrors
 
-let checkRootUserOrException () =
+let checkRootUserOrEx () =
 
     Environment.UserName = "root" |> failWithIfFalse IErrors.NeedRootAccess

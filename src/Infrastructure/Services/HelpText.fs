@@ -1,4 +1,4 @@
-namespace Services.Help.HelpText
+namespace Services.HelpText
 
 open System
 open System.Reflection
@@ -14,7 +14,7 @@ type Service () =
         let version = Assembly.GetEntryAssembly().GetName().Version
         $"\nHomeshift v{version.Major}.{version.Minor}.{version.Build} by David Sanroma"
 
-    static member public HelpTextFromResult (result : ParserResult<_>) =
+    static member public helpTextFromResult (result : ParserResult<_>) =
 
         SentenceBuilder.Factory <- fun () -> ISentenceBuilder ()
         let helpText = HelpText.AutoBuild(result, 100)

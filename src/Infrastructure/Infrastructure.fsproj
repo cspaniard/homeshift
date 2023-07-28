@@ -6,17 +6,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Brokers\" />
+        <Compile Include="Brokers\Config.fs" />
+        <Compile Include="Brokers\BrokersDI.fs" />
         <Compile Include="Services\HelpText.fs" />
+        <Compile Include="Services\Config.fs" />
         <Compile Include="Services\ServicesDI.fs" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="CommandLineParser.FSharp" Version="2.9.1" />
+      <PackageReference Include="FSharp.Json" Version="0.4.1" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Localization\Localization.csproj" />
+      <ProjectReference Include="..\Model\Model.fsproj" />
     </ItemGroup>
 
 </Project>

@@ -3,30 +3,22 @@
 open System
 open Model
 
-let private getCurrentConfigData () =
-
-    {
-        SnapshotPath = ConfigData.getDefault().SnapshotPath
-        ScheduleMonthly = true
-        ScheduleWeekly = false
-        ScheduleDaily  = true
-        ScheduleHourly = false
-    } : ConfigData
+type IConfigService = DI.Services.IConfigService
 
 //----------------------------------------------------------------------------------------------------------------------
 let RunOfData (data : ConfigData) =
 
-    Helpers.checkRootUserOrException ()
-    Console.WriteLine $"%A{data}"
+    Helpers.checkRootUserOrEx ()
+    IConfigService.storeConfigData data
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
 let RunOfOptions (options : ConfigOptions) =
 
-    Helpers.checkRootUserOrException ()
+    Helpers.checkRootUserOrEx ()
     Console.WriteLine "Pues seguimos como root."
 
-    getCurrentConfigData ()
+    IConfigService.getConfigData ()
     |> ConfigData.mergeWithOptions options
     |> RunOfData
 //----------------------------------------------------------------------------------------------------------------------

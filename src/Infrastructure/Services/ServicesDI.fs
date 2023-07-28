@@ -1,5 +1,6 @@
-namespace DI.Services
+namespace DI
 
-module HelpDI =
+module Services =
 
-    type IHelpService = Services.Help.HelpText.Service
+    type IHelpTextService = Services.HelpText.Service
+    type IConfigService = Services.Config.Service

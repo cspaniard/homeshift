@@ -6,5 +6,5 @@ open Model
 let Run (options : DeleteData) =
     Console.WriteLine $"Hello %A{options} 5"
 
-    Helpers.checkRootUserOrException ()
+    Helpers.checkRootUserOrEx ()
     Console.WriteLine "Pues seguimos como root."
