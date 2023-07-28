@@ -39,8 +39,8 @@
     <data name="ConfigScheduleWeekly" xml:space="preserve">
         <value>Habilita instantáneas semanales. (bool)</value>
     </data>
-    <data name="ConfigSnapshotPath" xml:space="preserve">
-        <value>Senda de almacenamiento de las instantáneas.</value>
+    <data name="ConfigSnapshotsRoot" xml:space="preserve">
+        <value>Las instantáneas se guardarán en {snapshots-root}/homeshift</value>
     </data>
     <data name="VerbList" xml:space="preserve">
         <value>Lista las instantáneas.</value>

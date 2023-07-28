@@ -2,7 +2,7 @@ namespace Model
 
 //----------------------------------------------------------------------------------------------------------------------
 type ConfigData = {
-    SnapshotPath : string
+    SnapshotsRoot : string
     ScheduleMonthly : bool
     ScheduleWeekly : bool
     ScheduleDaily : bool
@@ -18,7 +18,7 @@ with
             | None -> confValue
 
         {
-            SnapshotPath = if options.SnapshotPath = null then data.SnapshotPath else options.SnapshotPath
+            SnapshotsRoot = if options.SnapshotPath = null then data.SnapshotsRoot else options.SnapshotPath
             ScheduleMonthly = options.ScheduleMonthly |> ifNullUseConfig data.ScheduleMonthly
             ScheduleWeekly = options.ScheduleWeekly |> ifNullUseConfig data.ScheduleWeekly
             ScheduleDaily  = options.ScheduleDaily |> ifNullUseConfig data.ScheduleDaily
@@ -27,7 +27,7 @@ with
 
     static member getDefault () =
         {
-            SnapshotPath = "/"
+            SnapshotsRoot = "/"
             ScheduleMonthly = false
             ScheduleWeekly = false
             ScheduleDaily  = false

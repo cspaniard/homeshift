@@ -93,9 +93,9 @@ namespace Localization {
             }
         }
         
-        public static string ConfigSnapshotPath {
+        public static string ConfigSnapshotsRoot {
             get {
-                return ResourceManager.GetString("ConfigSnapshotPath", resourceCulture);
+                return ResourceManager.GetString("ConfigSnapshotsRoot", resourceCulture);
             }
         }
         

@@ -26,7 +26,7 @@
     <ItemGroup>
         <EmbeddedResource Update="CliOptions.resx">
             <Generator>PublicResXFileCodeGenerator</Generator>
-            <LastGenOutput>LocaleText.Designer.cs</LastGenOutput>
+            <LastGenOutput>CliOptions.Designer.cs</LastGenOutput>
         </EmbeddedResource>
         <EmbeddedResource Update="LocSentenceBuilder.resx">
             <Generator>PublicResXFileCodeGenerator</Generator>

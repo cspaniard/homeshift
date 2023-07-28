@@ -22,7 +22,7 @@ function _homeshift()
         return 0
         ;;
 
-    "--snapshot-path")
+    "--snapshots-root")
         _filedir
         return 0
         ;;
@@ -41,7 +41,7 @@ function _homeshift()
 
     "config")
         COMPREPLY=( $(compgen -W '
-            --snapshot-path --schedule-monthly --schedule-weekly --schedule-daily --schedule-hourly --help --version
+            --snapshots-root --schedule-monthly --schedule-weekly --schedule-daily --schedule-hourly --help --version
             ' -- "$cur" ) )
         return 0
         ;;
