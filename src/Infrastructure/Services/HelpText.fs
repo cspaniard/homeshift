@@ -17,8 +17,7 @@ type Service () =
     static member public helpTextFromResult (result : ParserResult<_>) =
 
         SentenceBuilder.Factory <- fun () -> ISentenceBuilder ()
-        let helpText = HelpText.AutoBuild(result, 100)
-        helpText.MaximumDisplayWidth <- Console.WindowWidth
+        let helpText = HelpText.AutoBuild(result, Console.WindowWidth)
         helpText.Heading <- Service.Heading
         helpText.Copyright <- ""
         helpText.AddNewLineBetweenHelpSections <- true
