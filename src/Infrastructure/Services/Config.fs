@@ -9,19 +9,19 @@ type IConfigBroker = DI.Brokers.IConfigBroker
 type Service () =
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member getConfigData () =
+    static member getConfigDataOrEx () =
 
         try
-            IConfigBroker.getCurrentConfigOrEx ()
+            IConfigBroker.getConfigDataFromFileOrEx ()
 
         with
         | :? FileNotFoundException ->
             let defaultData = ConfigData.getDefault ()
-            IConfigBroker.createConfigFileOrEx defaultData
+            IConfigBroker.saveConfigDataToFileOrEx defaultData
             defaultData
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member storeConfigData (data : ConfigData) =
-        IConfigBroker.createConfigFileOrEx data
+    static member storeConfigDataOrEx (data : ConfigData) =
+        IConfigBroker.saveConfigDataToFileOrEx data
     // -----------------------------------------------------------------------------------------------------------------

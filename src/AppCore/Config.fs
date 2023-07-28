@@ -1,24 +1,22 @@
 ﻿module AppCore.Config
 
-open System
 open Model
 
 type IConfigService = DI.Services.IConfigService
 
 //----------------------------------------------------------------------------------------------------------------------
-let RunOfData (data : ConfigData) =
+let RunOfDataOrEx (data : ConfigData) =
 
     Helpers.checkRootUserOrEx ()
-    IConfigService.storeConfigData data
+    IConfigService.storeConfigDataOrEx data
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
-let RunOfOptions (options : ConfigOptions) =
+let RunOfOptionsOrEx (options : ConfigOptions) =
 
     Helpers.checkRootUserOrEx ()
-    Console.WriteLine "Pues seguimos como root."
 
-    IConfigService.getConfigData ()
+    IConfigService.getConfigDataOrEx ()
     |> ConfigData.mergeWithOptions options
-    |> RunOfData
+    |> RunOfDataOrEx
 //----------------------------------------------------------------------------------------------------------------------

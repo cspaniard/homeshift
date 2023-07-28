@@ -17,7 +17,7 @@ type Broker () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member createConfigFileOrEx (data : ConfigData) =
+    static member saveConfigDataToFileOrEx (data : ConfigData) =
 
         createConfigPathOrEx ()
 
@@ -26,7 +26,7 @@ type Broker () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member getCurrentConfigOrEx () =
+    static member getConfigDataFromFileOrEx () =
 
         createConfigPathOrEx ()
 

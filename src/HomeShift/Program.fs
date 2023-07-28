@@ -20,7 +20,7 @@ try
     | :? Parsed<obj> as command ->
         match command.Value with
         | :? ListOptions -> List.Run ()
-        | :? ConfigOptions as opts -> Config.RunOfOptions opts
+        | :? ConfigOptions as opts -> Config.RunOfOptionsOrEx opts
         | :? CreateOptions as opts -> CreateData.ofOptions opts |> Create.Run
         | :? RestoreOptions as opts -> RestoreData.ofOptions opts |> Restore.Run
 
