@@ -1,23 +1,37 @@
 namespace Model
 
-open System
-
 //----------------------------------------------------------------------------------------------------------------------
 type ConfigData = {
     SnapshotPath : string
-    ScheduleMonthly : Nullable<bool>
-    ScheduleWeekly : Nullable<bool>
-    ScheduleDaily : Nullable<bool>
-    ScheduleHourly : Nullable<bool>
+    ScheduleMonthly : bool
+    ScheduleWeekly : bool
+    ScheduleDaily : bool
+    ScheduleHourly : bool
 }
 with
-    static member ofOptions (o : ConfigOptions) =
+    static member mergeWithOptions (options : ConfigOptions) (data : ConfigData) =
+
+        let inline ifNullUseConfig confValue optValue =
+
+            match Option.ofNullable optValue with
+            | Some v -> v
+            | None -> confValue
+
         {
-            SnapshotPath = o.SnapshotPath
-            ScheduleMonthly = o.ScheduleMonthly
-            ScheduleWeekly = o.ScheduleWeekly
-            ScheduleDaily  = o.ScheduleDaily
-            ScheduleHourly = o.ScheduleMonthly
+            SnapshotPath = if options.SnapshotPath = null then data.SnapshotPath else options.SnapshotPath
+            ScheduleMonthly = options.ScheduleMonthly |> ifNullUseConfig data.ScheduleMonthly
+            ScheduleWeekly = options.ScheduleWeekly |> ifNullUseConfig data.ScheduleWeekly
+            ScheduleDaily  = options.ScheduleDaily |> ifNullUseConfig data.ScheduleDaily
+            ScheduleHourly = options.ScheduleHourly |> ifNullUseConfig data.ScheduleHourly
+        } : ConfigData
+
+    static member getDefault () =
+        {
+            SnapshotPath = "/"
+            ScheduleMonthly = false
+            ScheduleWeekly = false
+            ScheduleDaily  = false
+            ScheduleHourly = false
         } : ConfigData
 //----------------------------------------------------------------------------------------------------------------------
 

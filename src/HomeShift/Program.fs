@@ -20,9 +20,9 @@ try
     | :? Parsed<obj> as command ->
         match command.Value with
         | :? ListOptions -> List.Run ()
-        | :? ConfigOptions as o -> ConfigData.ofOptions o |> Config.Run
-        | :? CreateOptions as o -> CreateData.ofOptions o |> Create.Run
-        | :? RestoreOptions as o -> RestoreData.ofOptions o |> Restore.Run
+        | :? ConfigOptions as opts -> Config.RunOfOptions opts
+        | :? CreateOptions as opts -> CreateData.ofOptions opts |> Create.Run
+        | :? RestoreOptions as opts -> RestoreData.ofOptions opts |> Restore.Run
 
         | :? DeleteOptions as o ->
             match parser.ParseArguments<DeleteOptionsAtLeastOne> args with
@@ -42,3 +42,4 @@ try
 with e ->
     IHelpService.Heading |> printfn "%s\n"
     Console.WriteLine $"{e.Message}\n"
+    Console.WriteLine $"{e.StackTrace}\n"
