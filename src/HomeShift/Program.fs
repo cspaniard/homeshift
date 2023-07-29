@@ -5,7 +5,7 @@ open CommandLine
 open AppCore
 open Model
 
-type IHelpService = DI.Services.IHelpTextService
+type private IHelpService = DI.Services.IHelpTextService
 
 // ---------------------------------------------------------------------------------------------------------------------
 

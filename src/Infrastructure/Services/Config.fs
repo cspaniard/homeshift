@@ -1,9 +1,10 @@
 namespace Services.Config
 
+open System
 open System.IO
 open Model
 
-type IConfigBroker = DI.Brokers.IConfigBroker
+type private IConfigBroker = DI.Brokers.IConfigBroker
 
 
 type Service () =

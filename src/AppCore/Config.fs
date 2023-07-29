@@ -2,7 +2,7 @@
 
 open Model
 
-type IConfigService = DI.Services.IConfigService
+type private IConfigService = DI.Services.IConfigService
 
 //----------------------------------------------------------------------------------------------------------------------
 let RunOfDataOrEx (data : ConfigData) =

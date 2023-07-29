@@ -6,7 +6,8 @@ open System.Text.RegularExpressions
 open CommandLine
 open CommandLine.Text
 
-type ISentenceBuilder = DI.Services.LocalizationDI.ISentenceBuilder
+type private ISentenceBuilder = DI.Services.LocalizationDI.ISentenceBuilder
+
 
 type Service () =
 
