@@ -1,48 +1,48 @@
 namespace Model
 
-open FSharp.Json
+open Newtonsoft.Json
 
 type DeviceDataChild =
     {
-        [<JsonField("name")>]
+        [<JsonProperty("name")>]
         Name : string
 
-        [<JsonField("kname")>]
+        [<JsonProperty("kname")>]
         Kname : string
 
-        [<JsonField("ro")>]
+        [<JsonProperty("ro")>]
         ReadOnly : bool
 
-        [<JsonField("type")>]
+        [<JsonProperty("type")>]
         DeviceType : string
 
-        [<JsonField("mountpoints")>]
+        [<JsonProperty("mountpoints")>]
         MountPoints : string array
     }
 
 type DeviceData =
     {
-        [<JsonField("name")>]
+        [<JsonProperty("name")>]
         Name : string
 
-        [<JsonField("kname")>]
+        [<JsonProperty("kname")>]
         Kname : string
 
-        [<JsonField("ro")>]
+        [<JsonProperty("ro")>]
         ReadOnly : bool
 
-        [<JsonField("type")>]
+        [<JsonProperty("type")>]
         DeviceType : string
 
-        [<JsonField("mountpoints")>]
+        [<JsonProperty("mountpoints")>]
         MountPoints : string[]
 
-        [<JsonField("children")>]
+        [<JsonProperty("children")>]
         Children : DeviceDataChild[]
     }
 
 type BlockDevices =
     {
-        [<JsonField("blockdevices")>]
+        [<JsonProperty("blockdevices")>]
         BlockDevices : DeviceData[]
     }

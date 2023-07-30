@@ -1,7 +1,7 @@
 namespace Brokers.Config
 
 open System.IO
-open FSharp.Json
+open Newtonsoft.Json
 open Model
 
 type Broker () =
@@ -21,8 +21,9 @@ type Broker () =
 
         createConfigPathOrEx ()
 
-        let jsonData = Json.serialize data
-        File.WriteAllText(CONFIG_FILE, jsonData)
+        (CONFIG_FILE,
+         JsonConvert.SerializeObject(data, Formatting.Indented))
+        |> File.WriteAllText
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -30,6 +31,7 @@ type Broker () =
 
         createConfigPathOrEx ()
 
-        File.ReadAllText(CONFIG_FILE)
-        |> Json.deserialize<ConfigData>
+        CONFIG_FILE
+        |> File.ReadAllText
+        |> JsonConvert.DeserializeObject<ConfigData>
     // -----------------------------------------------------------------------------------------------------------------

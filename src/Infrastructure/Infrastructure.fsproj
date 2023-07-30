@@ -17,8 +17,8 @@
 
     <ItemGroup>
       <PackageReference Include="CommandLineParser.FSharp" Version="2.9.1" />
-      <PackageReference Include="FSharp.Json" Version="0.4.1" />
       <PackageReference Include="Motsoft.Util" Version="1.7.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
     <ItemGroup>
