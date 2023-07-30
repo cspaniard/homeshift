@@ -15,10 +15,11 @@ type Service () =
 
             dataChild.DeviceType = "part" &&
             dataChild.ReadOnly = false &&
-            dataChild.MountPoints[0] <> null &&
             dataChild.MountPoints
-            |> Array.exists (fun s -> s.Contains "boot" = false &&
-                                      s.Contains "efi" = false)
+            |> Array.exists
+                   (fun s -> s <> null &&
+                             s.Contains "boot" = false &&
+                             s.Contains "efi" = false)
 
         let devicesData =
             IDevicesBroker.getDeviceInfoOrEx ()
