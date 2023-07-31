@@ -15,9 +15,9 @@ type ListOptions () = class end
 //----------------------------------------------------------------------------------------------------------------------
 [<Verb("config", HelpText = nameof VerbConfig, ResourceType = typeof<CliOptions>)>]
 type ConfigOptions = {
-    [<Option ("snapshots-root", Group = "config",
-              HelpText = nameof ConfigSnapshotsRoot, ResourceType = typeof<CliOptions>)>]
-    SnapshotPath : string
+    [<Option ("snapshot-device", Group = "config",
+              HelpText = nameof ConfigSnapshotDevice, ResourceType = typeof<CliOptions>)>]
+    SnapshotDevice : string
 
     [<Option ("schedule-monthly", Group = "config",
               HelpText = nameof ConfigScheduleMonthly, ResourceType = typeof<CliOptions>)>]

@@ -46,8 +46,8 @@
     <data name="ConfigScheduleHourly" xml:space="preserve">
         <value>Enable hourly snapshots. (bool)</value>
     </data>
-    <data name="ConfigSnapshotsRoot" xml:space="preserve">
-        <value>Snapshots will be stored in {snapshots-root}/homeshift directory.</value>
+    <data name="ConfigSnapshotDevice" xml:space="preserve">
+        <value>Device where snapshots will be stored.</value>
     </data>
     <data name="VerbList" xml:space="preserve">
         <value>List snapshots.</value>
