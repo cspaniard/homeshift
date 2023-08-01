@@ -12,6 +12,7 @@
     <ItemGroup>
         <Compile Include="Helpers.fs" />
         <Compile Include="List.fs" />
+        <Compile Include="ListDevices.fs" />
         <Compile Include="Config.fs" />
         <Compile Include="Create.fs" />
         <Compile Include="Restore.fs" />

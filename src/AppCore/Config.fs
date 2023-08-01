@@ -5,14 +5,14 @@ open Motsoft.Util
 open Localization
 
 type private IConfigService = DI.Services.IConfigService
-type private IDevices = DI.Services.IDevicesService
+type private IDevicesService = DI.Services.IDevicesService
 
 //----------------------------------------------------------------------------------------------------------------------
 let RunOfDataOrEx (data : ConfigData) =
 
     Helpers.checkRootUserOrEx ()
 
-    IDevices.getValidDevicesDataOrEx ()
+    IDevicesService.getValidDevicesDataOrEx ()
     |> Array.exists (fun d -> $"/dev/{d.Kname}" = data.SnapshotDevice)
     |> failWithIfFalse $"{Errors.InvalidDevice} ({data.SnapshotDevice})"
 

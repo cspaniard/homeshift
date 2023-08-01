@@ -11,6 +11,7 @@ type private IHelpService = DI.Services.IHelpTextService
 
 // ---------------------------------------------------------------------------------------------------------------------
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<ListOptions>)>]
+[<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<ListDevicesOptions>)>]
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<ConfigOptions>)>]
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<CreateOptions>)>]
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<RestoreOptions>)>]
@@ -24,12 +25,13 @@ try
 
     let parser = new Parser (fun o -> o.HelpWriter <- null)
 
-    parser.ParseArguments<ListOptions, ConfigOptions,
+    parser.ParseArguments<ListOptions, ListDevicesOptions, ConfigOptions,
                           CreateOptions, RestoreOptions, DeleteOptions> args
     |> function
     | :? Parsed<obj> as command ->
         match command.Value with
         | :? ListOptions -> List.Run ()
+        | :? ListDevicesOptions -> ListDevices.Run ()
         | :? ConfigOptions as opts -> Config.RunOfOptionsOrEx opts
         | :? CreateOptions as opts -> CreateData.ofOptions opts |> Create.Run
         | :? RestoreOptions as opts -> RestoreData.ofOptions opts |> Restore.Run

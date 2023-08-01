@@ -67,4 +67,7 @@
     <data name="VerbDelete" xml:space="preserve">
         <value>Deletes snapshots.</value>
     </data>
+    <data name="VerbListDevices" xml:space="preserve">
+        <value>List valid target devices.</value>
+    </data>
 </root>

@@ -60,4 +60,7 @@
     <data name="VerbDelete" xml:space="preserve">
         <value>Elimina instantáneas.</value>
     </data>
+    <data name="VerbListDevices" xml:space="preserve">
+        <value>Lista dispositivos válidos para las instantáneas.</value>
+    </data>
 </root>
