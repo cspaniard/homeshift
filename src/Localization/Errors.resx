@@ -21,4 +21,7 @@
     <data name="NeedRootAccess" xml:space="preserve">
         <value>Need root access to perform the required action.</value>
     </data>
+    <data name="InvalidDevice" xml:space="preserve">
+        <value>Invalid snapshot device.</value>
+    </data>
 </root>

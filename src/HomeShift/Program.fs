@@ -10,7 +10,6 @@ open Model
 type private IHelpService = DI.Services.IHelpTextService
 
 // ---------------------------------------------------------------------------------------------------------------------
-
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<ListOptions>)>]
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<ConfigOptions>)>]
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<CreateOptions>)>]
@@ -18,6 +17,8 @@ type private IHelpService = DI.Services.IHelpTextService
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<DeleteOptions>)>]
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<DeleteOptionsAtLeastOne>)>]
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<CliOptions>)>]
+// ---------------------------------------------------------------------------------------------------------------------
+
 try
     let args = Environment.GetCommandLineArgs() |> Array.tail
 
@@ -51,4 +52,4 @@ try
 with e ->
     IHelpService.Heading |> printfn "%s\n"
     Console.WriteLine $"{e.Message}\n"
-    Console.WriteLine $"{e.StackTrace}\n"
+    // Console.WriteLine $"{e.StackTrace}\n"

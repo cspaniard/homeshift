@@ -18,7 +18,7 @@ with
             | None -> confValue
 
         {
-            SnapshotDevice = if options.SnapshotDevice = null then data.SnapshotDevice else options.SnapshotDevice
+            SnapshotDevice = if options.SnapshotDevice = null then data.SnapshotDevice else options.SnapshotDevice.Trim()
             ScheduleMonthly = options.ScheduleMonthly |> ifNullUseConfig data.ScheduleMonthly
             ScheduleWeekly = options.ScheduleWeekly |> ifNullUseConfig data.ScheduleWeekly
             ScheduleDaily  = options.ScheduleDaily |> ifNullUseConfig data.ScheduleDaily

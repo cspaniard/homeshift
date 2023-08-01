@@ -50,5 +50,11 @@ namespace Localization {
                 return ResourceManager.GetString("NeedRootAccess", resourceCulture);
             }
         }
+        
+        public static string InvalidDevice {
+            get {
+                return ResourceManager.GetString("InvalidDevice", resourceCulture);
+            }
+        }
     }
 }

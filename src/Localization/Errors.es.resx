@@ -21,4 +21,7 @@
     <data name="NeedRootAccess" xml:space="preserve">
         <value>Necesita acceso root para ejecutar esta acción.</value>
     </data>
+    <data name="InvalidDevice" xml:space="preserve">
+        <value>Dispositivo inválido para las instantáneas.</value>
+    </data>
 </root>
