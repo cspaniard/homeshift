@@ -56,5 +56,23 @@ namespace Localization {
                 return ResourceManager.GetString("InvalidDevice", resourceCulture);
             }
         }
+        
+        public static string UserIsEmpty {
+            get {
+                return ResourceManager.GetString("UserIsEmpty", resourceCulture);
+            }
+        }
+        
+        public static string UserNoInfoFound {
+            get {
+                return ResourceManager.GetString("UserNoInfoFound", resourceCulture);
+            }
+        }
+        
+        public static string DeviceNameIsEmpty {
+            get {
+                return ResourceManager.GetString("DeviceNameIsEmpty", resourceCulture);
+            }
+        }
     }
 }

@@ -1,10 +1,15 @@
 module AppCore.Create
 
-open System
 open Model
 
+type private IConfigService = DI.Services.IConfigService
+type private ICreateService = DI.Services.ICreateService
+
 let Run (options : CreateData) =
-    Console.WriteLine $"Hello %A{options} 5"
 
     Helpers.checkRootUserOrEx ()
-    Console.WriteLine "Pues seguimos como root."
+
+    let configData = IConfigService.getConfigDataOrEx ()
+
+    options.User
+    |> ICreateService.createSnapshot configData

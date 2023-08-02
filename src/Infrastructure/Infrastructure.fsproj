@@ -7,11 +7,14 @@
 
     <ItemGroup>
         <Compile Include="Brokers\Config.fs" />
+        <Compile Include="Brokers\Process.fs" />
         <Compile Include="Brokers\Devices.fs" />
+        <Compile Include="Brokers\Users.fs" />
         <Compile Include="Brokers\Console.fs" />
         <Compile Include="Brokers\BrokersDI.fs" />
         <Compile Include="Services\HelpText.fs" />
         <Compile Include="Services\Config.fs" />
+        <Compile Include="Services\Create.fs" />
         <Compile Include="Services\Devices.fs" />
         <Compile Include="Services\ServicesDI.fs" />
     </ItemGroup>
