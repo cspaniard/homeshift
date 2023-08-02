@@ -7,6 +7,10 @@ namespace DI.Services.LocalizationDI
     {
     }
 
+    public class IPhrases : Localization.Phrases
+    {
+    }
+
     public class ISentenceBuilder : Localization.LocalizedText.LocalizedSentenceBuilder
     {
     }

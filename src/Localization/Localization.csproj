@@ -22,6 +22,11 @@
           <AutoGen>True</AutoGen>
           <DependentUpon>Errors.resx</DependentUpon>
         </Compile>
+        <Compile Update="Phrases.Designer.cs">
+          <DesignTime>True</DesignTime>
+          <AutoGen>True</AutoGen>
+          <DependentUpon>Phrases.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Update="CliOptions.resx">
@@ -36,9 +41,9 @@
           <Generator>PublicResXFileCodeGenerator</Generator>
           <LastGenOutput>Errors.Designer.cs</LastGenOutput>
         </EmbeddedResource>
-        <EmbeddedResource Update="Errors.es.resx">
+        <EmbeddedResource Update="Phrases.resx">
           <Generator>PublicResXFileCodeGenerator</Generator>
-          <LastGenOutput>Errors.es.Designer.cs</LastGenOutput>
+          <LastGenOutput>Phrases.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>

@@ -16,8 +16,23 @@ type DeviceDataChild =
         [<JsonProperty("type")>]
         DeviceType : string
 
-        [<JsonProperty("mountpoints")>]
-        MountPoints : string array
+        [<JsonProperty("mountpoint")>]
+        MountPoint : string
+
+        [<JsonProperty("label")>]
+        Label : string
+
+        [<JsonProperty("path")>]
+        Path : string
+
+        [<JsonProperty("fstype")>]
+        FileSystemType : string
+
+        [<JsonProperty("parttypename")>]
+        PartTypeName : string
+
+        [<JsonProperty("size")>]
+        Size : string
     }
 
 type DeviceData =
@@ -34,8 +49,23 @@ type DeviceData =
         [<JsonProperty("type")>]
         DeviceType : string
 
-        [<JsonProperty("mountpoints")>]
-        MountPoints : string[]
+        [<JsonProperty("mountpoint")>]
+        MountPoint : string
+
+        [<JsonProperty("label")>]
+        Label : string
+
+        [<JsonProperty("path")>]
+        Path : string
+
+        [<JsonProperty("fstype")>]
+        FileSystemType : string
+
+        [<JsonProperty("parttypename")>]
+        PartTypeName : string
+
+        [<JsonProperty("size")>]
+        Size : string
 
         [<JsonProperty("children")>]
         Children : DeviceDataChild[]

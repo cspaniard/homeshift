@@ -1,6 +1,5 @@
 namespace Services.Config
 
-open System
 open System.IO
 open Model
 

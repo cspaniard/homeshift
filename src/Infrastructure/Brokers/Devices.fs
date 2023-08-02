@@ -9,7 +9,7 @@ type Broker () =
 
         let startInfo = ProcessStartInfo()
         startInfo.FileName <- "lsblk"
-        startInfo.Arguments <- "--json --output NAME,KNAME,RO,TYPE,MOUNTPOINTS"
+        startInfo.Arguments <- "--json --output NAME,KNAME,RO,TYPE,MOUNTPOINT,LABEL,PATH,FSTYPE,PARTTYPENAME,SIZE"
         startInfo.UseShellExecute <- false
         startInfo.RedirectStandardOutput <- true
 
