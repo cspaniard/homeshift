@@ -13,7 +13,7 @@ let RunOfDataOrEx (data : ConfigData) =
     Helpers.checkRootUserOrEx ()
 
     IDevicesService.getValidDevicesDataOrEx ()
-    |> Seq.exists (fun d -> d.Path = data.SnapshotDevice)
+    |> Seq.exists (fun d -> d.Path = data.SnapshotDevice.value)
     |> failWithIfFalse $"{Errors.InvalidDevice} ({data.SnapshotDevice})"
 
     IConfigService.storeConfigDataOrEx data

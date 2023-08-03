@@ -1,10 +1,9 @@
 namespace Brokers.Devices
 
-open System
 open System.Diagnostics
 open System.IO
+open Model
 open Motsoft.Util
-open Localization
 
 type IProcessBroker = Brokers.Process.Broker
 
@@ -26,9 +25,7 @@ type Broker () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member mountDeviceOrEx (deviceName : string) =
-
-        String.IsNullOrWhiteSpace deviceName |> failWithIfTrue Errors.DeviceNameIsEmpty
+    static member mountDeviceOrEx (snapshotDevice : SnapshotDevice) =
 
         let pid = Process.GetCurrentProcess().Id
         let mountPoint = $"/run/homeshift/{pid}"   // ToDo: Make it a Broker wide value.
@@ -37,7 +34,8 @@ type Broker () =
             Directory.CreateDirectory mountPoint |> ignore
 
         try
-            IProcessBroker.startProcessAndWaitOrEx "mount" $"{deviceName} {mountPoint}"
+            IProcessBroker.startProcessAndWaitOrEx "mount" $"{snapshotDevice.value} {mountPoint}"
+            mountPoint
         with e ->
             Directory.Delete mountPoint
             reraise ()

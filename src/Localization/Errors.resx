@@ -24,13 +24,19 @@
     <data name="InvalidDevice" xml:space="preserve">
         <value>Invalid snapshot device.</value>
     </data>
-    <data name="UserIsEmpty" xml:space="preserve">
+    <data name="UserNameIsEmpty" xml:space="preserve">
         <value>User name cannot be empty.</value>
     </data>
     <data name="UserNoInfoFound" xml:space="preserve">
         <value>Could not find info for the specified user.</value>
     </data>
-    <data name="DeviceNameIsEmpty" xml:space="preserve">
-        <value>Snapshot device name cannot be empty.</value>
+    <data name="UserNameHasSpaces" xml:space="preserve">
+        <value>User name cannot contain spaces.</value>
+    </data>
+    <data name="SnapshotDeviceHasSpaces" xml:space="preserve">
+        <value>Snapshot device cannot contain spaces.</value>
+    </data>
+    <data name="SnapshotDeviceIsEmpty" xml:space="preserve">
+        <value>Snapshot device cannot be empty.</value>
     </data>
 </root>

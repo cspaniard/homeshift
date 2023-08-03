@@ -54,4 +54,4 @@ try
 with e ->
     IHelpService.Heading |> printfn "%s\n"
     Console.WriteLine $"{e.Message}\n"
-    Console.WriteLine $"{e.StackTrace}\n"
+    // Console.WriteLine $"{e.StackTrace}\n"

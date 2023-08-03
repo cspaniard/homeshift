@@ -11,5 +11,5 @@ let Run (options : CreateData) =
 
     let configData = IConfigService.getConfigDataOrEx ()
 
-    options.User
+    options.UserName
     |> ICreateService.createSnapshot configData

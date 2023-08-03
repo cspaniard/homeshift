@@ -6,6 +6,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="ValidationHelper.fs" />
+        <Compile Include="SnapshotDevice\SnapshotDeviceValidation.fs" />
+        <Compile Include="SnapshotDevice\SnapshotDevice.fs" />
+        <Compile Include="UserName\UserNameValidation.fs" />
+        <Compile Include="UserName\UserName.fs" />
+        <Compile Include="JsonConverters\SnapshotDeviceConverter.fs" />
+        <Compile Include="JsonConverters\UserConverter.fs" />
         <Compile Include="Options.fs" />
         <Compile Include="CommandData.fs" />
         <Compile Include="Devices.fs" />
@@ -13,6 +20,7 @@
 
     <ItemGroup>
       <PackageReference Include="CommandLineParser.FSharp" Version="2.9.1" />
+      <PackageReference Include="Motsoft.Util" Version="1.7.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 

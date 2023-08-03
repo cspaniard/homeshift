@@ -14,29 +14,24 @@ type private IDevicesBroker = DI.Brokers.IDevicesBroker
 type Service () =
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member getHomeForUserOrEx (userName : string) =
-
-        String.IsNullOrWhiteSpace userName |> failWithIfTrue Errors.UserIsEmpty
+    static member getHomeForUserOrEx (userName : UserName) =
 
         let line = IUsersBroker.getUserLineFromPasswordFileOrEx userName
 
-        String.IsNullOrWhiteSpace line |> failWithIfTrue Errors.UserNoInfoFound
+        line |> String.IsNullOrWhiteSpace |> failWithIfTrue Errors.UserNoInfoFound
 
         (line |> String.split ":")[5]
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member createSnapshot (configData : ConfigData) (userName : string) =
+    static member createSnapshot (configData : ConfigData) (userName : UserName) =
 
         let userHome = Service.getHomeForUserOrEx userName
-
-        printfn $"%A{configData.SnapshotDevice}"
-
-        IDevicesBroker.mountDeviceOrEx configData.SnapshotDevice
+        let mountPoint = IDevicesBroker.mountDeviceOrEx configData.SnapshotDevice
 
         // ToDo: Testing
         printfn "Haciendo copia..."
-        Directory.CreateDirectory "/home/z3" |> ignore
+        Directory.CreateDirectory $"{mountPoint}/z3" |> ignore
 
         IDevicesBroker.unmountCurrentOrEx ()
     // -----------------------------------------------------------------------------------------------------------------

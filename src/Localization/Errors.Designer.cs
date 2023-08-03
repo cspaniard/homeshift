@@ -57,9 +57,9 @@ namespace Localization {
             }
         }
         
-        public static string UserIsEmpty {
+        public static string UserNameIsEmpty {
             get {
-                return ResourceManager.GetString("UserIsEmpty", resourceCulture);
+                return ResourceManager.GetString("UserNameIsEmpty", resourceCulture);
             }
         }
         
@@ -69,9 +69,21 @@ namespace Localization {
             }
         }
         
-        public static string DeviceNameIsEmpty {
+        public static string UserNameHasSpaces {
             get {
-                return ResourceManager.GetString("DeviceNameIsEmpty", resourceCulture);
+                return ResourceManager.GetString("UserNameHasSpaces", resourceCulture);
+            }
+        }
+        
+        public static string SnapshotDeviceHasSpaces {
+            get {
+                return ResourceManager.GetString("SnapshotDeviceHasSpaces", resourceCulture);
+            }
+        }
+        
+        public static string SnapshotDeviceIsEmpty {
+            get {
+                return ResourceManager.GetString("SnapshotDeviceIsEmpty", resourceCulture);
             }
         }
     }

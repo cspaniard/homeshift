@@ -24,13 +24,19 @@
     <data name="InvalidDevice" xml:space="preserve">
         <value>Dispositivo inválido para las instantáneas.</value>
     </data>
-    <data name="UserIsEmpty" xml:space="preserve">
+    <data name="UserNameIsEmpty" xml:space="preserve">
         <value>Nombre de usuario no puede estar vacío.</value>
     </data>
     <data name="UserNoInfoFound" xml:space="preserve">
         <value>No se pudo encontrar información del usuario especificado.</value>
     </data>
-    <data name="DeviceNameIsEmpty" xml:space="preserve">
-        <value>El nombre del dispositivo de las instantáneas no puede estar vacío.</value>
+    <data name="UserNameHasSpaces" xml:space="preserve">
+        <value>Nombre de usuario no puede tener espcacios.</value>
+    </data>
+    <data name="SnapshotDeviceIsEmpty" xml:space="preserve">
+        <value>El dispositivo de las instantáneas no puede estar vacío.</value>
+    </data>
+    <data name="SnapshotDeviceHasSpaces" xml:space="preserve">
+        <value>El dispositivo de las instantáneas no puede tener espacios.</value>
     </data>
 </root>

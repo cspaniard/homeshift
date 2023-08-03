@@ -1,8 +1,12 @@
 namespace Model
 
+open Newtonsoft.Json
+open Model.JsonConverters
+
 //----------------------------------------------------------------------------------------------------------------------
 type ConfigData = {
-    SnapshotDevice : string
+    [<JsonConverter(typeof<SnapshotDeviceConverter>)>]
+    SnapshotDevice : SnapshotDevice
     ScheduleMonthly : bool
     ScheduleWeekly : bool
     ScheduleDaily : bool
@@ -18,7 +22,9 @@ with
             | None -> confValue
 
         {
-            SnapshotDevice = if options.SnapshotDevice = null then data.SnapshotDevice else options.SnapshotDevice.Trim()
+            SnapshotDevice = if options.SnapshotDevice = null
+                             then data.SnapshotDevice
+                             else SnapshotDevice.create <| options.SnapshotDevice.Trim()
             ScheduleMonthly = options.ScheduleMonthly |> ifNullUseConfig data.ScheduleMonthly
             ScheduleWeekly = options.ScheduleWeekly |> ifNullUseConfig data.ScheduleWeekly
             ScheduleDaily  = options.ScheduleDaily |> ifNullUseConfig data.ScheduleDaily
@@ -27,7 +33,7 @@ with
 
     static member getDefault () =
         {
-            SnapshotDevice = "/"
+            SnapshotDevice = "/" |> SnapshotDevice.create    // ToDo: Need to think what to use for default value.
             ScheduleMonthly = false
             ScheduleWeekly = false
             ScheduleDaily  = false
@@ -37,13 +43,13 @@ with
 
 //----------------------------------------------------------------------------------------------------------------------
 type CreateData = {
-    User : string
+    UserName : UserName
     Comment : string
 }
 with
     static member ofOptions (o : CreateOptions) =
         {
-            User = o.User
+            UserName = o.UserName |> UserName.create
             Comment = o.Comment
         } : CreateData
 //----------------------------------------------------------------------------------------------------------------------

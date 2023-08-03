@@ -46,7 +46,7 @@ type ConfigOptions = {
 [<Verb("create", HelpText = nameof VerbCreate, ResourceType = typeof<CliOptions>)>]
 type CreateOptions = {
     [<Option ("user", Required = true, HelpText = nameof CreateUser, ResourceType = typeof<CliOptions>)>]
-    User : string
+    UserName : string
 
     [<Option ("comment", HelpText = nameof CreateComments , ResourceType = typeof<CliOptions>)>]
     Comment : string
