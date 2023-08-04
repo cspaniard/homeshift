@@ -1,16 +1,22 @@
 ﻿module AppCore.Config
 
+open Motsoft.Util
 open Model
+open Localization
 
 type private IConfigService = DI.Services.IConfigService
 type private IDevicesService = DI.Services.IDevicesService
 
 //----------------------------------------------------------------------------------------------------------------------
-let RunOfDataOrEx (data : ConfigData) =
+let RunOfDataOrEx (configData : ConfigData) =
 
     Helpers.checkRootUserOrEx ()
 
-    IConfigService.storeConfigDataOrEx data
+    configData.SnapshotDevice.value
+    |> IDevicesService.isValidDeviceOrEx
+    |> failWithIfFalse $"{Errors.InvalidDevice} ({configData.SnapshotDevice})"
+
+    IConfigService.storeConfigDataOrEx configData
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
