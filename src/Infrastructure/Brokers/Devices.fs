@@ -5,23 +5,16 @@ open System.IO
 open Model
 open Motsoft.Util
 
-type IProcessBroker = Brokers.Process.Broker
+type private IProcessBroker = DI.Brokers.IProcessBrokerDI
 
 type Broker () =
 
     // -----------------------------------------------------------------------------------------------------------------
     static member getDeviceInfoOrEx () =
 
-        let startInfo = ProcessStartInfo()
-        startInfo.FileName <- "lsblk"
-        startInfo.Arguments <- "--json --output NAME,KNAME,RO,TYPE,MOUNTPOINT,LABEL,PATH,FSTYPE,PARTTYPENAME,SIZE"
-        startInfo.UseShellExecute <- false
-        startInfo.RedirectStandardOutput <- true
-
-        let proc = Process.Start(startInfo)
-
-        proc.WaitForExit()
-        proc.StandardOutput.ReadToEnd()
+        IProcessBroker.startProcessAndReadToEndOrEx
+            "lsblk"
+            "--json --output NAME,KNAME,RO,TYPE,MOUNTPOINT,LABEL,PATH,FSTYPE,PARTTYPENAME,SIZE"
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------

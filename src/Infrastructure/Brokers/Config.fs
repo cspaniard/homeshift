@@ -1,6 +1,5 @@
 namespace Brokers.Config
 
-open System
 open System.IO
 open Newtonsoft.Json
 open Model

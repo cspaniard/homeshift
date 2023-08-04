@@ -11,10 +11,13 @@ type private ISentenceBuilder = DI.Services.LocalizationDI.ISentenceBuilder
 
 type Service () =
 
+    // -----------------------------------------------------------------------------------------------------------------
     static member Heading with get () =
         let version = Assembly.GetEntryAssembly().GetName().Version
         $"\nHomeshift v{version.Major}.{version.Minor}.{version.Build} by David Sanroma"
+    // -----------------------------------------------------------------------------------------------------------------
 
+    // -----------------------------------------------------------------------------------------------------------------
     static member public helpTextFromResult (result : ParserResult<_>) =
 
         SentenceBuilder.Factory <- fun () -> ISentenceBuilder ()
@@ -25,3 +28,4 @@ type Service () =
 
         let groupWord = ISentenceBuilder().OptionGroupWord.Invoke()
         Regex.Replace(helpText, $"\({groupWord}:.*\) ", "")
+    // -----------------------------------------------------------------------------------------------------------------

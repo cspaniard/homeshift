@@ -1,8 +1,6 @@
-namespace DI
+namespace DI.Services
 
-module Services =
-
-    type IHelpTextService = Services.HelpText.Service
-    type IConfigService = Services.Config.Service
-    type IDevicesService = Services.Devices.Service
-    type ICreateService = Services.Create.Service
+type IHelpTextService = Services.HelpText.Service
+type IConfigService = Services.Config.Service
+type IDevicesService = Services.Devices.Service
+type ICreateService = Services.Create.Service

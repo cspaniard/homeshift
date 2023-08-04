@@ -5,11 +5,11 @@ open Model
 type private IConfigService = DI.Services.IConfigService
 type private ICreateService = DI.Services.ICreateService
 
-let Run (options : CreateData) =
+let Run (createData : CreateData) =
 
     Helpers.checkRootUserOrEx ()
 
     let configData = IConfigService.getConfigDataOrEx ()
 
-    options.UserName
+    createData.UserName
     |> ICreateService.createSnapshot configData
