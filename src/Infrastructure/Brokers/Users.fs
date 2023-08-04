@@ -7,7 +7,7 @@ type private IProcessBroker = DI.Brokers.IProcessBrokerDI
 type Broker () =
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member getUserLineFromPasswordFileOrEx (userName : UserName) =
+    static member getUserInfoFromPasswordFileOrEx (userName : UserName) =
 
         IProcessBroker.startProcessAndReadToEndOrEx
             "grep"

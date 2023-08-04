@@ -3,13 +3,13 @@ module Model.UserNameValidation
 open Localization
 open Model.ValidationHelper
 
-let UserNameErrors = ErrorDict ()
+let private UserNameErrors = ErrorDict ()
 
 UserNameErrors.Add (ValueIsEmpty, Errors.UserNameIsEmpty)
 UserNameErrors.Add (ValueContainsSpaces, Errors.UserNameHasSpaces)
 
-let getValidatorsList () =
-    [|
+let getValidators () =
+    [
         checkEmptyTry UserNameErrors
         checkForSpaces UserNameErrors
-    |]
+    ]

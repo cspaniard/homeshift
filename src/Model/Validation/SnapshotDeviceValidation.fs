@@ -3,13 +3,13 @@ module Model.SnapshotDeviceValidation
 open Localization
 open Model.ValidationHelper
 
-let SnapshotDeviceErrors = ErrorDict ()
+let private SnapshotDeviceErrors = ErrorDict ()
 
 SnapshotDeviceErrors.Add (ValueIsEmpty, Errors.SnapshotDeviceIsEmpty)
 SnapshotDeviceErrors.Add (ValueContainsSpaces, Errors.SnapshotDeviceHasSpaces)
 
-let getValidatorsList () =
-    [|
+let getValidators () =
+    [
         checkEmptyTry SnapshotDeviceErrors
         checkForSpaces SnapshotDeviceErrors
-    |]
+    ]

@@ -16,7 +16,7 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
     static member getHomeForUserOrEx (userName : UserName) =
 
-        let line = IUsersBroker.getUserLineFromPasswordFileOrEx userName
+        let line = IUsersBroker.getUserInfoFromPasswordFileOrEx userName
 
         line |> String.IsNullOrWhiteSpace |> failWithIfTrue Errors.UserNoInfoFound
 

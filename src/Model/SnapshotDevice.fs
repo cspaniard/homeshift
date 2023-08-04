@@ -1,11 +1,10 @@
 namespace Model
 
 open Motsoft.Util
-open Model.UserNameValidation
 
-type UserName =
+type SnapshotDevice =
 
-    private UserName of string with
+    private SnapshotDevice of string with
 
         static member private canonicalize (value : string) =
             value
@@ -14,18 +13,18 @@ type UserName =
         static member private validateTry (value : string) =
 
             try
-                getValidatorsList ()
-                |> Array.iter (fun f -> f value)
+                SnapshotDeviceValidation.getValidators ()
+                |> Seq.iter (fun f -> f value)
 
                 value
             with e -> failwith e.Message
 
-        member this.value = let (UserName value) = this in value
+        member this.value = let (SnapshotDevice value) = this in value
 
         override this.ToString () = this.value
 
         static member create (value : string) =
             value
-            |> UserName.canonicalize
-            |> UserName.validateTry
-            |> UserName
+            |> SnapshotDevice.canonicalize
+            |> SnapshotDevice.validateTry
+            |> SnapshotDevice

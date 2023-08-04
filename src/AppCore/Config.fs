@@ -1,8 +1,6 @@
 ﻿module AppCore.Config
 
 open Model
-open Motsoft.Util
-open Localization
 
 type private IConfigService = DI.Services.IConfigService
 type private IDevicesService = DI.Services.IDevicesService
@@ -11,10 +9,6 @@ type private IDevicesService = DI.Services.IDevicesService
 let RunOfDataOrEx (data : ConfigData) =
 
     Helpers.checkRootUserOrEx ()
-
-    IDevicesService.getValidDevicesDataOrEx ()
-    |> Seq.exists (fun d -> d.Path = data.SnapshotDevice.value)
-    |> failWithIfFalse $"{Errors.InvalidDevice} ({data.SnapshotDevice})"
 
     IConfigService.storeConfigDataOrEx data
 //----------------------------------------------------------------------------------------------------------------------

@@ -11,7 +11,7 @@ type UserConverter () =
     override _.CanConvert (_ : Type) = true
 
     override _.WriteJson(writer, value, serializer) =
-        serializer.Serialize(writer, (value :?> UserName).value)
+        serializer.Serialize (writer, (value :?> UserName).value)
 
     override _.ReadJson(reader, _, _, serializer) =
-        UserName.create(serializer.Deserialize<string>(reader))
+        UserName.create (serializer.Deserialize<string>(reader))

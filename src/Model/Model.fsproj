@@ -6,11 +6,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="ValidationHelper.fs" />
-        <Compile Include="SnapshotDevice\SnapshotDeviceValidation.fs" />
-        <Compile Include="SnapshotDevice\SnapshotDevice.fs" />
-        <Compile Include="UserName\UserNameValidation.fs" />
-        <Compile Include="UserName\UserName.fs" />
+        <Compile Include="Validation\ValidationHelper.fs" />
+        <Compile Include="Validation\SnapshotDeviceValidation.fs" />
+        <Compile Include="Validation\UserNameValidation.fs" />
+        <Compile Include="SnapshotDevice.fs" />
+        <Compile Include="UserName.fs" />
         <Compile Include="JsonConverters\SnapshotDeviceConverter.fs" />
         <Compile Include="JsonConverters\UserConverter.fs" />
         <Compile Include="Options.fs" />
