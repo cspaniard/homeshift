@@ -67,12 +67,14 @@ with
 
 //----------------------------------------------------------------------------------------------------------------------
 type DeleteData = {
+    UserName : UserName
     Snapshot : string
     DeleteAll : bool
 }
 with
     static member ofOptions (o : DeleteOptions) =
         {
+            UserName = o.UserName |> UserName.create
             Snapshot = o.Snapshot
             DeleteAll = o.DeleteAll
         } : DeleteData

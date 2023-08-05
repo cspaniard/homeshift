@@ -64,6 +64,9 @@ type RestoreOptions = {
 //----------------------------------------------------------------------------------------------------------------------
 [<Verb("delete", HelpText = nameof VerbDelete, ResourceType = typeof<CliOptions>)>]
 type DeleteOptions = {
+    [<Option ("user", Required = true, HelpText = nameof DeleteUser, ResourceType = typeof<CliOptions>)>]
+    UserName : string
+
     [<Option ("snapshot", SetName = "snapshot", HelpText = nameof DeleteSnapshot, ResourceType = typeof<CliOptions>)>]
     Snapshot : string
 
@@ -74,6 +77,9 @@ type DeleteOptions = {
 
 //----------------------------------------------------------------------------------------------------------------------
 type DeleteOptionsAtLeastOne = {
+    [<Option ("user", Required = true, Group = "delete", HelpText = nameof DeleteUser, ResourceType = typeof<CliOptions>)>]
+    UserName : string
+
     [<Option ("snapshot", Group = "delete", HelpText = nameof DeleteSnapshot, ResourceType = typeof<CliOptions>)>]
     Snapshot : string
 

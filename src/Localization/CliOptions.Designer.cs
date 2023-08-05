@@ -140,5 +140,11 @@ namespace Localization {
                 return ResourceManager.GetString("VerbListDevices", resourceCulture);
             }
         }
+        
+        public static string DeleteUser {
+            get {
+                return ResourceManager.GetString("DeleteUser", resourceCulture);
+            }
+        }
     }
 }

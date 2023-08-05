@@ -52,15 +52,18 @@
         <value>Instantánea a restaurar.</value>
     </data>
     <data name="DeleteSnapshot" xml:space="preserve">
-        <value>Elimina instantánea.</value>
+        <value>Elimina instantánea espcífica de un usuario.</value>
     </data>
     <data name="DeleteAll" xml:space="preserve">
-        <value>Elimina todas las instantáneas.</value>
+        <value>Elimina todas las instantáneas de un usuario.</value>
     </data>
     <data name="VerbDelete" xml:space="preserve">
         <value>Elimina instantáneas.</value>
     </data>
     <data name="VerbListDevices" xml:space="preserve">
         <value>Lista dispositivos válidos para las instantáneas.</value>
+    </data>
+    <data name="DeleteUser" xml:space="preserve">
+        <value>Elimina instantánea(s) del usuario especificado.</value>
     </data>
 </root>

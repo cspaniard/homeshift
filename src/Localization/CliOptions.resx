@@ -59,15 +59,18 @@
         <value>Specify snapshot to restore.</value>
     </data>
     <data name="DeleteSnapshot" xml:space="preserve">
-        <value>Delete snapshot.</value>
+        <value>Delete one snapshot of specified user.</value>
     </data>
     <data name="DeleteAll" xml:space="preserve">
-        <value>Delete all snapshots.</value>
+        <value>Delete all snapshots of specified user.</value>
     </data>
     <data name="VerbDelete" xml:space="preserve">
         <value>Deletes snapshots.</value>
     </data>
     <data name="VerbListDevices" xml:space="preserve">
         <value>List valid target devices.</value>
+    </data>
+    <data name="DeleteUser" xml:space="preserve">
+        <value>Deletes snapshot(s) for the specifed user.</value>
     </data>
 </root>
