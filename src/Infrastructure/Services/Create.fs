@@ -9,6 +9,7 @@ open Localization
 
 type private IUsersBroker = DI.Brokers.IUsersBroker
 type private IDevicesBroker = DI.Brokers.IDevicesBroker
+type private IErrors = DI.Services.LocalizationDI.IErrors
 
 
 type Service () =
@@ -18,7 +19,7 @@ type Service () =
 
         let line = IUsersBroker.getUserInfoFromPasswordFileOrEx userName
 
-        line |> String.IsNullOrWhiteSpace |> failWithIfTrue Errors.UserNoInfoFound
+        line |> String.IsNullOrWhiteSpace |> failWithIfTrue IErrors.UserNoInfoFound
 
         (line |> String.split ":")[5]
     // -----------------------------------------------------------------------------------------------------------------
