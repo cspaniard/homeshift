@@ -1,6 +1,7 @@
 module AppCore.Create
 
 open Model
+open AppCore.Helpers
 
 type private IConfigService = DI.Services.IConfigService
 type private ICreateService = DI.Services.ICreateService
@@ -8,10 +9,13 @@ type private ICreateService = DI.Services.ICreateService
 //----------------------------------------------------------------------------------------------------------------------
 let Run (createData : CreateData) =
 
-    Helpers.checkRootUserOrEx ()
+    checkRootUserOrEx ()
 
     let configData = IConfigService.getConfigDataOrEx ()
 
-    createData.UserName
+    configData.SnapshotDevice.value
+    |> checkDeviceExists
+
+    createData
     |> ICreateService.createSnapshot configData
 //----------------------------------------------------------------------------------------------------------------------

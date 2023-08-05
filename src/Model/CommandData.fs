@@ -33,7 +33,7 @@ with
 
     static member getDefault () =
         {
-            SnapshotDevice = "/" |> SnapshotDevice.create     // ToDo: Need to think what to use for default value.
+            SnapshotDevice = "not_configured" |> SnapshotDevice.create   // ToDo: Need to think what to use for default value.
             ScheduleMonthly = false
             ScheduleWeekly = false
             ScheduleDaily  = false

@@ -24,14 +24,23 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member createSnapshot (configData : ConfigData) (userName : UserName) =
+    static member createSnapshot (configData : ConfigData) (createData : CreateData) =
 
-        let userHome = Service.getHomeForUserOrEx userName
+        let userHome = Service.getHomeForUserOrEx createData.UserName
         let mountPoint = IDevicesBroker.mountDeviceOrEx configData.SnapshotDevice
+
+        let dateTime = DateTimeOffset.Now
+        let snapshotPath = $"{mountPoint}/homeshift/snapshots/{createData.UserName}/" +
+                           $"{dateTime.Year}-%02i{dateTime.Month}-%02i{dateTime.Day}_" +
+                           $"%02i{dateTime.Hour}-%02i{dateTime.Minute}-%02i{dateTime.Second}"
 
         // ToDo: Testing
         printfn "Haciendo copia..."
-        Directory.CreateDirectory $"{mountPoint}/z3" |> ignore
+        // Directory.CreateDirectory snapshotPath
+        // |> ignore
+
+        printfn $"%s{userHome}"
+        printfn $"%s{snapshotPath}"
 
         IDevicesBroker.unmountCurrentOrEx ()
     // -----------------------------------------------------------------------------------------------------------------

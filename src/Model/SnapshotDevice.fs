@@ -12,12 +12,10 @@ type SnapshotDevice =
 
         static member private validateTry (value : string) =
 
-            try
-                SnapshotDeviceValidation.getValidators ()
-                |> Seq.iter (fun f -> f value)
+            SnapshotDeviceValidation.getValidators ()
+            |> Seq.iter (fun f -> f value)
 
-                value
-            with e -> failwith e.Message
+            value
 
         member this.value = let (SnapshotDevice value) = this in value
 

@@ -12,12 +12,10 @@ type UserName =
 
         static member private validateOrEx (value : string) =
 
-            try
-                UserNameValidation.getValidators ()
-                |> Seq.iter (fun f -> f value)
+            UserNameValidation.getValidators ()
+            |> Seq.iter (fun f -> f value)
 
-                value
-            with e -> failwith e.Message
+            value
 
         member this.value = let (UserName value) = this in value
 
