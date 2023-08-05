@@ -55,7 +55,7 @@ function _homeshift()
 
     "delete")
         COMPREPLY=( $(compgen -W '
-            --snapshot --all --help --version
+            --user --snapshot --all --help --version
             ' -- "$cur" ) )
         return 0
         ;;
