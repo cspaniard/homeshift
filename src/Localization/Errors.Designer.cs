@@ -86,5 +86,17 @@ namespace Localization {
                 return ResourceManager.GetString("SnapshotDeviceIsEmpty", resourceCulture);
             }
         }
+        
+        public static string DirectoryIsEmpy {
+            get {
+                return ResourceManager.GetString("DirectoryIsEmpy", resourceCulture);
+            }
+        }
+        
+        public static string HomeDirectoryDoesNotExist {
+            get {
+                return ResourceManager.GetString("HomeDirectoryDoesNotExist", resourceCulture);
+            }
+        }
     }
 }

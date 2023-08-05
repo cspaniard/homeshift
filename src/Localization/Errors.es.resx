@@ -39,4 +39,10 @@
     <data name="SnapshotDeviceHasSpaces" xml:space="preserve">
         <value>El dispositivo de las instantáneas no puede tener espacios.</value>
     </data>
+    <data name="DirectoryIsEmpy" xml:space="preserve">
+        <value>El nombre del directorio no puede estar vacío.</value>
+    </data>
+    <data name="HomeDirectoryDoesNotExist" xml:space="preserve">
+        <value>El directorio home del usuario no existe.</value>
+    </data>
 </root>

@@ -1,11 +1,8 @@
 namespace Services.Create
 
 open System
-open System.IO
 open Model
 open Motsoft.Util
-
-open Localization
 
 type private IUsersBroker = DI.Brokers.IUsersBroker
 type private IDevicesBroker = DI.Brokers.IDevicesBroker
@@ -19,9 +16,9 @@ type Service () =
 
         let line = IUsersBroker.getUserInfoFromPasswordFileOrEx userName
 
-        line |> String.IsNullOrWhiteSpace |> failWithIfTrue IErrors.UserNoInfoFound
-
         (line |> String.split ":")[5]
+        |> Directory.create
+        |> IUsersBroker.checkUserHomeExistsOrEx
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -40,7 +37,7 @@ type Service () =
         // Directory.CreateDirectory snapshotPath
         // |> ignore
 
-        printfn $"%s{userHome}"
+        printfn $"%s{userHome.value}"
         printfn $"%s{snapshotPath}"
 
         IDevicesBroker.unmountCurrentOrEx ()

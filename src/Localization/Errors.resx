@@ -39,4 +39,10 @@
     <data name="SnapshotDeviceIsEmpty" xml:space="preserve">
         <value>Snapshot device cannot be empty.</value>
     </data>
+    <data name="DirectoryIsEmpy" xml:space="preserve">
+        <value>Directory name cannot be empty.</value>
+    </data>
+    <data name="HomeDirectoryDoesNotExist" xml:space="preserve">
+        <value>User's home directory does not exist.</value>
+    </data>
 </root>
