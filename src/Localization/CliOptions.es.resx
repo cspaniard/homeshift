@@ -64,6 +64,6 @@
         <value>Lista dispositivos válidos para las instantáneas.</value>
     </data>
     <data name="DeleteUser" xml:space="preserve">
-        <value>Elimina instantánea(s) del usuario especificado.</value>
+        <value>Usuario del que eliminar instantáneas.</value>
     </data>
 </root>

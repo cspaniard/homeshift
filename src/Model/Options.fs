@@ -77,7 +77,7 @@ type DeleteOptions = {
 
 //----------------------------------------------------------------------------------------------------------------------
 type DeleteOptionsAtLeastOne = {
-    [<Option ("user", Required = true, Group = "delete", HelpText = nameof DeleteUser, ResourceType = typeof<CliOptions>)>]
+    [<Option ("user", Required = true, Group = "user", HelpText = nameof DeleteUser, ResourceType = typeof<CliOptions>)>]
     UserName : string
 
     [<Option ("snapshot", Group = "delete", HelpText = nameof DeleteSnapshot, ResourceType = typeof<CliOptions>)>]

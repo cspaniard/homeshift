@@ -71,6 +71,6 @@
         <value>List valid target devices.</value>
     </data>
     <data name="DeleteUser" xml:space="preserve">
-        <value>Deletes snapshot(s) for the specifed user.</value>
+        <value>User for which snapshots will be deleted.</value>
     </data>
 </root>
