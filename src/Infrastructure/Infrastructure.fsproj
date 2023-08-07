@@ -12,6 +12,7 @@
         <Compile Include="Brokers\Devices.fs" />
         <Compile Include="Brokers\Users.fs" />
         <Compile Include="Brokers\Console.fs" />
+        <Compile Include="Brokers\Snapshot.fs" />
         <Compile Include="Brokers\BrokersDI.fs" />
         <Compile Include="Services\HelpText.fs" />
         <Compile Include="Services\Config.fs" />

@@ -40,6 +40,6 @@ type Broker () =
         let pid = Process.GetCurrentProcess().Id
         let mountPoint = $"/run/homeshift/{pid}"   // ToDo: Make it a Broker wide value.
 
-        IProcessBroker.startProcessAndWaitOrEx "umount" mountPoint
+        IProcessBroker.startProcessNoOuputAtAll "umount" mountPoint
         Directory.Delete mountPoint
     // -----------------------------------------------------------------------------------------------------------------

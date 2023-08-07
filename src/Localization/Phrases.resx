@@ -36,4 +36,22 @@
     <data name="Label" xml:space="preserve">
         <value>Label</value>
     </data>
+    <data name="SnapshotInterrupted" xml:space="preserve">
+        <value>Snapshot interrupted by user.</value>
+    </data>
+    <data name="DeletingIncompleteSnapshot" xml:space="preserve">
+        <value>Deleting incomplete snapshot.</value>
+    </data>
+    <data name="NeedToDeleteLastSnapshot" xml:space="preserve">
+        <value>Needed to delete last snapshot, but could not find it.</value>
+    </data>
+    <data name="Elapsed" xml:space="preserve">
+        <value>Elapsed</value>
+    </data>
+    <data name="Completed" xml:space="preserve">
+        <value>Completed</value>
+    </data>
+    <data name="TimeRemaining" xml:space="preserve">
+        <value>Time Remaining</value>
+    </data>
 </root>

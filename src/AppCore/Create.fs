@@ -17,5 +17,5 @@ let Run (createData : CreateData) =
     |> checkDeviceExists
 
     createData
-    |> ICreateService.createSnapshot configData
+    |> ICreateService.createSnapshotOrEx configData
 //----------------------------------------------------------------------------------------------------------------------

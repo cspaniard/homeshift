@@ -17,6 +17,7 @@ type Broker () =
     static member WriteMatrix (rightAlignments : bool array) (hasHeader : bool) (data : string array array) =
 
         // ToDo: Check rightAlignments size vs data line size. Must be the same.
+        // ToDo: Maybe there is way to pass less information in the rightAlignments array.
 
         let columnGap = "   "
 

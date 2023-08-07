@@ -1,12 +1,15 @@
 namespace Services.Create
 
 open System
+open System.Threading
 open Model
-open Motsoft.Util
 
 type private IUsersBroker = DI.Brokers.IUsersBroker
 type private IDevicesBroker = DI.Brokers.IDevicesBroker
 type private IErrors = DI.Services.LocalizationDI.IErrors
+type private ISnapshotBroker = DI.Brokers.ISnapshotBroker
+type private IConsoleBroker = DI.Brokers.IConsoleBroker
+type private IPhrases = DI.Services.LocalizationDI.IPhrases
 
 
 type Service () =
@@ -16,29 +19,51 @@ type Service () =
 
         let line = IUsersBroker.getUserInfoFromPasswordFileOrEx userName
 
-        (line |> String.split ":")[5]
+        (line.Split ":")[5]
         |> Directory.create
         |> IUsersBroker.checkUserHomeExistsOrEx
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member createSnapshot (configData : ConfigData) (createData : CreateData) =
+    static member createSnapshotOrEx (configData : ConfigData) (createData : CreateData) =
 
-        let userHome = Service.getHomeForUserOrEx createData.UserName
+        let mutable PressedCtrlC = false
+
+        let CancelKeyHandler =
+            ConsoleCancelEventHandler(fun _ args -> args.Cancel <- true ; PressedCtrlC <- true)
+
+        let userHomePath = Service.getHomeForUserOrEx createData.UserName
         let mountPoint = IDevicesBroker.mountDeviceOrEx configData.SnapshotDevice
 
-        let dateTime = DateTimeOffset.Now
-        let snapshotPath = $"{mountPoint}/homeshift/snapshots/{createData.UserName}/" +
-                           $"{dateTime.Year}-%02i{dateTime.Month}-%02i{dateTime.Day}_" +
-                           $"%02i{dateTime.Hour}-%02i{dateTime.Minute}-%02i{dateTime.Second}"
+        let userSnapshotsPath = $"{mountPoint}/homeshift/snapshots/{createData.UserName}"
+                                |> Directory.create
 
-        // ToDo: Testing
-        printfn "Haciendo copia..."
-        // Directory.CreateDirectory snapshotPath
-        // |> ignore
+        Console.CancelKeyPress.AddHandler CancelKeyHandler
 
-        printfn $"%s{userHome.value}"
-        printfn $"%s{snapshotPath}"
+        try
+            ISnapshotBroker.getLastSnapshotOptionInPathOrEx userSnapshotsPath
+            |> ISnapshotBroker.createSnapshotOrEx userHomePath userSnapshotsPath
 
-        IDevicesBroker.unmountCurrentOrEx ()
+        finally
+            Console.CancelKeyPress.RemoveHandler CancelKeyHandler
+
+            if PressedCtrlC then
+                [
+                    IPhrases.SnapshotInterrupted
+                    IPhrases.DeletingIncompleteSnapshot
+                    ""
+                ]
+                |> IConsoleBroker.writeLines
+
+                ISnapshotBroker.deleteLastSnapshotOrEx userSnapshotsPath
+
+            let rec tryUnmount n =
+                if n < 10 then
+                    try
+                        IDevicesBroker.unmountCurrentOrEx ()
+                    with _ ->
+                        Thread.Sleep 1000
+                        tryUnmount (n + 1)
+
+            tryUnmount 0
     // -----------------------------------------------------------------------------------------------------------------
