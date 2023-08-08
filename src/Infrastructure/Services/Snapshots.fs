@@ -48,7 +48,7 @@ type Service () =
 
         try
             ISnapshotsBroker.getLastSnapshotOptionInPathOrEx userSnapshotsPath
-            |> ISnapshotsBroker.createSnapshotOrEx userHomePath userSnapshotsPath
+            |> ISnapshotsBroker.createSnapshotOrEx userHomePath userSnapshotsPath createData
 
         finally
             Console.CancelKeyPress.RemoveHandler CancelKeyHandler

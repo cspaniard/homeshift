@@ -1,6 +1,14 @@
 namespace Model
 
+open System
+
 type Snapshot = {
     Name : string
-    // Comment : string          // ToDo: Leave out for now
+    // Comments : string          // ToDo: Leave out for now
+}
+
+
+type SnapshotFileInfo = {
+    CreationDateTime : DateTimeOffset
+    Comments : string
 }

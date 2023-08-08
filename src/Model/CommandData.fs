@@ -1,5 +1,6 @@
 namespace Model
 
+open System
 open Newtonsoft.Json
 open Model.JsonConverters
 
@@ -56,14 +57,16 @@ with
 
 //----------------------------------------------------------------------------------------------------------------------
 type CreateData = {
+    CreationDateTime : DateTimeOffset
     UserName : UserName
-    Comment : string
+    Comments : string
 }
 with
     static member ofOptions (o : CreateOptions) =
         {
+            CreationDateTime = DateTimeOffset.Now
             UserName = o.UserName |> UserName.create
-            Comment = o.Comment
+            Comments = o.Comment
         } : CreateData
 //----------------------------------------------------------------------------------------------------------------------
 

@@ -6,11 +6,38 @@ open System.IO
 open Motsoft.Util
 
 open Model
+open Newtonsoft.Json
 
 type private IProcessBroker = DI.Brokers.IProcessBrokerDI
 type private IPhrases = DI.Services.LocalizationDI.IPhrases
 
 type Broker () =
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static let getSnapshotFileInfo (createData : CreateData) =
+
+        {
+            CreationDateTime = createData.CreationDateTime
+            Comments = if createData.Comments = null then "" else createData.Comments
+        }
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static let getSnapshotPath (userSnapshotsPath : Directory) (dateTime : DateTimeOffset) =
+
+        Path.Combine(userSnapshotsPath.value,
+                     $"{dateTime.Year}-%02i{dateTime.Month}-%02i{dateTime.Day}_" +
+                     $"%02i{dateTime.Hour}-%02i{dateTime.Minute}-%02i{dateTime.Second}")
+        |> Directory.create
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static let createInfoFileOrEx (infoFilePath : Directory) (snapshotFileInfo : SnapshotFileInfo) =
+
+        (Path.Combine(infoFilePath.value, "info.json"),
+         JsonConvert.SerializeObject(snapshotFileInfo, Formatting.Indented))
+        |> File.WriteAllText
+    // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
     static member getAllInfoInPathOrEx (path : Directory) =
@@ -35,18 +62,17 @@ type Broker () =
 
     // -----------------------------------------------------------------------------------------------------------------
     static member createSnapshotOrEx (sourcePath : Directory) (userSnapshotsPath : Directory)
+                                     (createData : CreateData)
                                      (lastSnapshotPathOption : Directory option) =
 
-        let dateTime = DateTimeOffset.Now
+        let baseSnapshotPath = getSnapshotPath userSnapshotsPath createData.CreationDateTime
 
-        let finalDestination =
-            Path.Combine(userSnapshotsPath.value,
-                         $"{dateTime.Year}-%02i{dateTime.Month}-%02i{dateTime.Day}_" +
-                         $"%02i{dateTime.Hour}-%02i{dateTime.Minute}-%02i{dateTime.Second}",
-                         "userfiles")
-            |> Directory.create
+        let finalDestinationPath =
+           (baseSnapshotPath.value, "userfiles")
+           |> Path.Combine
+           |> Directory.create
 
-        Directory.CreateDirectory finalDestination.value |> ignore
+        Directory.CreateDirectory finalDestinationPath.value |> ignore
 
         let stopWatch = Stopwatch.StartNew()
 
@@ -67,14 +93,17 @@ type Broker () =
             IProcessBroker.startProcessWithNotificationOrEx
                 progressCallBack
                 "rsync" ("-a --info=progress2 " +
-                         $"--link-dest={linkDestPath.value} {sourcePath.value}/ {finalDestination.value}")
+                         $"--link-dest={linkDestPath.value} {sourcePath.value}/ {finalDestinationPath.value}")
 
         | None ->
             IProcessBroker.startProcessWithNotificationOrEx
                 progressCallBack
-                "rsync" $"-a --info=progress2 {sourcePath.value}/ {finalDestination.value}"
+                "rsync" $"-a --info=progress2 {sourcePath.value}/ {finalDestinationPath.value}"
 
         stopWatch.Stop()
+
+        getSnapshotFileInfo createData
+        |> createInfoFileOrEx baseSnapshotPath
 
         Console.WriteLine($"{IPhrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
                           $"%02i{stopWatch.Elapsed.Minutes}:%02i{stopWatch.Elapsed.Seconds} - " +
