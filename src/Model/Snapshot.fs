@@ -3,12 +3,13 @@ namespace Model
 open System
 
 type Snapshot = {
+    CreationDateTime : DateTimeOffset
     Name : string
-    // Comments : string          // ToDo: Leave out for now
+    Comments : string
 }
 
 
-type SnapshotFileInfo = {
+type SnapshotInfoFileData = {
     CreationDateTime : DateTimeOffset
     Comments : string
 }

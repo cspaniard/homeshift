@@ -21,8 +21,8 @@ let RunOfDataOrEx (listData : ListData) =
 //----------------------------------------------------------------------------------------------------------------------
 let RunOfOptionsOrEx (options : ListOptions) =
 
-    Console.WriteLine "Listing snapshots."
+    Console.WriteLine "Listing snapshots.\n"
 
     RunOfDataOrEx (options |> ListData.ofOptions)
-    |> Seq.iter (fun s -> printfn $"%s{s.Name}")
+    |> Seq.iter (fun s -> printfn $"%s{s.Name} - {s.Comments}")
 //----------------------------------------------------------------------------------------------------------------------

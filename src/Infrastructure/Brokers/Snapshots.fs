@@ -11,7 +11,13 @@ open Newtonsoft.Json
 type private IProcessBroker = DI.Brokers.IProcessBrokerDI
 type private IPhrases = DI.Services.LocalizationDI.IPhrases
 
+
 type Broker () =
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static let [<Literal>] USER_FILES_DIRECTORY = "userfiles"
+    static let [<Literal>] INFO_FILE_NAME = "info.json"
+    // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
     static let getSnapshotFileInfo (createData : CreateData) =
@@ -32,9 +38,9 @@ type Broker () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static let createInfoFileOrEx (infoFilePath : Directory) (snapshotFileInfo : SnapshotFileInfo) =
+    static let createInfoFileOrEx (infoFilePath : Directory) (snapshotFileInfo : SnapshotInfoFileData) =
 
-        (Path.Combine(infoFilePath.value, "info.json"),
+        (Path.Combine(infoFilePath.value, INFO_FILE_NAME),
          JsonConvert.SerializeObject(snapshotFileInfo, Formatting.Indented))
         |> File.WriteAllText
     // -----------------------------------------------------------------------------------------------------------------
@@ -42,9 +48,22 @@ type Broker () =
     // -----------------------------------------------------------------------------------------------------------------
     static member getAllInfoInPathOrEx (path : Directory) =
 
+        let getSnapshotInfoFromDir (dirName : string) =
+
+            let snapshotFileInfoData =
+                Path.Combine(dirName, INFO_FILE_NAME)
+                |> File.ReadAllText
+                |> JsonConvert.DeserializeObject<SnapshotInfoFileData>
+
+            {
+                CreationDateTime = snapshotFileInfoData.CreationDateTime
+                Name = Path.GetFileName dirName
+                Comments = snapshotFileInfoData.Comments
+            } : Snapshot
+
         Directory.GetDirectories path.value
-        // ToDo: We need to dive in each one to get extra info like Description.
-        |> Array.map (fun d -> { Name = Path.GetFileName d } : Snapshot)
+        |> Array.sort
+        |> Array.map getSnapshotInfoFromDir
         |> Seq.ofArray
     // -----------------------------------------------------------------------------------------------------------------
 
@@ -68,9 +87,9 @@ type Broker () =
         let baseSnapshotPath = getSnapshotPath userSnapshotsPath createData.CreationDateTime
 
         let finalDestinationPath =
-           (baseSnapshotPath.value, "userfiles")
-           |> Path.Combine
-           |> Directory.create
+            (baseSnapshotPath.value, USER_FILES_DIRECTORY)
+            |> Path.Combine
+            |> Directory.create
 
         Directory.CreateDirectory finalDestinationPath.value |> ignore
 
@@ -88,7 +107,7 @@ type Broker () =
 
         match lastSnapshotPathOption with
         | Some lsp ->
-            let linkDestPath = Path.Combine(lsp.value, "userfiles") |> Directory.create
+            let linkDestPath = Path.Combine(lsp.value, USER_FILES_DIRECTORY) |> Directory.create
 
             IProcessBroker.startProcessWithNotificationOrEx
                 progressCallBack
