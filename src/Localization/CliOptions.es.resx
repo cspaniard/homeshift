@@ -22,7 +22,7 @@
         <value>Configura valores por defecto.</value>
     </data>
     <data name="CreateUser" xml:space="preserve">
-        <value>Realiza una instantánea del usuario especificado.</value>
+        <value>Usuario del que realizar la instantánea.</value>
     </data>
     <data name="CreateComments" xml:space="preserve">
         <value>Especifica la descripción de la instantánea.</value>
@@ -43,7 +43,7 @@
         <value>Dispositivo donde se guardarán las instantáneas.</value>
     </data>
     <data name="VerbList" xml:space="preserve">
-        <value>Lista las instantáneas.</value>
+        <value>Lista las instantáneas de un usuario.</value>
     </data>
     <data name="VerbRestore" xml:space="preserve">
         <value>Restaura instantánea.</value>
@@ -65,5 +65,8 @@
     </data>
     <data name="DeleteUser" xml:space="preserve">
         <value>Usuario del que eliminar instantáneas.</value>
+    </data>
+    <data name="ListUser" xml:space="preserve">
+        <value>Usuario del que listar instantáneas.</value>
     </data>
 </root>

@@ -18,6 +18,7 @@
         <Compile Include="Options.fs" />
         <Compile Include="CommandData.fs" />
         <Compile Include="Devices.fs" />
+        <Compile Include="Snapshot.fs" />
     </ItemGroup>
 
     <ItemGroup>

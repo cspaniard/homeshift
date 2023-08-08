@@ -30,7 +30,7 @@ try
     |> function
     | :? Parsed<obj> as command ->
         match command.Value with
-        | :? ListOptions -> List.Run ()
+        | :? ListOptions as opts -> List.RunOfOptionsOrEx opts
         | :? ListDevicesOptions -> ListDevices.Run ()
         | :? ConfigOptions as opts -> Config.RunOfOptionsOrEx opts
         | :? CreateOptions as opts -> CreateData.ofOptions opts |> Create.Run

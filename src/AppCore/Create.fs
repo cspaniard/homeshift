@@ -4,7 +4,7 @@ open Model
 open AppCore.Helpers
 
 type private IConfigService = DI.Services.IConfigService
-type private ICreateService = DI.Services.ICreateService
+type private ISnapshotsService = DI.Services.ISnapshotsService
 
 //----------------------------------------------------------------------------------------------------------------------
 let Run (createData : CreateData) =
@@ -17,5 +17,5 @@ let Run (createData : CreateData) =
     |> checkDeviceExists
 
     createData
-    |> ICreateService.createSnapshotOrEx configData
+    |> ISnapshotsService.createOrEx configData
 //----------------------------------------------------------------------------------------------------------------------

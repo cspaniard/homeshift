@@ -146,5 +146,11 @@ namespace Localization {
                 return ResourceManager.GetString("DeleteUser", resourceCulture);
             }
         }
+        
+        public static string ListUser {
+            get {
+                return ResourceManager.GetString("ListUser", resourceCulture);
+            }
+        }
     }
 }

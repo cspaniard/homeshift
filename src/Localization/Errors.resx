@@ -45,4 +45,10 @@
     <data name="HomeDirectoryDoesNotExist" xml:space="preserve">
         <value>User's home directory does not exist.</value>
     </data>
+    <data name="CouldNotUnmount" xml:space="preserve">
+        <value>Device could not be unmounted.</value>
+    </data>
+    <data name="UserInvalid" xml:space="preserve">
+        <value>User name is invalid.</value>
+    </data>
 </root>

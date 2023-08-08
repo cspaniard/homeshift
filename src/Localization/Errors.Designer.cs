@@ -98,5 +98,17 @@ namespace Localization {
                 return ResourceManager.GetString("HomeDirectoryDoesNotExist", resourceCulture);
             }
         }
+        
+        public static string CouldNotUnmount {
+            get {
+                return ResourceManager.GetString("CouldNotUnmount", resourceCulture);
+            }
+        }
+        
+        public static string UserInvalid {
+            get {
+                return ResourceManager.GetString("UserInvalid", resourceCulture);
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-namespace Brokers.Snapshot
+namespace Brokers.Snapshots
 
 open System
 open System.Diagnostics
@@ -11,6 +11,15 @@ type private IProcessBroker = DI.Brokers.IProcessBrokerDI
 type private IPhrases = DI.Services.LocalizationDI.IPhrases
 
 type Broker () =
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static member getAllInfoInPathOrEx (path : Directory) =
+
+        Directory.GetDirectories path.value
+        // ToDo: We need to dive in each one to get extra info like Description.
+        |> Array.map (fun d -> { Name = Path.GetFileName d } : Snapshot)
+        |> Seq.ofArray
+    // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
     static member getLastSnapshotOptionInPathOrEx (path : Directory) =

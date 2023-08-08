@@ -9,7 +9,10 @@ open type Localization.CliOptions
 
 //----------------------------------------------------------------------------------------------------------------------
 [<Verb("list", HelpText = nameof VerbList, ResourceType = typeof<CliOptions>)>]
-type ListOptions () = class end
+type ListOptions = {
+    [<Option ("user", Required = true, HelpText = nameof ListUser, ResourceType = typeof<CliOptions>)>]
+    UserName : string
+}
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
