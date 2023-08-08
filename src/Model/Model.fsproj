@@ -15,6 +15,7 @@
         <Compile Include="Directory.fs" />
         <Compile Include="JsonConverters\SnapshotDeviceConverter.fs" />
         <Compile Include="JsonConverters\UserConverter.fs" />
+        <Compile Include="JsonConverters\CommentsConverter.fs" />
         <Compile Include="Options.fs" />
         <Compile Include="CommandData.fs" />
         <Compile Include="Devices.fs" />

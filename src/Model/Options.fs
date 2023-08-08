@@ -51,8 +51,8 @@ type CreateOptions = {
     [<Option ("user", Required = true, HelpText = nameof CreateUser, ResourceType = typeof<CliOptions>)>]
     UserName : string
 
-    [<Option ("comment", HelpText = nameof CreateComments , ResourceType = typeof<CliOptions>)>]
-    Comment : string
+    [<Option ("comments", HelpText = nameof CreateComments , ResourceType = typeof<CliOptions>)>]
+    Comments : string
 }
 //----------------------------------------------------------------------------------------------------------------------
 

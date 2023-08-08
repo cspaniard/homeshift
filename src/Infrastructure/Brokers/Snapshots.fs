@@ -24,8 +24,8 @@ type Broker () =
 
         {
             CreationDateTime = createData.CreationDateTime
-            Comments = if createData.Comments = null then "" else createData.Comments
-        }
+            Comments = createData.Comments
+        } : SnapshotInfoFileData
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------

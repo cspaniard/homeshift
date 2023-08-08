@@ -42,7 +42,7 @@ function _homeshift()
     case $opt in
     "create")
         COMPREPLY=( $(compgen -W '
-            --user --comment --help --version
+            --user --comments --help --version
             ' -- "$cur" ) )
         return 0
         ;;

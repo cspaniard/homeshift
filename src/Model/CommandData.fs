@@ -59,14 +59,14 @@ with
 type CreateData = {
     CreationDateTime : DateTimeOffset
     UserName : UserName
-    Comments : string
+    Comments : Comments
 }
 with
     static member ofOptions (o : CreateOptions) =
         {
             CreationDateTime = DateTimeOffset.Now
             UserName = o.UserName |> UserName.create
-            Comments = o.Comment
+            Comments = o.Comments |> Comments.create
         } : CreateData
 //----------------------------------------------------------------------------------------------------------------------
 

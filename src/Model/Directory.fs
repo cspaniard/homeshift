@@ -26,3 +26,23 @@ type Directory =
             |> Directory.canonicalize
             |> Directory.validateOrEx
             |> Directory
+
+type Comments =
+
+    private Comments of string with
+
+        static member private canonicalize (value : string) =
+            value
+            |> trim
+
+        member this.value = let (Comments value) = this in value
+
+        override this.ToString () = this.value
+
+        static member create (value : string) =
+
+            let value = if value = null then "" else value
+
+            value
+            |> Comments.canonicalize
+            |> Comments
