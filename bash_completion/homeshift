@@ -29,6 +29,14 @@ function _homeshift()
 
     esac
 
+    case "${prev}" in
+    "--user")
+        _allowed_users
+        return 0
+        ;;
+
+    esac
+
     opt="${COMP_WORDS[1]}"
 
     case $opt in
@@ -56,6 +64,13 @@ function _homeshift()
     "delete")
         COMPREPLY=( $(compgen -W '
             --user --snapshot --all --help --version
+            ' -- "$cur" ) )
+        return 0
+        ;;
+
+    "list")
+        COMPREPLY=( $(compgen -W '
+            --user --all --help --version
             ' -- "$cur" ) )
         return 0
         ;;
