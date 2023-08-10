@@ -3,11 +3,11 @@ namespace Services.Devices
 open Newtonsoft.Json
 open Motsoft.Util
 open Model
-open Localization
 
 
 type private IDevicesBroker = DI.Brokers.IDevicesBroker
 type private IConsoleBroker = DI.Brokers.IConsoleBroker
+type private IPhrases = DI.Services.LocalizationDI.IPhrases
 
 type Service () =
 
@@ -41,13 +41,13 @@ type Service () =
 
         [
             ""
-            Phrases.MountedDevices
+            IPhrases.MountedDevices
             ""
         ]
         |> IConsoleBroker.writeLines
 
         [|
-            [| Phrases.Device ; Phrases.Size ; Phrases.MountPoint ; Phrases.Type ; Phrases.Label |]
+            [| IPhrases.Device ; IPhrases.Size ; IPhrases.MountPoint ; IPhrases.Type ; IPhrases.Label |]
 
             for d in devices do
                 [| d.Path ; d.Size ; d.MountPoint ; d.FileSystemType ; d.Label |]

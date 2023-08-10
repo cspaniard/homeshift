@@ -116,5 +116,23 @@ namespace Localization {
                 return ResourceManager.GetString("TimeRemaining", resourceCulture);
             }
         }
+        
+        public static string UserSnapshots {
+            get {
+                return ResourceManager.GetString("UserSnapshots", resourceCulture);
+            }
+        }
+        
+        public static string SnapshotName {
+            get {
+                return ResourceManager.GetString("SnapshotName", resourceCulture);
+            }
+        }
+        
+        public static string SnapshotComments {
+            get {
+                return ResourceManager.GetString("SnapshotComments", resourceCulture);
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ type private ISnapshotsBroker = DI.Brokers.ISnapshotsBroker
 type private IConsoleBroker = DI.Brokers.IConsoleBroker
 type private IUsersService = DI.Services.IUsersService
 
+
 type Service () =
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -78,4 +79,23 @@ type Service () =
 
         unmountDeviceOrEx ()
         list
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static member outputSnapshots (userName : UserName) (snapshots : Snapshot seq) =
+
+        [
+            ""
+            $"{IPhrases.UserSnapshots}: {userName.value}"
+            ""
+        ]
+        |> IConsoleBroker.writeLines
+
+        [|
+            [| IPhrases.SnapshotName ; IPhrases.SnapshotComments |]
+
+            for d in snapshots do
+                [| d.Name ; d.Comments.value |]
+        |]
+        |> IConsoleBroker.WriteMatrixWithFooter [| false ; false |] true [ "" ]
     // -----------------------------------------------------------------------------------------------------------------

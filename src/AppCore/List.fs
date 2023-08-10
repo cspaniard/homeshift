@@ -1,7 +1,5 @@
 module AppCore.List
 
-open System
-
 open Helpers
 open Model
 
@@ -21,8 +19,6 @@ let RunOfDataOrEx (listData : ListData) =
 //----------------------------------------------------------------------------------------------------------------------
 let RunOfOptionsOrEx (options : ListOptions) =
 
-    Console.WriteLine "Listing snapshots.\n"
-
     RunOfDataOrEx (options |> ListData.ofOptions)
-    |> Seq.iter (fun s -> printfn $"%s{s.Name} - {s.Comments}")
+    |> ISnapshotsService.outputSnapshots (options.UserName |> UserName.create)
 //----------------------------------------------------------------------------------------------------------------------

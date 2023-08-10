@@ -54,4 +54,13 @@
     <data name="TimeRemaining" xml:space="preserve">
         <value>Time Remaining</value>
     </data>
+    <data name="UserSnapshots" xml:space="preserve">
+        <value>User snapshots</value>
+    </data>
+    <data name="SnapshotName" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="SnapshotComments" xml:space="preserve">
+        <value>Comments</value>
+    </data>
 </root>
