@@ -68,11 +68,11 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member listOrEx (configData : ConfigData) (listData : ListData) =
+    static member listOrEx (snapshotDevice : SnapshotDevice) (userName : UserName) =
 
-        let mountPoint = IDevicesBroker.mountDeviceOrEx configData.SnapshotDevice
+        let mountPoint = IDevicesBroker.mountDeviceOrEx snapshotDevice
 
-        let userSnapshotsPath = $"{mountPoint}/homeshift/snapshots/{listData.UserName}"
+        let userSnapshotsPath = $"{mountPoint}/homeshift/snapshots/{userName}"
                                 |> Directory.create
 
         let list = ISnapshotsBroker.getAllInfoInPathOrEx userSnapshotsPath
@@ -82,7 +82,7 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member outputSnapshots (userName : UserName) (snapshots : Snapshot seq) =
+    static member outputOrEx (userName : UserName) (snapshots : Snapshot seq) =
 
         [
             ""
@@ -98,4 +98,34 @@ type Service () =
                 [| d.Name ; d.Comments.value |]
         |]
         |> IConsoleBroker.WriteMatrixWithFooter [| false ; false |] true [ "" ]
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static member deleteOrEx (configData : ConfigData) (deleteData : DeleteData) =
+
+        [
+            ""
+            $"{IPhrases.SnapshotDeleting} ({deleteData.UserName.value}): {deleteData.SnapshotName}"
+            ""
+        ]
+        |> IConsoleBroker.writeLines
+
+
+        let mountPoint = IDevicesBroker.mountDeviceOrEx configData.SnapshotDevice
+
+        let snapshotsPath = $"{mountPoint}/homeshift/snapshots/{deleteData.UserName}/{deleteData.SnapshotName}"
+                            |> Directory.create
+
+        try
+            ISnapshotsBroker.deletetSnapshotPathOrEx snapshotsPath
+
+        finally
+            unmountDeviceOrEx ()
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static member isValidOrEx (snapshotDevice : SnapshotDevice) (userName : UserName) (snapshotName : string) =
+
+        Service.listOrEx snapshotDevice userName
+        |> Seq.exists (fun s -> s.Name = snapshotName)
     // -----------------------------------------------------------------------------------------------------------------

@@ -130,9 +130,15 @@ type Broker () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
+    static member deletetSnapshotPathOrEx (snapshotsPath : Directory) =
+
+        Directory.Delete(snapshotsPath.value, true)
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
     static member deleteLastSnapshotOrEx (userSnapshotsPath : Directory) =
 
         match Broker.getLastSnapshotOptionInPathOrEx userSnapshotsPath with
-        | Some path -> Directory.Delete(path.value, true)
+        | Some path -> Broker.deletetSnapshotPathOrEx path
         | None -> failwith IPhrases.NeedToDeleteLastSnapshot
     // -----------------------------------------------------------------------------------------------------------------

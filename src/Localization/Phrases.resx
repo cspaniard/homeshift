@@ -63,4 +63,7 @@
     <data name="SnapshotComments" xml:space="preserve">
         <value>Comments</value>
     </data>
+    <data name="SnapshotDeleting" xml:space="preserve">
+        <value>Deleting snapshot</value>
+    </data>
 </root>

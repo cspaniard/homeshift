@@ -1,12 +1,29 @@
 module AppCore.Delete
 
-open System
 open Model
+open Helpers
+
+type private IConfigService = DI.Services.IConfigService
+type private ISnapshotsService = DI.Services.ISnapshotsService
 
 //----------------------------------------------------------------------------------------------------------------------
-let Run (options : DeleteData) =
-    Console.WriteLine $"Hello %A{options} 5"
+let RunOfDataOrEx (deleteData : DeleteData) =
 
-    Helpers.checkRootUserOrEx ()
-    Console.WriteLine "Pues seguimos como root."
+    checkRootUserOrEx ()
+
+    let configData = IConfigService.getConfigDataOrEx ()
+
+    checkUserOrEx deleteData.UserName
+    checkDeviceOrEx configData.SnapshotDevice
+    checkSnapshotOrEx configData.SnapshotDevice deleteData.UserName deleteData.SnapshotName
+
+    ISnapshotsService.deleteOrEx configData deleteData
+//----------------------------------------------------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------------------------------------------------
+let RunOfOptionsOrEx (deleteOptions : DeleteOptions) =
+
+    deleteOptions
+    |> DeleteData.ofOptions
+    |> RunOfDataOrEx
 //----------------------------------------------------------------------------------------------------------------------

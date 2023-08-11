@@ -3,22 +3,26 @@ module AppCore.List
 open Helpers
 open Model
 
-type IConfigService = DI.Services.IConfigService
-type ISnapshotsService = DI.Services.ISnapshotsService
+type private IConfigService = DI.Services.IConfigService
+type private ISnapshotsService = DI.Services.ISnapshotsService
 
 
 //----------------------------------------------------------------------------------------------------------------------
 let RunOfDataOrEx (listData : ListData) =
 
-    checkValidUser listData.UserName
-
     let configData = IConfigService.getConfigDataOrEx ()
-    ISnapshotsService.listOrEx configData listData
+
+    checkUserOrEx listData.UserName
+    checkDeviceOrEx configData.SnapshotDevice
+
+    ISnapshotsService.listOrEx configData.SnapshotDevice listData.UserName
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
-let RunOfOptionsOrEx (options : ListOptions) =
+let RunOfOptionsOrEx (listOptions : ListOptions) =
 
-    RunOfDataOrEx (options |> ListData.ofOptions)
-    |> ISnapshotsService.outputSnapshots (options.UserName |> UserName.create)
+    listOptions
+    |> ListData.ofOptions
+    |> RunOfDataOrEx
+    |> ISnapshotsService.outputOrEx (listOptions.UserName |> UserName.create)
 //----------------------------------------------------------------------------------------------------------------------

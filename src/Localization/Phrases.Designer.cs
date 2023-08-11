@@ -134,5 +134,11 @@ namespace Localization {
                 return ResourceManager.GetString("SnapshotComments", resourceCulture);
             }
         }
+        
+        public static string SnapshotDeleting {
+            get {
+                return ResourceManager.GetString("SnapshotDeleting", resourceCulture);
+            }
+        }
     }
 }

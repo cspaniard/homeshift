@@ -10,8 +10,8 @@ let RunOfDataOrEx (configData : ConfigData) =
 
     checkRootUserOrEx ()
 
-    configData.SnapshotDevice.value
-    |> checkDeviceExists
+    configData.SnapshotDevice
+    |> checkDeviceOrEx
 
     IConfigService.storeConfigDataOrEx configData
 //----------------------------------------------------------------------------------------------------------------------

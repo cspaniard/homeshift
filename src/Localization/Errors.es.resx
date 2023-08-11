@@ -51,4 +51,7 @@
     <data name="UserInvalid" xml:space="preserve">
         <value>El nombre del usuario es inválido.</value>
     </data>
+    <data name="SnapshotInvalid" xml:space="preserve">
+        <value>Instantánea inválida.</value>
+    </data>
 </root>

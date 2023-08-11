@@ -13,8 +13,8 @@ let Run (createData : CreateData) =
 
     let configData = IConfigService.getConfigDataOrEx ()
 
-    configData.SnapshotDevice.value
-    |> checkDeviceExists
+    configData.SnapshotDevice
+    |> checkDeviceOrEx
 
     createData
     |> ISnapshotsService.createOrEx configData

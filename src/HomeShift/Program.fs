@@ -36,9 +36,9 @@ try
         | :? CreateOptions as opts -> CreateData.ofOptions opts |> Create.Run
         | :? RestoreOptions as opts -> RestoreData.ofOptions opts |> Restore.Run
 
-        | :? DeleteOptions as o ->
+        | :? DeleteOptions as deleteOptions ->
             match parser.ParseArguments<DeleteOptionsAtLeastOne> args with
-            | :? Parsed<DeleteOptionsAtLeastOne> -> DeleteData.ofOptions o |> Delete.Run
+            | :? Parsed<DeleteOptionsAtLeastOne> -> Delete.RunOfOptionsOrEx deleteOptions
             | :? NotParsed<DeleteOptionsAtLeastOne> as notParsed ->
                     IHelpService.helpTextFromResult notParsed |> Console.WriteLine
             | _ -> Console.WriteLine "Should not get here 3."

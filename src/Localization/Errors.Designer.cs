@@ -110,5 +110,11 @@ namespace Localization {
                 return ResourceManager.GetString("UserInvalid", resourceCulture);
             }
         }
+        
+        public static string SnapshotInvalid {
+            get {
+                return ResourceManager.GetString("SnapshotInvalid", resourceCulture);
+            }
+        }
     }
 }

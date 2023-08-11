@@ -20,6 +20,8 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
     static member isValidUser (userName : UserName) =
 
+        // ToDo: Revisit this idea.
+
         try
             Service.getHomeForUserOrEx userName |> ignore
             true

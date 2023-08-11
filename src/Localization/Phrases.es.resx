@@ -56,4 +56,7 @@
     <data name="SnapshotComments" xml:space="preserve">
         <value>Comentarios</value>
     </data>
+    <data name="SnapshotDeleting" xml:space="preserve">
+        <value>Elimininando instantánea</value>
+    </data>
 </root>

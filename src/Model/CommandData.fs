@@ -7,13 +7,11 @@ open Model.JsonConverters
 //----------------------------------------------------------------------------------------------------------------------
 type ListData = {
     UserName : UserName
-    ListAll : bool
 }
 with
     static member ofOptions (options : ListOptions) =
         {
             UserName = options.UserName |> UserName.create
-            ListAll = false    // ToDo: Just for testing. FIX IT.
         } : ListData
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -84,14 +82,14 @@ with
 //----------------------------------------------------------------------------------------------------------------------
 type DeleteData = {
     UserName : UserName
-    Snapshot : string
+    SnapshotName : string
     DeleteAll : bool
 }
 with
     static member ofOptions (o : DeleteOptions) =
         {
             UserName = o.UserName |> UserName.create
-            Snapshot = o.Snapshot
+            SnapshotName = o.Snapshot
             DeleteAll = o.DeleteAll
         } : DeleteData
 //----------------------------------------------------------------------------------------------------------------------
