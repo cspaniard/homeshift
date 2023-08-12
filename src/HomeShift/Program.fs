@@ -29,6 +29,9 @@ try
                           CreateOptions, RestoreOptions, DeleteOptions> args
     |> function
     | :? Parsed<obj> as command ->
+
+        IHelpService.showHeading ()
+
         match command.Value with
         | :? ListOptions as opts -> List.RunOfOptionsOrEx opts
         | :? ListDevicesOptions -> ListDevices.Run ()
@@ -46,12 +49,11 @@ try
         | _ -> Console.WriteLine "Should not get here 1."
 
     | :? NotParsed<obj> as notParsed when notParsed.Errors.IsVersion() ->
-            IHelpService.Heading |> printfn "%s\n"
+            IHelpService.showHeading ()
     | :? NotParsed<obj> as notParsed ->
             IHelpService.helpTextFromResult notParsed |> Console.WriteLine
     | _ -> Console.WriteLine "Should not get here 2."
 
 with e ->
-    IHelpService.Heading |> printfn "%s\n"
     Console.WriteLine $"{e.Message}\n"
-    Console.WriteLine $"{e.StackTrace}\n"
+    // Console.WriteLine $"{e.StackTrace}\n"

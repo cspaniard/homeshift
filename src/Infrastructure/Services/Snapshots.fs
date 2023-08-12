@@ -88,7 +88,6 @@ type Service () =
         snapshots |> Seq.isEmpty |> failWithIfTrue $"{IErrors.SnapshotNonFound} ({userName.value})"
 
         [
-            ""
             $"{IPhrases.UserSnapshots}: {userName.value}"
             ""
         ]
@@ -107,7 +106,6 @@ type Service () =
     static member deleteOrEx (snapshotDevice : SnapshotDevice) (deleteData : DeleteData) =
 
         [
-            ""
             $"{IPhrases.SnapshotDeleting} ({deleteData.UserName.value}): {deleteData.SnapshotName}"
             ""
         ]
@@ -140,7 +138,6 @@ type Service () =
             snapshotList |> Seq.isEmpty |> failWithIfTrue $"{IErrors.SnapshotNonFound} ({userName.value})"
 
             [
-                ""
                 $"{IPhrases.SnapshotDeletingAll} ({userName.value})"
                 ""
             ]
@@ -158,6 +155,8 @@ type Service () =
             $"{mountPoint}/homeshift/snapshots/{userName}"
             |> Directory.create
             |> ISnapshotsBroker.deleteUserPathIfEmptyOrEx
+
+            [ "" ] |> IConsoleBroker.writeLines
 
         finally
             unmountDeviceOrEx ()

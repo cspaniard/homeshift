@@ -5,6 +5,7 @@ open AppCore.Helpers
 
 type private IConfigService = DI.Services.IConfigService
 type private ISnapshotsService = DI.Services.ISnapshotsService
+type private IConsoleBroker = DI.Brokers.IConsoleBroker
 
 //----------------------------------------------------------------------------------------------------------------------
 let Run (createData : CreateData) =
@@ -13,8 +14,7 @@ let Run (createData : CreateData) =
 
     let configData = IConfigService.getConfigDataOrEx ()
 
-    configData.SnapshotDevice
-    |> checkDeviceOrEx
+    checkDeviceOrEx configData.SnapshotDevice
 
     createData
     |> ISnapshotsService.createOrEx configData

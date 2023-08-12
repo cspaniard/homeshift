@@ -7,6 +7,7 @@ open CommandLine
 open CommandLine.Text
 
 type private ISentenceBuilder = DI.Services.LocalizationDI.ISentenceBuilder
+type IConsoleBroker = DI.Brokers.IConsoleBroker
 
 
 type Service () =
@@ -28,4 +29,14 @@ type Service () =
 
         let groupWord = ISentenceBuilder().OptionGroupWord.Invoke()
         Regex.Replace(helpText, $"\({groupWord}:.*\) ", "")
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static member showHeading () =
+
+        [
+            Service.Heading
+            ""
+        ]
+        |> IConsoleBroker.writeLines
     // -----------------------------------------------------------------------------------------------------------------

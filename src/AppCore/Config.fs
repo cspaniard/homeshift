@@ -1,9 +1,11 @@
 ﻿module AppCore.Config
 
+open DI.Services.LocalizationDI
 open Model
 open AppCore.Helpers
 
 type private IConfigService = DI.Services.IConfigService
+type private IConsoleBroker = DI.Brokers.IConsoleBroker
 
 //----------------------------------------------------------------------------------------------------------------------
 let RunOfDataOrEx (configData : ConfigData) =
@@ -24,4 +26,10 @@ let RunOfOptionsOrEx (options : ConfigOptions) =
     IConfigService.getConfigDataOrEx ()
     |> ConfigData.mergeWithOptions options
     |> RunOfDataOrEx
+
+    [
+        IPhrases.ConfigSaved
+        ""
+    ]
+    |> IConsoleBroker.writeLines
 //----------------------------------------------------------------------------------------------------------------------

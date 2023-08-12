@@ -62,4 +62,10 @@
     <data name="SnapshotDeletingAll" xml:space="preserve">
         <value>Eliminando todas las instantáneas</value>
     </data>
+    <data name="ConfigSaved" xml:space="preserve">
+        <value>La configuración ha sido guardada.</value>
+    </data>
+    <data name="SnapshotCreating" xml:space="preserve">
+        <value>Creando instantánea</value>
+    </data>
 </root>

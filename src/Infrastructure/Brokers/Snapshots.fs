@@ -94,6 +94,8 @@ type Broker () =
             |> Path.Combine
             |> Directory.create
 
+        Console.WriteLine($"{IPhrases.SnapshotCreating} ({createData.UserName.value}): " +
+                          $"{Path.GetFileName baseSnapshotPath.value}\n")
         Directory.CreateDirectory finalDestinationPath.value |> ignore
 
         let stopWatch = Stopwatch.StartNew()

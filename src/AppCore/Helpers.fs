@@ -33,5 +33,5 @@ let checkUserOrEx (userName : UserName) =
 let checkSnapshotOrEx (snapshotDevice : SnapshotDevice) (userName : UserName) (snapshotName : string) =
 
    ISnapshotService.isValidOrEx snapshotDevice userName snapshotName
-   |> failWithIfFalse $"{IErrors.SnapshotInvalid} ({snapshotName})"
+   |> failWithIfFalse $"{IErrors.SnapshotInvalid} ({userName.value}): {snapshotName}"
 //----------------------------------------------------------------------------------------------------------------------

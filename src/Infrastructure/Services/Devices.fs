@@ -40,7 +40,6 @@ type Service () =
     static member outputDevices (devices : DeviceDataChild seq) =
 
         [
-            ""
             IPhrases.MountedDevices
             ""
         ]

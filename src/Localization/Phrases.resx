@@ -69,4 +69,10 @@
     <data name="SnapshotDeletingAll" xml:space="preserve">
         <value>Deleting all snapshots</value>
     </data>
+    <data name="ConfigSaved" xml:space="preserve">
+        <value>Configuration has been saved.</value>
+    </data>
+    <data name="SnapshotCreating" xml:space="preserve">
+        <value>Creating snapshot</value>
+    </data>
 </root>
