@@ -59,4 +59,7 @@
     <data name="SnapshotDeleting" xml:space="preserve">
         <value>Elimininando instantánea</value>
     </data>
+    <data name="SnapshotDeletingAll" xml:space="preserve">
+        <value>Eliminando todas las instantáneas</value>
+    </data>
 </root>

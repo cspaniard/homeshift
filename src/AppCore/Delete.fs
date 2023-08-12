@@ -15,9 +15,12 @@ let RunOfDataOrEx (deleteData : DeleteData) =
 
     checkUserOrEx deleteData.UserName
     checkDeviceOrEx configData.SnapshotDevice
-    checkSnapshotOrEx configData.SnapshotDevice deleteData.UserName deleteData.SnapshotName
 
-    ISnapshotsService.deleteOrEx configData deleteData
+    if deleteData.DeleteAll then
+        ISnapshotsService.deleteAll configData.SnapshotDevice deleteData.UserName
+    else
+        checkSnapshotOrEx configData.SnapshotDevice deleteData.UserName deleteData.SnapshotName
+        ISnapshotsService.deleteOrEx configData.SnapshotDevice deleteData
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------

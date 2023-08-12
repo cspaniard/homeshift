@@ -66,4 +66,7 @@
     <data name="SnapshotDeleting" xml:space="preserve">
         <value>Deleting snapshot</value>
     </data>
+    <data name="SnapshotDeletingAll" xml:space="preserve">
+        <value>Deleting all snapshots</value>
+    </data>
 </root>

@@ -2,6 +2,7 @@ namespace Services.Snapshots
 
 open System
 open System.Threading
+open Motsoft.Util
 
 open Model
 
@@ -84,6 +85,8 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
     static member outputOrEx (userName : UserName) (snapshots : Snapshot seq) =
 
+        snapshots |> Seq.isEmpty |> failWithIfTrue $"{IErrors.SnapshotNonFound} ({userName.value})"
+
         [
             ""
             $"{IPhrases.UserSnapshots}: {userName.value}"
@@ -101,7 +104,7 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member deleteOrEx (configData : ConfigData) (deleteData : DeleteData) =
+    static member deleteOrEx (snapshotDevice : SnapshotDevice) (deleteData : DeleteData) =
 
         [
             ""
@@ -111,13 +114,50 @@ type Service () =
         |> IConsoleBroker.writeLines
 
 
-        let mountPoint = IDevicesBroker.mountDeviceOrEx configData.SnapshotDevice
+        let mountPoint = IDevicesBroker.mountDeviceOrEx snapshotDevice
 
-        let snapshotsPath = $"{mountPoint}/homeshift/snapshots/{deleteData.UserName}/{deleteData.SnapshotName}"
-                            |> Directory.create
+        let snapshotPath = $"{mountPoint}/homeshift/snapshots/{deleteData.UserName}/{deleteData.SnapshotName}"
+                           |> Directory.create
 
         try
-            ISnapshotsBroker.deletetSnapshotPathOrEx snapshotsPath
+            ISnapshotsBroker.deleteSnapshotPathOrEx snapshotPath
+
+            $"{mountPoint}/homeshift/snapshots/{deleteData.UserName.value}"
+            |> Directory.create
+            |> ISnapshotsBroker.deleteUserPathIfEmptyOrEx
+
+        finally
+            unmountDeviceOrEx ()
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static member deleteAll (snapshotDevice : SnapshotDevice) (userName : UserName) =
+
+        try
+            let snapshotList = Service.listOrEx snapshotDevice userName
+            let mountPoint = IDevicesBroker.mountDeviceOrEx snapshotDevice
+
+            snapshotList |> Seq.isEmpty |> failWithIfTrue $"{IErrors.SnapshotNonFound} ({userName.value})"
+
+            [
+                ""
+                $"{IPhrases.SnapshotDeletingAll} ({userName.value})"
+                ""
+            ]
+            |> IConsoleBroker.writeLines
+
+            snapshotList
+            |> Seq.iter (fun s ->
+                            [ $"{IPhrases.SnapshotDeleting} %s{s.Name}" ]
+                            |> IConsoleBroker.writeLines
+
+                            $"{mountPoint}/homeshift/snapshots/{userName}/{s.Name}"
+                            |> Directory.create
+                            |> ISnapshotsBroker.deleteSnapshotPathOrEx)
+
+            $"{mountPoint}/homeshift/snapshots/{userName}"
+            |> Directory.create
+            |> ISnapshotsBroker.deleteUserPathIfEmptyOrEx
 
         finally
             unmountDeviceOrEx ()

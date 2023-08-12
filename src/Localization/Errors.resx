@@ -54,4 +54,7 @@
     <data name="SnapshotInvalid" xml:space="preserve">
         <value>Invalid snapshot.</value>
     </data>
+    <data name="SnapshotNonFound" xml:space="preserve">
+        <value>Could not find any snapshots</value>
+    </data>
 </root>

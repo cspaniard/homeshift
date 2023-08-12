@@ -140,5 +140,11 @@ namespace Localization {
                 return ResourceManager.GetString("SnapshotDeleting", resourceCulture);
             }
         }
+        
+        public static string SnapshotDeletingAll {
+            get {
+                return ResourceManager.GetString("SnapshotDeletingAll", resourceCulture);
+            }
+        }
     }
 }

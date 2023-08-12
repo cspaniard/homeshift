@@ -54,4 +54,7 @@
     <data name="SnapshotInvalid" xml:space="preserve">
         <value>Instantánea inválida.</value>
     </data>
+    <data name="SnapshotNonFound" xml:space="preserve">
+        <value>No se encontró ninguna instantánea</value>
+    </data>
 </root>

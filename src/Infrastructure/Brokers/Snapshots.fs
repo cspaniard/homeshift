@@ -61,10 +61,13 @@ type Broker () =
                 Comments = snapshotFileInfoData.Comments
             } : Snapshot
 
-        Directory.GetDirectories path.value
-        |> Array.sort
-        |> Array.map getSnapshotInfoFromDir
-        |> Seq.ofArray
+        if Directory.Exists path.value then
+            Directory.GetDirectories path.value
+            |> Array.sort
+            |> Array.map getSnapshotInfoFromDir
+            |> Seq.ofArray
+        else
+            Seq.empty<Snapshot>
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -130,15 +133,25 @@ type Broker () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member deletetSnapshotPathOrEx (snapshotsPath : Directory) =
+    static member deleteSnapshotPathOrEx (snapshotsPath : Directory) =
 
         Directory.Delete(snapshotsPath.value, true)
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static member deleteUserPathIfEmptyOrEx (snapshotsPath : Directory) =
+
+        Directory.EnumerateDirectories snapshotsPath.value
+        |> Seq.isEmpty
+        |> function
+                | true -> Directory.Delete(snapshotsPath.value, true)
+                | false -> ()
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
     static member deleteLastSnapshotOrEx (userSnapshotsPath : Directory) =
 
         match Broker.getLastSnapshotOptionInPathOrEx userSnapshotsPath with
-        | Some path -> Broker.deletetSnapshotPathOrEx path
+        | Some path -> Broker.deleteSnapshotPathOrEx path
         | None -> failwith IPhrases.NeedToDeleteLastSnapshot
     // -----------------------------------------------------------------------------------------------------------------

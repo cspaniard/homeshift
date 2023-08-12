@@ -116,5 +116,11 @@ namespace Localization {
                 return ResourceManager.GetString("SnapshotInvalid", resourceCulture);
             }
         }
+        
+        public static string SnapshotNonFound {
+            get {
+                return ResourceManager.GetString("SnapshotNonFound", resourceCulture);
+            }
+        }
     }
 }
