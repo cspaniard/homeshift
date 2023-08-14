@@ -4,7 +4,7 @@ open System
 open Model
 
 //----------------------------------------------------------------------------------------------------------------------
-let Run (options : RestoreData) =
+let runOrEx (options : RestoreData) =
     Console.WriteLine $"Hello %A{options} 5"
 
     Helpers.checkRootUserOrEx ()

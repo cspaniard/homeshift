@@ -1,9 +1,6 @@
 namespace Brokers.Snapshots
 
-open System
-open System.Diagnostics
 open System.IO
-open Motsoft.Util
 
 open Model
 open Newtonsoft.Json
@@ -26,15 +23,6 @@ type Broker () =
             CreationDateTime = createData.CreationDateTime
             Comments = createData.Comments
         } : SnapshotInfoFileData
-    // -----------------------------------------------------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------------------------------------------------
-    static let getSnapshotPath (userSnapshotsPath : Directory) (dateTime : DateTimeOffset) =
-
-        Path.Combine(userSnapshotsPath.value,
-                     $"{dateTime.Year}-%02i{dateTime.Month}-%02i{dateTime.Day}_" +
-                     $"%02i{dateTime.Hour}-%02i{dateTime.Minute}-%02i{dateTime.Second}")
-        |> Directory.create
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -83,32 +71,16 @@ type Broker () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member createSnapshotOrEx (sourcePath : Directory) (userSnapshotsPath : Directory)
-                                     (createData : CreateData)
+    static member createSnapshotOrEx (sourcePath : Directory) (baseSnapshotPath : Directory)
+                                     (createData : CreateData) (progressCallBack : string -> unit)
                                      (lastSnapshotPathOption : Directory option) =
-
-        let baseSnapshotPath = getSnapshotPath userSnapshotsPath createData.CreationDateTime
 
         let finalDestinationPath =
             (baseSnapshotPath.value, USER_FILES_DIRECTORY)
             |> Path.Combine
             |> Directory.create
 
-        Console.WriteLine($"{IPhrases.SnapshotCreating} ({createData.UserName.value}): " +
-                          $"{Path.GetFileName baseSnapshotPath.value}\n")
         Directory.CreateDirectory finalDestinationPath.value |> ignore
-
-        let stopWatch = Stopwatch.StartNew()
-
-        let progressCallBack (progressString : string) =
-            if progressString <> null then
-                let progressParts = progressString |> String.split " "
-
-                if progressParts.Length > 3 then
-                    Console.Write($"{IPhrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
-                                  $"%02i{stopWatch.Elapsed.Minutes}:%02i{stopWatch.Elapsed.Seconds} - " +
-                                  $"{IPhrases.Completed}: {progressParts[1]} - " +
-                                  $"{IPhrases.TimeRemaining}: {progressParts[3]}     \r")
 
         match lastSnapshotPathOption with
         | Some lsp ->
@@ -124,14 +96,8 @@ type Broker () =
                 progressCallBack
                 "rsync" $"-a --info=progress2 {sourcePath.value}/ {finalDestinationPath.value}"
 
-        stopWatch.Stop()
-
         getSnapshotFileInfo createData
         |> createInfoFileOrEx baseSnapshotPath
-
-        Console.WriteLine($"{IPhrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
-                          $"%02i{stopWatch.Elapsed.Minutes}:%02i{stopWatch.Elapsed.Seconds} - " +
-                          $"{IPhrases.Completed} 100%% - {IPhrases.TimeRemaining}: 0:00:00          \n")
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------

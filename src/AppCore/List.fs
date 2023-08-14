@@ -8,21 +8,24 @@ type private ISnapshotsService = DI.Services.ISnapshotsService
 
 
 //----------------------------------------------------------------------------------------------------------------------
-let RunOfDataOrEx (listData : ListData) =
+let getSnapshotList (listData : ListData) =
 
     let configData = IConfigService.getConfigDataOrEx ()
 
     checkUserOrEx listData.UserName
     checkDeviceOrEx configData.SnapshotDevice
 
-    ISnapshotsService.listOrEx configData.SnapshotDevice listData.UserName
+    ISnapshotsService.getListForUserOrEx configData.SnapshotDevice listData.UserName
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
-let RunOfOptionsOrEx (listOptions : ListOptions) =
+module CLI =
 
-    listOptions
-    |> ListData.ofOptions
-    |> RunOfDataOrEx
-    |> ISnapshotsService.outputOrEx (listOptions.UserName |> UserName.create)
-//----------------------------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
+    let showSnapshotList (listOptions : ListOptions) =
+
+        listOptions
+        |> ListData.ofOptions
+        |> getSnapshotList
+        |> ISnapshotsService.outputOrEx (listOptions.UserName |> UserName.create)
+    //------------------------------------------------------------------------------------------------------------------

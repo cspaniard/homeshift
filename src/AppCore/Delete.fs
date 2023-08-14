@@ -7,7 +7,7 @@ type private IConfigService = DI.Services.IConfigService
 type private ISnapshotsService = DI.Services.ISnapshotsService
 
 //----------------------------------------------------------------------------------------------------------------------
-let RunOfDataOrEx (deleteData : DeleteData) =
+let deleteSnapshotOrEx (deleteData : DeleteData) =
 
     checkRootUserOrEx ()
 
@@ -24,9 +24,12 @@ let RunOfDataOrEx (deleteData : DeleteData) =
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
-let RunOfOptionsOrEx (deleteOptions : DeleteOptions) =
+module CLI =
 
-    deleteOptions
-    |> DeleteData.ofOptions
-    |> RunOfDataOrEx
-//----------------------------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
+    let deleteSnapshotOrEx (deleteOptions : DeleteOptions) =
+
+        deleteOptions
+        |> DeleteData.ofOptions
+        |> deleteSnapshotOrEx
+    //------------------------------------------------------------------------------------------------------------------

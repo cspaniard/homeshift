@@ -8,6 +8,7 @@ open Localization
 open Model
 
 type private IHelpService = DI.Services.IHelpTextService
+type private IConsoleBroker = DI.Brokers.IConsoleBroker
 
 // ---------------------------------------------------------------------------------------------------------------------
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<ListOptions>)>]
@@ -21,6 +22,8 @@ type private IHelpService = DI.Services.IHelpTextService
 // ---------------------------------------------------------------------------------------------------------------------
 
 try
+    IConsoleBroker.enableStdOut()
+
     let args = Environment.GetCommandLineArgs() |> Array.tail
 
     let parser = new Parser (fun o -> o.HelpWriter <- null)
@@ -33,15 +36,15 @@ try
         IHelpService.showHeading ()
 
         match command.Value with
-        | :? ListOptions as opts -> List.RunOfOptionsOrEx opts
-        | :? ListDevicesOptions -> ListDevices.Run ()
-        | :? ConfigOptions as opts -> Config.RunOfOptionsOrEx opts
-        | :? CreateOptions as opts -> CreateData.ofOptions opts |> Create.Run
-        | :? RestoreOptions as opts -> RestoreData.ofOptions opts |> Restore.Run
+        | :? ListOptions as opts -> List.CLI.showSnapshotList opts
+        | :? ListDevicesOptions -> ListDevices.CLI.showDeviceList ()
+        | :? ConfigOptions as opts -> Config.CLI.storeConfigOrEx opts
+        | :? CreateOptions as opts -> Create.CLI.createSnapshotOrEx opts
+        | :? RestoreOptions as opts -> RestoreData.ofOptions opts |> Restore.runOrEx
 
         | :? DeleteOptions as deleteOptions ->
             match parser.ParseArguments<DeleteOptionsAtLeastOne> args with
-            | :? Parsed<DeleteOptionsAtLeastOne> -> Delete.RunOfOptionsOrEx deleteOptions
+            | :? Parsed<DeleteOptionsAtLeastOne> -> Delete.CLI.deleteSnapshotOrEx deleteOptions
             | :? NotParsed<DeleteOptionsAtLeastOne> as notParsed ->
                     IHelpService.helpTextFromResult notParsed |> Console.WriteLine
             | _ -> Console.WriteLine "Should not get here 3."

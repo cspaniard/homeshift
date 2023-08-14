@@ -1,6 +1,8 @@
 namespace Services.Snapshots
 
 open System
+open System.Diagnostics
+open System.IO
 open System.Threading
 open Motsoft.Util
 
@@ -15,6 +17,15 @@ type private IUsersService = DI.Services.IUsersService
 
 
 type Service () =
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static let getSnapshotPath (userSnapshotsPath : Directory) (dateTime : DateTimeOffset) =
+
+        Path.Combine(userSnapshotsPath.value,
+                     $"{dateTime.Year}-%02i{dateTime.Month}-%02i{dateTime.Day}_" +
+                     $"%02i{dateTime.Hour}-%02i{dateTime.Minute}-%02i{dateTime.Second}")
+        |> Directory.create
+    // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
     static let unmountDeviceOrEx () =
@@ -37,20 +48,50 @@ type Service () =
 
         let mutable PressedCtrlC = false
 
-        let CancelKeyHandler =
-            ConsoleCancelEventHandler(fun _ args -> args.Cancel <- true ; PressedCtrlC <- true)
-
         let userHomePath = IUsersService.getHomeForUserOrEx createData.UserName
         let mountPoint = IDevicesBroker.mountDeviceOrEx configData.SnapshotDevice
 
         let userSnapshotsPath = $"{mountPoint}/homeshift/snapshots/{createData.UserName}"
                                 |> Directory.create
 
-        Console.CancelKeyPress.AddHandler CancelKeyHandler
+        let CancelKeyHandler =
+            ConsoleCancelEventHandler(fun _ args -> args.Cancel <- true ; PressedCtrlC <- true)
 
         try
+            let stopWatch = Stopwatch.StartNew()
+
+            let progressCallBack (progressString : string) =
+                if progressString <> null then
+                    let progressParts = progressString |> String.split " "
+
+                    if progressParts.Length > 3 then
+                        IConsoleBroker.write($"{IPhrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
+                                             $"%02i{stopWatch.Elapsed.Minutes}:%02i{stopWatch.Elapsed.Seconds} - " +
+                                             $"{IPhrases.Completed}: {progressParts[1]} - " +
+                                             $"{IPhrases.TimeRemaining}: {progressParts[3]}     \r")
+
+            let baseSnapshotPath = getSnapshotPath userSnapshotsPath createData.CreationDateTime
+
+            [
+                $"{IPhrases.SnapshotCreating} ({createData.UserName.value}): " +
+                    $"{Path.GetFileName baseSnapshotPath.value}"
+                ""
+            ]
+            |> IConsoleBroker.writeLines
+
+            // ---------------------------------------------------------------------------------------------------------
+            Console.CancelKeyPress.AddHandler CancelKeyHandler
+
             ISnapshotsBroker.getLastSnapshotOptionInPathOrEx userSnapshotsPath
-            |> ISnapshotsBroker.createSnapshotOrEx userHomePath userSnapshotsPath createData
+            |> ISnapshotsBroker.createSnapshotOrEx userHomePath baseSnapshotPath createData progressCallBack
+            // ---------------------------------------------------------------------------------------------------------
+
+            stopWatch.Stop()
+
+            IConsoleBroker.writeLine($"{IPhrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
+                                     $"%02i{stopWatch.Elapsed.Minutes}:%02i{stopWatch.Elapsed.Seconds} - " +
+                                     $"{IPhrases.Completed} 100%% - {IPhrases.TimeRemaining}: 0:00:00          \n")
+
 
         finally
             Console.CancelKeyPress.RemoveHandler CancelKeyHandler
@@ -69,17 +110,18 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member listOrEx (snapshotDevice : SnapshotDevice) (userName : UserName) =
+    static member getListForUserOrEx (snapshotDevice : SnapshotDevice) (userName : UserName) =
 
         let mountPoint = IDevicesBroker.mountDeviceOrEx snapshotDevice
 
-        let userSnapshotsPath = $"{mountPoint}/homeshift/snapshots/{userName}"
-                                |> Directory.create
+        try
+            let userSnapshotsPath = $"{mountPoint}/homeshift/snapshots/{userName}"
+                                    |> Directory.create
 
-        let list = ISnapshotsBroker.getAllInfoInPathOrEx userSnapshotsPath
+            ISnapshotsBroker.getAllInfoInPathOrEx userSnapshotsPath
 
-        unmountDeviceOrEx ()
-        list
+        finally
+            unmountDeviceOrEx ()
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -132,7 +174,7 @@ type Service () =
     static member deleteAll (snapshotDevice : SnapshotDevice) (userName : UserName) =
 
         try
-            let snapshotList = Service.listOrEx snapshotDevice userName
+            let snapshotList = Service.getListForUserOrEx snapshotDevice userName
             let mountPoint = IDevicesBroker.mountDeviceOrEx snapshotDevice
 
             snapshotList |> Seq.isEmpty |> failWithIfTrue $"{IErrors.SnapshotNonFound} ({userName.value})"
@@ -156,7 +198,7 @@ type Service () =
             |> Directory.create
             |> ISnapshotsBroker.deleteUserPathIfEmptyOrEx
 
-            [ "" ] |> IConsoleBroker.writeLines
+            IConsoleBroker.writeLine ""
 
         finally
             unmountDeviceOrEx ()
@@ -165,6 +207,6 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
     static member isValidOrEx (snapshotDevice : SnapshotDevice) (userName : UserName) (snapshotName : string) =
 
-        Service.listOrEx snapshotDevice userName
+        Service.getListForUserOrEx snapshotDevice userName
         |> Seq.exists (fun s -> s.Name = snapshotName)
     // -----------------------------------------------------------------------------------------------------------------

@@ -5,10 +5,9 @@ open AppCore.Helpers
 
 type private IConfigService = DI.Services.IConfigService
 type private ISnapshotsService = DI.Services.ISnapshotsService
-type private IConsoleBroker = DI.Brokers.IConsoleBroker
 
 //----------------------------------------------------------------------------------------------------------------------
-let Run (createData : CreateData) =
+let createSnapshotOrEx (createData : CreateData) =
 
     checkRootUserOrEx ()
 
@@ -16,6 +15,16 @@ let Run (createData : CreateData) =
 
     checkDeviceOrEx configData.SnapshotDevice
 
-    createData
-    |> ISnapshotsService.createOrEx configData
+    ISnapshotsService.createOrEx configData createData
 //----------------------------------------------------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------------------------------------------------
+module CLI =
+
+    //------------------------------------------------------------------------------------------------------------------
+    let createSnapshotOrEx (createOptions : CreateOptions) =
+
+        createOptions
+        |> CreateData.ofOptions
+        |> createSnapshotOrEx
+    //------------------------------------------------------------------------------------------------------------------
