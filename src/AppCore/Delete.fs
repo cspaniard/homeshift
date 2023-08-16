@@ -3,8 +3,12 @@ module AppCore.Delete
 open Model
 open Helpers
 
-type private IConfigService = DI.Services.IConfigService
-type private ISnapshotsService = DI.Services.ISnapshotsService
+open Services
+
+//----------------------------------------------------------------------------------------------------------------------
+let IConfigService = ConfigServiceDI.Dep.D ()
+let ISnapshotsService = SnapshotsServiceDI.Dep.D ()
+//----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
 let deleteSnapshotOrEx (deleteData : DeleteData) =

@@ -2,12 +2,12 @@ module Model.SnapshotDeviceValidation
 
 open Model.ValidationHelper
 
-type private IErrors = DI.Services.LocalizationDI.IErrors
+open Localization
 
 let private SnapshotDeviceErrors = ErrorDict ()
 
-SnapshotDeviceErrors.Add (ValueIsEmpty, IErrors.SnapshotDeviceIsEmpty)
-SnapshotDeviceErrors.Add (ValueContainsSpaces, IErrors.SnapshotDeviceHasSpaces)
+SnapshotDeviceErrors.Add (ValueIsEmpty, Errors.SnapshotDeviceIsEmpty)
+SnapshotDeviceErrors.Add (ValueContainsSpaces, Errors.SnapshotDeviceHasSpaces)
 
 let getValidators () =
     [

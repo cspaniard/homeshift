@@ -1,4 +1,4 @@
-namespace Services.Snapshots
+namespace Services
 
 open System
 open System.Diagnostics
@@ -8,18 +8,21 @@ open Motsoft.Util
 
 open Model
 
-type private IPhrases = DI.Services.LocalizationDI.IPhrases
-type private IErrors = DI.Services.LocalizationDI.IErrors
-type private IDevicesBroker = DI.Brokers.IDevicesBroker
-type private ISnapshotsBroker = DI.Brokers.ISnapshotsBroker
-type private IConsoleBroker = DI.Brokers.IConsoleBroker
-type private IUsersService = DI.Services.IUsersService
+open Localization
+open Services
+open Brokers
 
-
-type Service () =
+type SnapshotsService private () as this =
 
     // -----------------------------------------------------------------------------------------------------------------
-    static let getSnapshotPath (userSnapshotsPath : Directory) (dateTime : DateTimeOffset) =
+    let IUsersService = UsersServiceDI.Dep.D ()
+    let IDevicesBroker = DevicesBrokerDI.Dep.D ()
+    let IConsoleBroker = ConsoleBrokerDI.Dep.D ()
+    let ISnapshotsBroker = SnapshotsBrokerDI.Dep.D ()
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    let getSnapshotPath (userSnapshotsPath : Directory) (dateTime : DateTimeOffset) =
 
         Path.Combine(userSnapshotsPath.value,
                      $"{dateTime.Year}-%02i{dateTime.Month}-%02i{dateTime.Day}_" +
@@ -28,7 +31,7 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static let unmountDeviceOrEx () =
+    let unmountDeviceOrEx () =
 
         let rec tryUnmountOrEx n =
             if n < 10 then
@@ -38,13 +41,18 @@ type Service () =
                     Thread.Sleep 1000
                     tryUnmountOrEx (n + 1)
             else
-                failwith IErrors.CouldNotUnmount
+                failwith Errors.CouldNotUnmount
 
         tryUnmountOrEx 0
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member createOrEx (configData : ConfigData) (createData : CreateData) =
+    static let instance = SnapshotsService()
+    static member getInstance () = instance
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    member _.createOrEx (configData : ConfigData) (createData : CreateData) =
 
         let mutable PressedCtrlC = false
 
@@ -65,15 +73,15 @@ type Service () =
                     let progressParts = progressString |> String.split " "
 
                     if progressParts.Length > 3 then
-                        IConsoleBroker.write($"{IPhrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
+                        IConsoleBroker.write($"{Phrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
                                              $"%02i{stopWatch.Elapsed.Minutes}:%02i{stopWatch.Elapsed.Seconds} - " +
-                                             $"{IPhrases.Completed}: {progressParts[1]} - " +
-                                             $"{IPhrases.TimeRemaining}: {progressParts[3]}     \r")
+                                             $"{Phrases.Completed}: {progressParts[1]} - " +
+                                             $"{Phrases.TimeRemaining}: {progressParts[3]}     \r")
 
             let baseSnapshotPath = getSnapshotPath userSnapshotsPath createData.CreationDateTime
 
             [
-                $"{IPhrases.SnapshotCreating} ({createData.UserName.value}): " +
+                $"{Phrases.SnapshotCreating} ({createData.UserName.value}): " +
                     $"{Path.GetFileName baseSnapshotPath.value}"
                 ""
             ]
@@ -88,9 +96,9 @@ type Service () =
 
             stopWatch.Stop()
 
-            IConsoleBroker.writeLine($"{IPhrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
+            IConsoleBroker.writeLine($"{Phrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
                                      $"%02i{stopWatch.Elapsed.Minutes}:%02i{stopWatch.Elapsed.Seconds} - " +
-                                     $"{IPhrases.Completed} 100%% - {IPhrases.TimeRemaining}: 0:00:00          \n")
+                                     $"{Phrases.Completed} 100%% - {Phrases.TimeRemaining}: 0:00:00          \n")
 
 
         finally
@@ -98,8 +106,8 @@ type Service () =
 
             if PressedCtrlC then
                 [
-                    IPhrases.SnapshotInterrupted
-                    IPhrases.DeletingIncompleteSnapshot
+                    Phrases.SnapshotInterrupted
+                    Phrases.DeletingIncompleteSnapshot
                     ""
                 ]
                 |> IConsoleBroker.writeLines
@@ -110,7 +118,7 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member getListForUserOrEx (snapshotDevice : SnapshotDevice) (userName : UserName) =
+    member _.getListForUserOrEx (snapshotDevice : SnapshotDevice) (userName : UserName) =
 
         let mountPoint = IDevicesBroker.mountDeviceOrEx snapshotDevice
 
@@ -125,18 +133,18 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member outputOrEx (userName : UserName) (snapshots : Snapshot seq) =
+    member _.outputOrEx (userName : UserName) (snapshots : Snapshot seq) =
 
-        snapshots |> Seq.isEmpty |> failWithIfTrue $"{IErrors.SnapshotNonFound} ({userName.value})"
+        snapshots |> Seq.isEmpty |> failWithIfTrue $"{Errors.SnapshotNonFound} ({userName.value})"
 
         [
-            $"{IPhrases.UserSnapshots}: {userName.value}"
+            $"{Phrases.UserSnapshots}: {userName.value}"
             ""
         ]
         |> IConsoleBroker.writeLines
 
         [|
-            [| IPhrases.SnapshotName ; IPhrases.SnapshotComments |]
+            [| Phrases.SnapshotName ; Phrases.SnapshotComments |]
 
             for d in snapshots do
                 [| d.Name ; d.Comments.value |]
@@ -145,10 +153,10 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member deleteOrEx (snapshotDevice : SnapshotDevice) (deleteData : DeleteData) =
+    member _.deleteOrEx (snapshotDevice : SnapshotDevice) (deleteData : DeleteData) =
 
         [
-            $"{IPhrases.SnapshotDeleting} ({deleteData.UserName.value}): {deleteData.SnapshotName}"
+            $"{Phrases.SnapshotDeleting} ({deleteData.UserName.value}): {deleteData.SnapshotName}"
             ""
         ]
         |> IConsoleBroker.writeLines
@@ -171,24 +179,24 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member deleteAll (snapshotDevice : SnapshotDevice) (userName : UserName) =
+    member _.deleteAll (snapshotDevice : SnapshotDevice) (userName : UserName) =
 
         try
-            let snapshotList = Service.getListForUserOrEx snapshotDevice userName
+            let snapshotList = this.getListForUserOrEx snapshotDevice userName
             let mountPoint = IDevicesBroker.mountDeviceOrEx snapshotDevice
 
-            snapshotList |> Seq.isEmpty |> failWithIfTrue $"{IErrors.SnapshotNonFound} ({userName.value})"
+            snapshotList |> Seq.isEmpty |> failWithIfTrue $"{Errors.SnapshotNonFound} ({userName.value})"
 
             [
-                $"{IPhrases.SnapshotDeletingAll} ({userName.value})"
+                $"{Phrases.SnapshotDeletingAll} ({userName.value})"
                 ""
             ]
             |> IConsoleBroker.writeLines
 
             snapshotList
             |> Seq.iter (fun s ->
-                            [ $"{IPhrases.SnapshotDeleting} %s{s.Name}" ]
-                            |> IConsoleBroker.writeLines
+                            $"{Phrases.SnapshotDeleting} %s{s.Name}"
+                            |> IConsoleBroker.writeLine
 
                             $"{mountPoint}/homeshift/snapshots/{userName}/{s.Name}"
                             |> Directory.create
@@ -205,8 +213,14 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member isValidOrEx (snapshotDevice : SnapshotDevice) (userName : UserName) (snapshotName : string) =
+    member _.isValidOrEx (snapshotDevice : SnapshotDevice) (userName : UserName) (snapshotName : string) =
 
-        Service.getListForUserOrEx snapshotDevice userName
+        this.getListForUserOrEx snapshotDevice userName
         |> Seq.exists (fun s -> s.Name = snapshotName)
     // -----------------------------------------------------------------------------------------------------------------
+
+
+module SnapshotsServiceDI =
+
+    let Dep = DI.Dependency (fun () ->
+            failwith $"{Errors.NotInitialized} ({nameof SnapshotsService})" : SnapshotsService)

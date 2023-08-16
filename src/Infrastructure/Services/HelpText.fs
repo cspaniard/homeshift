@@ -1,4 +1,4 @@
-namespace Services.HelpText
+namespace Services
 
 open System
 open System.Reflection
@@ -6,24 +6,34 @@ open System.Text.RegularExpressions
 open CommandLine
 open CommandLine.Text
 
-type private ISentenceBuilder = DI.Services.LocalizationDI.ISentenceBuilder
-type IConsoleBroker = DI.Brokers.IConsoleBroker
+type ISentenceBuilder = Localization.LocalizedText.LocalizedSentenceBuilder
+
+open Brokers
 
 
-type Service () =
+type HelpService private () as this =
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member Heading with get () =
+    let IConsoleBroker = ConsoleBrokerDI.Dep.D ()
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static let instance = HelpService()
+    static member getInstance () = instance
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    member _.Heading with get () =
         let version = Assembly.GetEntryAssembly().GetName().Version
         $"\nHomeshift v{version.Major}.{version.Minor}.{version.Build} by David Sanroma"
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member public helpTextFromResult (result : ParserResult<_>) =
+    member _.helpTextFromResult (result : ParserResult<_>) =
 
         SentenceBuilder.Factory <- fun () -> ISentenceBuilder ()
         let helpText = HelpText.AutoBuild(result, Console.WindowWidth)
-        helpText.Heading <- Service.Heading
+        helpText.Heading <- this.Heading
         helpText.Copyright <- ""
         helpText.AddNewLineBetweenHelpSections <- true
 
@@ -32,11 +42,18 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member showHeading () =
+    member _.showHeading () =
 
         [
-            Service.Heading
+            this.Heading
             ""
         ]
         |> IConsoleBroker.writeLines
     // -----------------------------------------------------------------------------------------------------------------
+
+
+module IHelpServiceDI =
+    open Localization
+
+    let Dep = DI.Dependency (fun () ->
+            failwith $"{Errors.NotInitialized} ({nameof HelpService})" : HelpService)

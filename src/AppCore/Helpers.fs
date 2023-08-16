@@ -1,18 +1,22 @@
 module AppCore.Helpers
 
 open System
-open Model
 open Motsoft.Util
+open Model
 
-type private IErrors = DI.Services.LocalizationDI.IErrors
-type private IDevicesService = DI.Services.IDevicesService
-type private IUsersService = DI.Services.IUsersService
-type private ISnapshotService = DI.Services.ISnapshotsService
+open Localization
+open Services
+
+//----------------------------------------------------------------------------------------------------------------------
+let IDevicesService = DevicesServiceDI.Dep.D ()
+let ISnapshotsService = SnapshotsServiceDI.Dep.D ()
+let IUsersService = UsersServiceDI.Dep.D ()
+//----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
 let checkRootUserOrEx () =
 
-    Environment.UserName = "root" |> failWithIfFalse IErrors.NeedRootAccess
+    Environment.UserName = "root" |> failWithIfFalse Errors.NeedRootAccess
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -20,18 +24,18 @@ let checkDeviceOrEx (snapshotDevice : SnapshotDevice) =
 
     snapshotDevice
     |> IDevicesService.isValidDeviceOrEx
-    |> failWithIfFalse $"{IErrors.InvalidDevice} ({snapshotDevice})"
+    |> failWithIfFalse $"{Errors.InvalidDevice} ({snapshotDevice})"
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
 let checkUserOrEx (userName : UserName) =
 
-   IUsersService.isValidUser userName |> failWithIfFalse IErrors.UserInvalid
+   IUsersService.isValidUser userName |> failWithIfFalse Errors.UserInvalid
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
 let checkSnapshotOrEx (snapshotDevice : SnapshotDevice) (userName : UserName) (snapshotName : string) =
 
-   ISnapshotService.isValidOrEx snapshotDevice userName snapshotName
-   |> failWithIfFalse $"{IErrors.SnapshotInvalid} ({userName.value}): {snapshotName}"
+   ISnapshotsService.isValidOrEx snapshotDevice userName snapshotName
+   |> failWithIfFalse $"{Errors.SnapshotInvalid} ({userName.value}): {snapshotName}"
 //----------------------------------------------------------------------------------------------------------------------

@@ -57,4 +57,7 @@
     <data name="SnapshotNonFound" xml:space="preserve">
         <value>Could not find any snapshots</value>
     </data>
+    <data name="NotInitialized" xml:space="preserve">
+        <value>Not Initialized</value>
+    </data>
 </root>

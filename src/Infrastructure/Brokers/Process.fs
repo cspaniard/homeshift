@@ -1,17 +1,22 @@
-namespace Brokers.Process
+namespace Brokers
 
 open System.Diagnostics
 
-type Broker () =
+type ProcessBroker private () =
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member startProcessAndWaitOrEx (processName : string) (arguments : string) =
+    static let instance = ProcessBroker()
+    static member getInstance () = instance
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    member _.startProcessAndWaitOrEx (processName : string) (arguments : string) =
 
         Process.Start(processName, arguments).WaitForExit()
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member startProcessNoOuputAtAll (processName : string) (arguments : string) =
+    member _.startProcessNoOuputAtAll (processName : string) (arguments : string) =
 
         let startInfo = ProcessStartInfo()
         startInfo.FileName <- processName
@@ -26,7 +31,7 @@ type Broker () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member startProcessAndReadToEndOrEx (processName : string) (arguments : string) =
+    member _.startProcessAndReadToEndOrEx (processName : string) (arguments : string) =
 
         let startInfo = ProcessStartInfo()
         startInfo.FileName <- processName
@@ -41,7 +46,7 @@ type Broker () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member startProcessWithNotificationOrEx (callBack : string -> unit) (processName : string) (arguments : string) =
+    member _.startProcessWithNotificationOrEx (callBack : string -> unit) (processName : string) (arguments : string) =
 
         let eventHandler = DataReceivedEventHandler(fun _ args -> callBack args.Data)
 
@@ -63,3 +68,9 @@ type Broker () =
         proc.OutputDataReceived.RemoveHandler eventHandler
         ()
     // -----------------------------------------------------------------------------------------------------------------
+
+module ProcessBrokerDI =
+    open Localization
+
+    let Dep = DI.Dependency (fun () ->
+            failwith $"{Errors.NotInitialized} ({nameof ProcessBroker})" : ProcessBroker)

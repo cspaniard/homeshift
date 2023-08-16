@@ -1,23 +1,30 @@
-namespace Brokers.Config
+namespace Brokers
 
 open System.IO
 open Newtonsoft.Json
 open Model
 
-type Broker () =
-
-    static let [<Literal>] CONFIG_PATH = "/etc/homeshift"
-    static let [<Literal>] CONFIG_FILE = CONFIG_PATH + "/homeshift.cfg"
+type ConfigBroker private () =
 
     // -----------------------------------------------------------------------------------------------------------------
-    static let createConfigPathOrEx () =
+    let [<Literal>] CONFIG_PATH = "/etc/homeshift"
+    let [<Literal>] CONFIG_FILE = CONFIG_PATH + "/homeshift.cfg"
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    let createConfigPathOrEx () =
 
         if Directory.Exists CONFIG_PATH = false then
             Directory.CreateDirectory CONFIG_PATH |> ignore
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member saveConfigDataToFileOrEx (data : ConfigData) =
+    static let instance = ConfigBroker()
+    static member getInstance () = instance
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    member _.saveConfigDataToFileOrEx (data : ConfigData) =
 
         createConfigPathOrEx ()
 
@@ -27,7 +34,7 @@ type Broker () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member getConfigDataFromFileOrEx () =
+    member _.getConfigDataFromFileOrEx () =
 
         createConfigPathOrEx ()
 
@@ -35,3 +42,9 @@ type Broker () =
         |> File.ReadAllText
         |> JsonConvert.DeserializeObject<ConfigData>
     // -----------------------------------------------------------------------------------------------------------------
+
+module ConfigBrokerDI =
+    open Localization
+
+    let Dep = DI.Dependency (fun () ->
+            failwith $"{Errors.NotInitialized} ({nameof ConfigBroker})" : ConfigBroker)

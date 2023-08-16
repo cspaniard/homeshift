@@ -1,11 +1,11 @@
-namespace Brokers.Console
+namespace Brokers
 
 open System
 open System.IO
 open Motsoft.Util
 
 
-type Broker () =
+type ConsoleBroker private () as this =
 
     // -----------------------------------------------------------------------------------------------------------------
     static let stdOut = Console.Out
@@ -15,32 +15,37 @@ type Broker () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member enableStdOut () =
+    static let instance = ConsoleBroker()
+    static member getInstance () = instance
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    member _.enableStdOut () =
 
         Console.SetOut stdOut
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member write (line : string) =
+    member _.write (line : string) =
 
         Console.Write line
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member writeLine (line : string) =
+    member _.writeLine (line : string) =
 
         Console.WriteLine line
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member writeLines (lines : string seq) =
+    member _.writeLines (lines : string seq) =
 
         lines
         |> Seq.iter Console.WriteLine
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member WriteMatrix (rightAlignments : bool array) (hasHeader : bool) (data : string array array) =
+    member _.WriteMatrix (rightAlignments : bool array) (hasHeader : bool) (data : string array array) =
 
         // ToDo: Check rightAlignments size vs data line size. Must be the same.
         // ToDo: Maybe there is way to pass less information in the rightAlignments array.
@@ -85,11 +90,17 @@ type Broker () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member WriteMatrixWithFooter (rightAlignments : bool array) (hasHeader : bool)
+    member _.WriteMatrixWithFooter (rightAlignments : bool array) (hasHeader : bool)
                                         (footer : string seq) (data : string array array) =
 
-        Broker.WriteMatrix rightAlignments hasHeader data
+        this.WriteMatrix rightAlignments hasHeader data
 
         footer
-        |> Broker.writeLines
+        |> this.writeLines
     // -----------------------------------------------------------------------------------------------------------------
+
+module ConsoleBrokerDI =
+    open Localization
+
+    let Dep = DI.Dependency (fun () ->
+            failwith $"{Errors.NotInitialized} ({nameof ConsoleBroker})" : ConsoleBroker)

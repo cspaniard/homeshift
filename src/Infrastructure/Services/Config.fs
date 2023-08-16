@@ -1,17 +1,27 @@
-namespace Services.Config
+namespace Services
 
 open System.IO
 open Model
 
-type private IPhrases = DI.Services.LocalizationDI.IPhrases
-type private IConfigBroker = DI.Brokers.IConfigBroker
-type private IConsoleBroker = DI.Brokers.IConsoleBroker
+open Localization
+
+open Brokers
 
 
-type Service () =
+type ConfigService private () =
+
+    //------------------------------------------------------------------------------------------------------------------
+    let IConfigBroker = ConfigBrokerDI.Dep.D ()
+    let IConsoleBroker = ConsoleBrokerDI.Dep.D ()
+    //------------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member getConfigDataOrEx () =
+    static let instance = ConfigService()
+    static member getInstance () = instance
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    member _.getConfigDataOrEx () =
 
         try
             IConfigBroker.getConfigDataFromFileOrEx ()
@@ -24,13 +34,19 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member storeConfigDataOrEx (data : ConfigData) =
+    member _.storeConfigDataOrEx (data : ConfigData) =
 
         IConfigBroker.saveConfigDataToFileOrEx data
 
         [
-            IPhrases.ConfigSaved
+            Phrases.ConfigSaved
             ""
         ]
         |> IConsoleBroker.writeLines
     // -----------------------------------------------------------------------------------------------------------------
+
+
+module ConfigServiceDI =
+
+    let Dep = DI.Dependency (fun () ->
+            failwith $"{Errors.NotInitialized} ({nameof ConfigService})" : ConfigService)

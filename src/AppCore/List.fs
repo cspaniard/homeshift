@@ -3,12 +3,15 @@ module AppCore.List
 open Helpers
 open Model
 
-type private IConfigService = DI.Services.IConfigService
-type private ISnapshotsService = DI.Services.ISnapshotsService
-
+open Services
 
 //----------------------------------------------------------------------------------------------------------------------
-let getSnapshotList (listData : ListData) =
+let IConfigService = ConfigServiceDI.Dep.D ()
+let ISnapshotsService = SnapshotsServiceDI.Dep.D ()
+//----------------------------------------------------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------------------------------------------------
+let getSnapshotListOrEx (listData : ListData) =
 
     let configData = IConfigService.getConfigDataOrEx ()
 
@@ -22,10 +25,10 @@ let getSnapshotList (listData : ListData) =
 module CLI =
 
     //------------------------------------------------------------------------------------------------------------------
-    let showSnapshotList (listOptions : ListOptions) =
+    let showSnapshotListOrEx (listOptions : ListOptions) =
 
         listOptions
         |> ListData.ofOptions
-        |> getSnapshotList
+        |> getSnapshotListOrEx
         |> ISnapshotsService.outputOrEx (listOptions.UserName |> UserName.create)
     //------------------------------------------------------------------------------------------------------------------

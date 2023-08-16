@@ -7,8 +7,8 @@ open AppCore
 open Localization
 open Model
 
-type private IHelpService = DI.Services.IHelpTextService
-type private IConsoleBroker = DI.Brokers.IConsoleBroker
+open Services
+open Brokers
 
 // ---------------------------------------------------------------------------------------------------------------------
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<ListOptions>)>]
@@ -20,6 +20,20 @@ type private IConsoleBroker = DI.Brokers.IConsoleBroker
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<DeleteOptionsAtLeastOne>)>]
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<CliOptions>)>]
 // ---------------------------------------------------------------------------------------------------------------------
+
+InjectionDI.init ()
+
+// ---------------------------------------------------------------------------------------------------------------------
+let IHelpService = IHelpServiceDI.Dep.D()
+let IConsoleBroker = ConsoleBrokerDI.Dep.D()
+// ---------------------------------------------------------------------------------------------------------------------
+
+
+let rec showInnerExceptions (e : Exception) =
+
+    IConsoleBroker.writeLine e.Message
+    if e.InnerException <> null then showInnerExceptions e.InnerException
+
 
 try
     IConsoleBroker.enableStdOut()
@@ -36,7 +50,7 @@ try
         IHelpService.showHeading ()
 
         match command.Value with
-        | :? ListOptions as opts -> List.CLI.showSnapshotList opts
+        | :? ListOptions as opts -> List.CLI.showSnapshotListOrEx opts
         | :? ListDevicesOptions -> ListDevices.CLI.showDeviceList ()
         | :? ConfigOptions as opts -> Config.CLI.storeConfigOrEx opts
         | :? CreateOptions as opts -> Create.CLI.createSnapshotOrEx opts
@@ -58,5 +72,6 @@ try
     | _ -> Console.WriteLine "Should not get here 2."
 
 with e ->
-    Console.WriteLine $"{e.Message}\n"
+    // Console.WriteLine $"{e.Message}\n"
+    showInnerExceptions e
     // Console.WriteLine $"{e.StackTrace}\n"

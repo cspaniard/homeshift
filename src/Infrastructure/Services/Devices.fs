@@ -1,18 +1,27 @@
-namespace Services.Devices
+namespace Services
 
 open Newtonsoft.Json
 open Motsoft.Util
 open Model
 
+open Localization
+open Brokers
 
-type private IDevicesBroker = DI.Brokers.IDevicesBroker
-type private IConsoleBroker = DI.Brokers.IConsoleBroker
-type private IPhrases = DI.Services.LocalizationDI.IPhrases
 
-type Service () =
+type DevicesService private () as this =
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member getValidDevicesDataOrEx () =
+    let IDevicesBroker = DevicesBrokerDI.Dep.D ()
+    let IConsoleBroker = ConsoleBrokerDI.Dep.D ()
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    static let instance = DevicesService()
+    static member getInstance () = instance
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
+    member _.getValidDevicesDataOrEx () =
 
         let isValidDevice (dataChild : DeviceDataChild) =
 
@@ -30,26 +39,32 @@ type Service () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member isValidDeviceOrEx (device : SnapshotDevice) =
+    member _.isValidDeviceOrEx (device : SnapshotDevice) =
 
-        Service.getValidDevicesDataOrEx ()
+        this.getValidDevicesDataOrEx ()
         |> Seq.exists (fun d -> d.Path = device.value)
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static member outputDevices (devices : DeviceDataChild seq) =
+    member _.outputDevices (devices : DeviceDataChild seq) =
 
         [
-            IPhrases.MountedDevices
+            Phrases.MountedDevices
             ""
         ]
         |> IConsoleBroker.writeLines
 
         [|
-            [| IPhrases.Device ; IPhrases.Size ; IPhrases.MountPoint ; IPhrases.Type ; IPhrases.Label |]
+            [| Phrases.Device ; Phrases.Size ; Phrases.MountPoint ; Phrases.Type ; Phrases.Label |]
 
             for d in devices do
                 [| d.Path ; d.Size ; d.MountPoint ; d.FileSystemType ; d.Label |]
         |]
         |> IConsoleBroker.WriteMatrixWithFooter [| false ; true ; false ; false ; false |] true [ "" ]
     // -----------------------------------------------------------------------------------------------------------------
+
+
+module DevicesServiceDI =
+
+    let Dep = DI.Dependency (fun () ->
+            failwith $"{Errors.NotInitialized} ({nameof DevicesService})" : DevicesService)

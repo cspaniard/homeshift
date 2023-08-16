@@ -2,11 +2,11 @@ module Model.DirectoryValidation
 
 open Model.ValidationHelper
 
-type private IErrors = DI.Services.LocalizationDI.IErrors
+open Localization
 
 let private DirectoryErrors = ErrorDict ()
 
-DirectoryErrors.Add (ValueIsEmpty, IErrors.DirectoryIsEmpy)
+DirectoryErrors.Add (ValueIsEmpty, Errors.DirectoryIsEmpy)
 
 let getValidators () =
     [

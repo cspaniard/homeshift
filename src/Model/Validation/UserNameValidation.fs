@@ -2,12 +2,12 @@ module Model.UserNameValidation
 
 open Model.ValidationHelper
 
-type private IErrors = DI.Services.LocalizationDI.IErrors
+open Localization
 
 let private UserNameErrors = ErrorDict ()
 
-UserNameErrors.Add (ValueIsEmpty, IErrors.UserNameIsEmpty)
-UserNameErrors.Add (ValueContainsSpaces, IErrors.UserNameHasSpaces)
+UserNameErrors.Add (ValueIsEmpty, Errors.UserNameIsEmpty)
+UserNameErrors.Add (ValueContainsSpaces, Errors.UserNameHasSpaces)
 
 let getValidators () =
     [

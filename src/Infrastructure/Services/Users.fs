@@ -1,50 +1,45 @@
-namespace Brokers
-
-open System
-open System.IO
-open Motsoft.Util
+namespace Services
 
 open Model
 
-open Localization
 open Brokers
 
 
-type UsersBroker private () =
+type UsersService private () as this =
 
     // -----------------------------------------------------------------------------------------------------------------
-    let IProcessBroker = ProcessBrokerDI.Dep.D ()
+    let IUsersBroker = UsersBrokerDI.Dep.D ()
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static let instance = UsersBroker()
+    static let instance = UsersService()
     static member getInstance () = instance
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    member _.getUserInfoFromPasswordFileOrEx (userName : UserName) =
+    member _.getHomeForUserOrEx (userName : UserName) =
 
-        let line =
-            IProcessBroker.startProcessAndReadToEndOrEx
-                "grep"
-                $"^{userName.value}: /etc/passwd"
+        let line = IUsersBroker.getUserInfoFromPasswordFileOrEx userName
 
-        line |> String.IsNullOrWhiteSpace |> failWithIfTrue Errors.UserNoInfoFound
-
-        line
+        (line.Split ":")[5]
+        |> Directory.create
+        |> IUsersBroker.checkUserHomeExistsOrEx
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    member _.checkUserHomeExistsOrEx (homeDirectory : Directory) =
+    member _.isValidUser (userName : UserName) =
 
-        Directory.Exists homeDirectory.value
-        |> failWithIfFalse Errors.HomeDirectoryDoesNotExist
+        // ToDo: Revisit this idea.
 
-        homeDirectory
+        try
+            this.getHomeForUserOrEx userName |> ignore
+            true
+        with _ -> false
     // -----------------------------------------------------------------------------------------------------------------
 
+module UsersServiceDI =
 
-module UsersBrokerDI =
+    open Localization
 
     let Dep = DI.Dependency (fun () ->
-            failwith $"{Errors.NotInitialized} ({nameof UsersBroker})" : UsersBroker)
+            failwith $"{Errors.NotInitialized} ({nameof UsersService})" : UsersService)
