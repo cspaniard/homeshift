@@ -7,44 +7,49 @@ open Motsoft.Util
 open Model
 
 open Localization
-open Brokers
+open DI
 
 
-type UsersBroker private () =
-
-    // -----------------------------------------------------------------------------------------------------------------
-    let IProcessBroker = ProcessBrokerDI.Dep.D ()
-    // -----------------------------------------------------------------------------------------------------------------
+type UsersBroker private (processBroker : IProcessBroker) =
 
     // -----------------------------------------------------------------------------------------------------------------
-    static let instance = UsersBroker()
-    static member getInstance () = instance
+    let IProcessBroker = processBroker
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    member _.getUserInfoFromPasswordFileOrEx (userName : UserName) =
-
-        let line =
-            IProcessBroker.startProcessAndReadToEndOrEx
-                "grep"
-                $"^{userName.value}: /etc/passwd"
-
-        line |> String.IsNullOrWhiteSpace |> failWithIfTrue Errors.UserNoInfoFound
-
-        line
+    static let mutable instance = Unchecked.defaultof<IUsersBroker>
+    
+    static member getInstance (processBroker : IProcessBroker) =
+        
+        if obj.ReferenceEquals(instance, null) then
+            instance <- UsersBroker processBroker
+        
+        instance
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    member _.checkUserHomeExistsOrEx (homeDirectory : Directory) =
+    interface IUsersBroker with
+        
+        // -------------------------------------------------------------------------------------------------------------
+        member _.getUserInfoFromPasswordFileOrEx (userName : UserName) =
 
-        Directory.Exists homeDirectory.value
-        |> failWithIfFalse Errors.HomeDirectoryDoesNotExist
+            let line =
+                IProcessBroker.startProcessAndReadToEndOrEx
+                    "grep"
+                    $"^{userName.value}: /etc/passwd"
 
-        homeDirectory
+            line |> String.IsNullOrWhiteSpace |> failWithIfTrue Errors.UserNoInfoFound
+
+            line
+        // -------------------------------------------------------------------------------------------------------------
+            
+        // -------------------------------------------------------------------------------------------------------------
+        member _.checkUserHomeExistsOrEx (homeDirectory : Directory) =
+
+            Directory.Exists homeDirectory.value
+            |> failWithIfFalse Errors.HomeDirectoryDoesNotExist
+
+            homeDirectory
+        // -------------------------------------------------------------------------------------------------------------
+    
     // -----------------------------------------------------------------------------------------------------------------
-
-
-module UsersBrokerDI =
-
-    let Dep = DI.Dependency (fun () ->
-            failwith $"{Errors.NotInitialized} ({nameof UsersBroker})" : UsersBroker)

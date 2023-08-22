@@ -3,11 +3,11 @@ module AppCore.List
 open Helpers
 open Model
 
-open Services
+open DI.Dependencies
 
 //----------------------------------------------------------------------------------------------------------------------
-let IConfigService = ConfigServiceDI.Dep.D ()
-let ISnapshotsService = SnapshotsServiceDI.Dep.D ()
+let IConfigService = IConfigServiceDI.D ()
+let ISnapshotsService = ISnapshotsServiceDI.D ()
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------

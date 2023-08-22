@@ -5,55 +5,59 @@ open System.Reflection
 open System.Text.RegularExpressions
 open CommandLine
 open CommandLine.Text
+open DI
 
+// TODO: Evaluate to implement as another true service.
 type ISentenceBuilder = Localization.LocalizedText.LocalizedSentenceBuilder
 
-open Brokers
 
-
-type HelpService private () as this =
+type HelpService private (consoleBroker : IConsoleBroker) as this =
 
     // -----------------------------------------------------------------------------------------------------------------
-    let IConsoleBroker = ConsoleBrokerDI.Dep.D ()
+    let IConsoleBroker = consoleBroker
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static let instance = HelpService()
-    static member getInstance () = instance
+    static let mutable instance = Unchecked.defaultof<IHelpService>
+    
+    static member getInstance (consoleBroker : IConsoleBroker) =
+        
+        if obj.ReferenceEquals(instance, null) then
+            instance <- HelpService(consoleBroker)
+        
+        instance
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    member _.Heading with get () =
-        let version = Assembly.GetEntryAssembly().GetName().Version
-        $"\nHomeshift v{version.Major}.{version.Minor}.{version.Build} by David Sanroma"
+    interface IHelpService with
+    
+        // -------------------------------------------------------------------------------------------------------------
+        member _.Heading with get () =
+            let version = Assembly.GetEntryAssembly().GetName().Version
+            $"\nHomeshift v{version.Major}.{version.Minor}.{version.Build} by David Sanroma"
+        // -------------------------------------------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------------------------------------------
+        member _.helpTextFromResult (result : ParserResult<_>) =
+
+            SentenceBuilder.Factory <- fun () -> ISentenceBuilder ()
+            let helpText = HelpText.AutoBuild(result, Console.WindowWidth)
+            helpText.Heading <- (this :> IHelpService).Heading
+            helpText.Copyright <- ""
+            helpText.AddNewLineBetweenHelpSections <- true
+
+            let groupWord = ISentenceBuilder().OptionGroupWord.Invoke()
+            Regex.Replace(helpText, $"\({groupWord}:.*\) ", "")
+        // -------------------------------------------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------------------------------------------
+        member _.showHeading () =
+
+            [
+                (this :> IHelpService).Heading
+                ""
+            ]
+            |> IConsoleBroker.writeLines
+        // -------------------------------------------------------------------------------------------------------------
+    
     // -----------------------------------------------------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------------------------------------------------
-    member _.helpTextFromResult (result : ParserResult<_>) =
-
-        SentenceBuilder.Factory <- fun () -> ISentenceBuilder ()
-        let helpText = HelpText.AutoBuild(result, Console.WindowWidth)
-        helpText.Heading <- this.Heading
-        helpText.Copyright <- ""
-        helpText.AddNewLineBetweenHelpSections <- true
-
-        let groupWord = ISentenceBuilder().OptionGroupWord.Invoke()
-        Regex.Replace(helpText, $"\({groupWord}:.*\) ", "")
-    // -----------------------------------------------------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------------------------------------------------
-    member _.showHeading () =
-
-        [
-            this.Heading
-            ""
-        ]
-        |> IConsoleBroker.writeLines
-    // -----------------------------------------------------------------------------------------------------------------
-
-
-module IHelpServiceDI =
-    open Localization
-
-    let Dep = DI.Dependency (fun () ->
-            failwith $"{Errors.NotInitialized} ({nameof HelpService})" : HelpService)

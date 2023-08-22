@@ -7,8 +7,7 @@ open AppCore
 open Localization
 open Model
 
-open Services
-open Brokers
+open DI.Dependencies
 
 // ---------------------------------------------------------------------------------------------------------------------
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<ListOptions>)>]
@@ -24,8 +23,8 @@ open Brokers
 InjectionDI.init ()
 
 // ---------------------------------------------------------------------------------------------------------------------
-let IHelpService = IHelpServiceDI.Dep.D()
-let IConsoleBroker = ConsoleBrokerDI.Dep.D()
+let IHelpService = IHelpServiceDI.D()
+let IConsoleBroker = IConsoleBrokerDI.D()
 // ---------------------------------------------------------------------------------------------------------------------
 
 

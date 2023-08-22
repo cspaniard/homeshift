@@ -5,12 +5,12 @@ open Motsoft.Util
 open Model
 
 open Localization
-open Services
+open DI.Dependencies
 
 //----------------------------------------------------------------------------------------------------------------------
-let IDevicesService = DevicesServiceDI.Dep.D ()
-let ISnapshotsService = SnapshotsServiceDI.Dep.D ()
-let IUsersService = UsersServiceDI.Dep.D ()
+let IDevicesService = IDevicesServiceDI.D ()
+let ISnapshotsService = ISnapshotsServiceDI.D ()
+let IUsersService = IUsersServiceDI.D ()
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -1,45 +1,48 @@
 namespace Services
 
+open DI
 open Model
 
-open Brokers
 
-
-type UsersService private () as this =
+type UsersService private (usersBroker : IUsersBroker) as this =
 
     // -----------------------------------------------------------------------------------------------------------------
-    let IUsersBroker = UsersBrokerDI.Dep.D ()
+    let IUsersBroker = usersBroker
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static let instance = UsersService()
-    static member getInstance () = instance
+    static let mutable instance = Unchecked.defaultof<IUsersService>
+    
+    static member getInstance (usersBroker : IUsersBroker) =
+        
+        if obj.ReferenceEquals(instance, null) then
+            instance <- UsersService(usersBroker)
+        
+        instance
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    member _.getHomeForUserOrEx (userName : UserName) =
+    interface IUsersService with
+    
+        // -------------------------------------------------------------------------------------------------------------
+        member _.getHomeForUserOrEx (userName : UserName) =
 
-        let line = IUsersBroker.getUserInfoFromPasswordFileOrEx userName
+            let line = IUsersBroker.getUserInfoFromPasswordFileOrEx userName
 
-        (line.Split ":")[5]
-        |> Directory.create
-        |> IUsersBroker.checkUserHomeExistsOrEx
+            (line.Split ":")[5]
+            |> Directory.create
+            |> IUsersBroker.checkUserHomeExistsOrEx
+        // -------------------------------------------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------------------------------------------
+        member _.isValidUser (userName : UserName) =
+
+            // ToDo: Revisit this idea.
+
+            try
+                (this :> IUsersService).getHomeForUserOrEx userName |> ignore
+                true
+            with _ -> false
+        // -------------------------------------------------------------------------------------------------------------
+    
     // -----------------------------------------------------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------------------------------------------------
-    member _.isValidUser (userName : UserName) =
-
-        // ToDo: Revisit this idea.
-
-        try
-            this.getHomeForUserOrEx userName |> ignore
-            true
-        with _ -> false
-    // -----------------------------------------------------------------------------------------------------------------
-
-module UsersServiceDI =
-
-    open Localization
-
-    let Dep = DI.Dependency (fun () ->
-            failwith $"{Errors.NotInitialized} ({nameof UsersService})" : UsersService)

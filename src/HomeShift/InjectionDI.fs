@@ -3,18 +3,22 @@ module InjectionDI
 open Services
 open Brokers
 
+open DI.Dependencies
 
-let init() =
+let init () =
 
-    ConsoleBrokerDI.Dep.D <- (fun () -> ConsoleBroker.getInstance())
-    ConfigBrokerDI.Dep.D <- (fun () -> ConfigBroker.getInstance())
-    UsersBrokerDI.Dep.D <- (fun () -> UsersBroker.getInstance())
-    ProcessBrokerDI.Dep.D <- (fun () -> ProcessBroker.getInstance())
-    DevicesBrokerDI.Dep.D <- (fun () -> DevicesBroker.getInstance())
-    SnapshotsBrokerDI.Dep.D <- (fun () -> SnapshotsBroker.getInstance())
+    IConsoleBrokerDI.D <- (fun () -> ConsoleBroker.getInstance())
+    IConfigBrokerDI.D <- (fun () -> ConfigBroker.getInstance())
+    IProcessBrokerDI.D <- (fun () -> ProcessBroker.getInstance())
+    IUsersBrokerDI.D <- (fun () -> UsersBroker.getInstance(IProcessBrokerDI.D()))
+    IDevicesBrokerDI.D <- (fun () -> DevicesBroker.getInstance(IProcessBrokerDI.D()))
+    ISnapshotsBrokerDI.D <- (fun () -> SnapshotsBroker.getInstance(IProcessBrokerDI.D()))
 
-    ConfigServiceDI.Dep.D <- (fun () -> ConfigService.getInstance())
-    IHelpServiceDI.Dep.D <- (fun () -> HelpService.getInstance())
-    SnapshotsServiceDI.Dep.D <- (fun () -> SnapshotsService.getInstance())
-    DevicesServiceDI.Dep.D <- (fun () -> DevicesService.getInstance())
-    UsersServiceDI.Dep.D <- (fun () -> UsersService.getInstance())
+    IConfigServiceDI.D <- (fun () -> ConfigService.getInstance (IConfigBrokerDI.D(), IConsoleBrokerDI.D()))
+    IHelpServiceDI.D <- (fun () -> HelpService.getInstance(IConsoleBrokerDI.D()))
+    ISnapshotsServiceDI.D <- (fun () -> SnapshotsService.getInstance(IDevicesBrokerDI.D(),
+                                                                     ISnapshotsBrokerDI.D(),
+                                                                     IConsoleBrokerDI.D(),
+                                                                     IUsersServiceDI.D()))
+    IDevicesServiceDI.D <- (fun () -> DevicesService.getInstance(IDevicesBrokerDI.D(), IConsoleBrokerDI.D()))
+    IUsersServiceDI.D <- (fun () -> UsersService.getInstance(IUsersBrokerDI.D()))

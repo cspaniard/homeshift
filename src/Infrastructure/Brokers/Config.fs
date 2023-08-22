@@ -3,6 +3,7 @@ namespace Brokers
 open System.IO
 open Newtonsoft.Json
 open Model
+open DI
 
 type ConfigBroker private () =
 
@@ -24,27 +25,26 @@ type ConfigBroker private () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    member _.saveConfigDataToFileOrEx (data : ConfigData) =
+    
+    interface IConfigBroker with
+        // -------------------------------------------------------------------------------------------------------------
+        member _.saveConfigDataToFileOrEx (data : ConfigData) =
 
-        createConfigPathOrEx ()
+            createConfigPathOrEx ()
 
-        (CONFIG_FILE,
-         JsonConvert.SerializeObject(data, Formatting.Indented))
-        |> File.WriteAllText
+            (CONFIG_FILE,
+             JsonConvert.SerializeObject(data, Formatting.Indented))
+            |> File.WriteAllText
+        // -------------------------------------------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------------------------------------------
+        member _.getConfigDataFromFileOrEx () =
+
+            createConfigPathOrEx ()
+
+            CONFIG_FILE
+            |> File.ReadAllText
+            |> JsonConvert.DeserializeObject<ConfigData>
+        // -------------------------------------------------------------------------------------------------------------
+    
     // -----------------------------------------------------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------------------------------------------------
-    member _.getConfigDataFromFileOrEx () =
-
-        createConfigPathOrEx ()
-
-        CONFIG_FILE
-        |> File.ReadAllText
-        |> JsonConvert.DeserializeObject<ConfigData>
-    // -----------------------------------------------------------------------------------------------------------------
-
-module ConfigBrokerDI =
-    open Localization
-
-    let Dep = DI.Dependency (fun () ->
-            failwith $"{Errors.NotInitialized} ({nameof ConfigBroker})" : ConfigBroker)

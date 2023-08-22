@@ -1,52 +1,56 @@
 namespace Services
 
 open System.IO
+open DI
 open Model
 
 open Localization
 
-open Brokers
 
-
-type ConfigService private () =
+type ConfigService private (configBroker : IConfigBroker, consoleBroker : IConsoleBroker) =
 
     //------------------------------------------------------------------------------------------------------------------
-    let IConfigBroker = ConfigBrokerDI.Dep.D ()
-    let IConsoleBroker = ConsoleBrokerDI.Dep.D ()
+    let IConfigBroker = configBroker
+    let IConsoleBroker = consoleBroker
     //------------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static let instance = ConfigService()
-    static member getInstance () = instance
+    static let mutable instance = Unchecked.defaultof<IConfigService>
+    
+    static member getInstance (usersBroker : IConfigBroker, consoleBroker : IConsoleBroker) =
+        
+        if obj.ReferenceEquals(instance, null) then
+            instance <- ConfigService(usersBroker, consoleBroker)
+        
+        instance
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    member _.getConfigDataOrEx () =
+    interface IConfigService with
+    
+        // -------------------------------------------------------------------------------------------------------------
+        member _.getConfigDataOrEx () =
 
-        try
-            IConfigBroker.getConfigDataFromFileOrEx ()
+            try
+                IConfigBroker.getConfigDataFromFileOrEx ()
 
-        with
-        | :? FileNotFoundException ->
-            let defaultData = ConfigData.getDefault ()
-            IConfigBroker.saveConfigDataToFileOrEx defaultData
-            defaultData
+            with
+            | :? FileNotFoundException ->
+                let defaultData = ConfigData.getDefault ()
+                IConfigBroker.saveConfigDataToFileOrEx defaultData
+                defaultData
+        // -------------------------------------------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------------------------------------------
+        member _.storeConfigDataOrEx (data : ConfigData) =
+
+            IConfigBroker.saveConfigDataToFileOrEx data
+
+            [
+                Phrases.ConfigSaved
+                ""
+            ]
+            |> IConsoleBroker.writeLines
+        // -------------------------------------------------------------------------------------------------------------
+    
     // -----------------------------------------------------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------------------------------------------------
-    member _.storeConfigDataOrEx (data : ConfigData) =
-
-        IConfigBroker.saveConfigDataToFileOrEx data
-
-        [
-            Phrases.ConfigSaved
-            ""
-        ]
-        |> IConsoleBroker.writeLines
-    // -----------------------------------------------------------------------------------------------------------------
-
-
-module ConfigServiceDI =
-
-    let Dep = DI.Dependency (fun () ->
-            failwith $"{Errors.NotInitialized} ({nameof ConfigService})" : ConfigService)

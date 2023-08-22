@@ -5,57 +5,61 @@ open System.IO
 open Model
 open Motsoft.Util
 
-open Brokers
+open DI
 
-type DevicesBroker private () =
-
-    // -----------------------------------------------------------------------------------------------------------------
-    let IProcessBroker = ProcessBrokerDI.Dep.D ()
-    // -----------------------------------------------------------------------------------------------------------------
+type DevicesBroker private (processBroker : IProcessBroker) =
 
     // -----------------------------------------------------------------------------------------------------------------
-    static let instance = DevicesBroker()
-    static member getInstance () = instance
+    let IProcessBroker = processBroker
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    member _.getDeviceInfoOrEx () =
-
-        IProcessBroker.startProcessAndReadToEndOrEx
-            "lsblk"
-            "--json --output NAME,KNAME,RO,TYPE,MOUNTPOINT,LABEL,PATH,FSTYPE,PARTTYPENAME,SIZE"
+    static let mutable instance = Unchecked.defaultof<IDevicesBroker>
+    
+    static member getInstance (processBroker : IProcessBroker) =
+        
+        if obj.ReferenceEquals(instance, null) then
+            instance <- DevicesBroker(processBroker)
+        
+        instance
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    member _.mountDeviceOrEx (snapshotDevice : SnapshotDevice) =
+    interface IDevicesBroker with
+    
+        // -------------------------------------------------------------------------------------------------------------
+        member _.getDeviceInfoOrEx () =
 
-        let pid = Process.GetCurrentProcess().Id
-        let mountPoint = $"/run/homeshift/{pid}"   // ToDo: Make it a Broker wide value.
+            IProcessBroker.startProcessAndReadToEndOrEx
+                "lsblk"
+                "--json --output NAME,KNAME,RO,TYPE,MOUNTPOINT,LABEL,PATH,FSTYPE,PARTTYPENAME,SIZE"
+        // -------------------------------------------------------------------------------------------------------------
 
-        if Directory.Exists mountPoint = false then
-            Directory.CreateDirectory mountPoint |> ignore
+        // -------------------------------------------------------------------------------------------------------------
+        member _.mountDeviceOrEx (snapshotDevice : SnapshotDevice) =
 
-        try
-            IProcessBroker.startProcessAndWaitOrEx "mount" $"{snapshotDevice.value} {mountPoint}"
-            mountPoint
-        with e ->
+            let pid = Process.GetCurrentProcess().Id
+            let mountPoint = $"/run/homeshift/{pid}"   // ToDo: Make it a Broker wide value.
+
+            if Directory.Exists mountPoint = false then
+                Directory.CreateDirectory mountPoint |> ignore
+
+            try
+                IProcessBroker.startProcessAndWaitOrEx "mount" $"{snapshotDevice.value} {mountPoint}"
+                mountPoint
+            with e ->
+                Directory.Delete mountPoint
+                reraise ()
+        // -------------------------------------------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------------------------------------------
+        member _.unmountCurrentOrEx () =
+
+            let pid = Process.GetCurrentProcess().Id
+            let mountPoint = $"/run/homeshift/{pid}"   // ToDo: Make it a Broker wide value.
+
+            IProcessBroker.startProcessNoOuputAtAll "umount" mountPoint
             Directory.Delete mountPoint
-            reraise ()
+        // -------------------------------------------------------------------------------------------------------------
+    
     // -----------------------------------------------------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------------------------------------------------
-    member _.unmountCurrentOrEx () =
-
-        let pid = Process.GetCurrentProcess().Id
-        let mountPoint = $"/run/homeshift/{pid}"   // ToDo: Make it a Broker wide value.
-
-        IProcessBroker.startProcessNoOuputAtAll "umount" mountPoint
-        Directory.Delete mountPoint
-    // -----------------------------------------------------------------------------------------------------------------
-
-
-module DevicesBrokerDI =
-    open Localization
-
-    let Dep = DI.Dependency (fun () ->
-            failwith $"{Errors.NotInitialized} ({nameof DevicesBroker})" : DevicesBroker)
