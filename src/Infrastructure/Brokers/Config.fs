@@ -2,8 +2,10 @@ namespace Brokers
 
 open System.IO
 open Newtonsoft.Json
-open Model
+
 open DI
+open Model
+
 
 type ConfigBroker private () =
 

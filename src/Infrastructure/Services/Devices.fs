@@ -2,10 +2,10 @@ namespace Services
 
 open Newtonsoft.Json
 open Motsoft.Util
-open Model
 
-open Localization
 open DI
+open Model
+open Localization
 
 
 type DevicesService private (devicesBroker : IDevicesBroker, consoleBroker : IConsoleBroker) as this =

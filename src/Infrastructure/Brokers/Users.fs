@@ -4,10 +4,9 @@ open System
 open System.IO
 open Motsoft.Util
 
-open Model
-
-open Localization
 open DI
+open Model
+open Localization
 
 
 type UsersBroker private (processBroker : IProcessBroker) =

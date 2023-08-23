@@ -1,12 +1,12 @@
 namespace Brokers
 
 open System.IO
-
-open Model
 open Newtonsoft.Json
 
-open Localization
 open DI
+open Model
+open Localization
+
 
 type SnapshotsBroker private (processBroker : IProcessBroker) as this =
 

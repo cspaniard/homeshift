@@ -2,8 +2,9 @@ namespace Brokers
 
 open System
 open System.IO
-open DI
 open Motsoft.Util
+
+open DI
 
 
 type ConsoleBroker private () as this =

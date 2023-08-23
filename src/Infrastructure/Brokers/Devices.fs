@@ -2,10 +2,10 @@ namespace Brokers
 
 open System.Diagnostics
 open System.IO
-open Model
 open Motsoft.Util
 
 open DI
+open Model
 
 type DevicesBroker private (processBroker : IProcessBroker) =
 

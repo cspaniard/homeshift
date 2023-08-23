@@ -6,10 +6,10 @@ open System.IO
 open System.Threading
 open Motsoft.Util
 
-open Model
 open DI
-
+open Model
 open Localization
+
 
 type SnapshotsService private (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapshotsBroker,
                                consoleBroker : IConsoleBroker, usersService : IUsersService) as this =

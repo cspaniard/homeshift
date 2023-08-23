@@ -70,6 +70,7 @@ type IUsersService =
     
 // ---------------------------------------------------------------------------------------------------------------------
 module Dependencies =
+    
     open Localization
 
     let IConsoleBrokerDI = Dependency (fun () ->
@@ -104,4 +105,8 @@ module Dependencies =
     
     let IUsersServiceDI = Dependency (fun () ->
             failwith $"{Errors.NotInitialized} ({nameof IUsersService})" : IUsersService)
+    
+    let ISentenceBuilderDI = Dependency (fun () ->
+            failwith $"{Errors.NotInitialized} ({nameof Localization.DI.ISentenceBuilder})" :
+                Localization.DI.ISentenceBuilder)
 // ---------------------------------------------------------------------------------------------------------------------
