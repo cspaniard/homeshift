@@ -37,8 +37,6 @@ type UsersService private (usersBroker : IUsersBroker) as this =
         // -------------------------------------------------------------------------------------------------------------
         member _.isValidUser (userName : UserName) =
 
-            // ToDo: Revisit this idea.
-
             try
                 (this :> IUsersService).getHomeForUserOrEx userName |> ignore
                 true

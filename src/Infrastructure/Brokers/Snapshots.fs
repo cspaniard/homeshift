@@ -81,8 +81,8 @@ type SnapshotsBroker private (processBroker : IProcessBroker) as this =
             try
                 Directory.GetDirectories path.value
                 |> function
-                   | [||] -> None
-                   | dirs -> (Array.sortDescending dirs)[0] |> Directory.create |> Some
+                        | [||] -> None
+                        | dirs -> dirs |> Array.sortDescending |> Array.head |> Directory.create |> Some
             with
             | :? DirectoryNotFoundException -> None
         // -------------------------------------------------------------------------------------------------------------

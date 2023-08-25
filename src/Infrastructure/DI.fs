@@ -5,14 +5,15 @@ open Model
 
 type Dependency<'T>(def:'T) = member val D = def with get, set
 
+
 // ---------------------------------------------------------------------------------------------------------------------
 type IConsoleBroker =
     abstract member enableStdOut: unit -> unit
     abstract member write: string -> unit
     abstract member writeLine: string -> unit
     abstract member writeLines: string seq -> unit
-    abstract member WriteMatrix: bool array -> bool -> string array array -> unit
-    abstract member WriteMatrixWithFooter: bool array -> bool -> string seq -> string array array -> unit
+    abstract member writeMatrix: bool array -> bool -> string array array -> unit
+    abstract member writeMatrixWithFooter: bool array -> bool -> string seq -> string array array -> unit
 
 type IConfigBroker =
     abstract member saveConfigDataToFileOrEx: ConfigData -> unit
@@ -67,6 +68,7 @@ type IUsersService =
     abstract member getHomeForUserOrEx: UserName -> Directory
     abstract member isValidUser: UserName -> bool
 // ---------------------------------------------------------------------------------------------------------------------
+    
     
 // ---------------------------------------------------------------------------------------------------------------------
 module Dependencies =

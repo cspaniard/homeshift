@@ -68,7 +68,7 @@ type DevicesService private (devicesBroker : IDevicesBroker, consoleBroker : ICo
                 for d in devices do
                     [| d.Path ; d.Size ; d.MountPoint ; d.FileSystemType ; d.Label |]
             |]
-            |> IConsoleBroker.WriteMatrixWithFooter [| false ; true ; false ; false ; false |] true [ "" ]
+            |> IConsoleBroker.writeMatrixWithFooter [| false ; true ; false ; false ; false |] true [ "" ]
         // -----------------------------------------------------------------------------------------------------------------
     
     // -----------------------------------------------------------------------------------------------------------------

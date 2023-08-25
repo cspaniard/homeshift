@@ -50,7 +50,7 @@ type ConsoleBroker private () as this =
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
-        member _.WriteMatrix (rightAlignments : bool array) (hasHeader : bool) (data : string array array) =
+        member _.writeMatrix (rightAlignments : bool array) (hasHeader : bool) (data : string array array) =
 
             // ToDo: Check rightAlignments size vs data line size. Must be the same.
             // ToDo: Maybe there is way to pass less information in the rightAlignments array.
@@ -95,13 +95,13 @@ type ConsoleBroker private () as this =
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
-        member _.WriteMatrixWithFooter (rightAlignments : bool array) (hasHeader : bool)
+        member _.writeMatrixWithFooter (rightAlignments : bool array) (hasHeader : bool)
                                        (footer : string seq) (data : string array array) =
 
-            (this :> IConsoleBroker).WriteMatrix rightAlignments hasHeader data
+            (this :> IConsoleBroker).writeMatrix rightAlignments hasHeader data
 
             footer
             |> (this :> IConsoleBroker).writeLines
-        // -----------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------
     
     // -----------------------------------------------------------------------------------------------------------------

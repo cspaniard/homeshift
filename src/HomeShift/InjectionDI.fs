@@ -2,8 +2,10 @@ module InjectionDI
 
 open Services
 open Brokers
+open Localization.LocalizedText
 
 open DI.Dependencies
+
 
 let init () =
 
@@ -14,7 +16,7 @@ let init () =
     IDevicesBrokerDI.D <- (fun () -> DevicesBroker.getInstance(IProcessBrokerDI.D()))
     ISnapshotsBrokerDI.D <- (fun () -> SnapshotsBroker.getInstance(IProcessBrokerDI.D()))
 
-    ISentenceBuilderDI.D <- (fun () -> Localization.LocalizedText.LocalizedSentenceBuilder.GetInstance())
+    ISentenceBuilderDI.D <- (fun () -> LocalizedSentenceBuilder.GetInstance())
     IConfigServiceDI.D <- (fun () -> ConfigService.getInstance (IConfigBrokerDI.D(), IConsoleBrokerDI.D()))
     IHelpServiceDI.D <- (fun () -> HelpService.getInstance(IConsoleBrokerDI.D(), ISentenceBuilderDI.D()))
     ISnapshotsServiceDI.D <- (fun () -> SnapshotsService.getInstance(IDevicesBrokerDI.D(),

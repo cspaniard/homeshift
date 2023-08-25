@@ -159,7 +159,7 @@ type SnapshotsService private (devicesBroker : IDevicesBroker, snapshotsBroker :
                 for d in snapshots do
                     [| d.Name ; d.Comments.value |]
             |]
-            |> IConsoleBroker.WriteMatrixWithFooter [| false ; false |] true [ "" ]
+            |> IConsoleBroker.writeMatrixWithFooter [| false ; false |] true [ "" ]
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
