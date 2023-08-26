@@ -1,13 +1,17 @@
 module AppCore.Delete
 
+open Microsoft.Extensions.DependencyInjection
+
 open Model
 open Helpers
 
-open DI.Dependencies
+open DI.Interfaces
+open DI.Providers
+
 
 //----------------------------------------------------------------------------------------------------------------------
-let IConfigService = IConfigServiceDI.D ()
-let ISnapshotsService = ISnapshotsServiceDI.D ()
+let configService = serviceProvider.GetService<IConfigService>()
+let snapshotsService = serviceProvider.GetService<ISnapshotsService>()
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -15,16 +19,16 @@ let deleteSnapshotOrEx (deleteData : DeleteData) =
 
     checkRootUserOrEx ()
 
-    let configData = IConfigService.getConfigDataOrEx ()
+    let configData = configService.getConfigDataOrEx ()
 
     checkUserOrEx deleteData.UserName
     checkDeviceOrEx configData.SnapshotDevice
 
     if deleteData.DeleteAll then
-        ISnapshotsService.deleteAll configData.SnapshotDevice deleteData.UserName
+        snapshotsService.deleteAll configData.SnapshotDevice deleteData.UserName
     else
         checkSnapshotOrEx configData.SnapshotDevice deleteData.UserName deleteData.SnapshotName
-        ISnapshotsService.deleteOrEx configData.SnapshotDevice deleteData
+        snapshotsService.deleteOrEx configData.SnapshotDevice deleteData
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------

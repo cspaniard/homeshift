@@ -4,6 +4,7 @@ open System
 open Newtonsoft.Json
 open Model.JsonConverters
 
+
 //----------------------------------------------------------------------------------------------------------------------
 type ListData = {
     UserName : UserName
@@ -17,7 +18,7 @@ with
 
 //----------------------------------------------------------------------------------------------------------------------
 type ConfigData = {
-    [<JsonConverter(typeof<SnapshotDeviceConverter>)>]
+    [<JsonConverter(typeof<GenericConverter<SnapshotDevice, string>>)>]
     SnapshotDevice : SnapshotDevice
     ScheduleMonthly : bool
     ScheduleWeekly : bool
@@ -57,14 +58,14 @@ with
 type CreateData = {
     CreationDateTime : DateTimeOffset
     UserName : UserName
-    Comments : Comments
+    Comments : Comment
 }
 with
     static member ofOptions (o : CreateOptions) =
         {
             CreationDateTime = DateTimeOffset.Now
             UserName = o.UserName |> UserName.create
-            Comments = o.Comments |> Comments.create
+            Comments = o.Comments |> Comment.create
         } : CreateData
 //----------------------------------------------------------------------------------------------------------------------
 

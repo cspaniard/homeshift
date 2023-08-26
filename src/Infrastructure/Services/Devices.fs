@@ -3,32 +3,17 @@ namespace Services
 open Newtonsoft.Json
 open Motsoft.Util
 
-open DI
+open DI.Interfaces
 open Model
 open Localization
 
 
-type DevicesService private (devicesBroker : IDevicesBroker, consoleBroker : IConsoleBroker) as this =
+type DevicesService (devicesBroker : IDevicesBroker, consoleBroker : IConsoleBroker) as this =
 
     // -----------------------------------------------------------------------------------------------------------------
-    let IDevicesBroker = devicesBroker
-    let IConsoleBroker = consoleBroker
-    // -----------------------------------------------------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------------------------------------------------
-    static let mutable instance = Unchecked.defaultof<IDevicesService>
-    
-    static member getInstance (devicesBroker : IDevicesBroker, consoleBroker : IConsoleBroker) =
-        
-        if obj.ReferenceEquals(instance, null) then
-            instance <- DevicesService (devicesBroker, consoleBroker)
-        
-        instance
-    // -----------------------------------------------------------------------------------------------------------------
-
     interface IDevicesService with
-    
-        // -----------------------------------------------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------------------------------------------
         member _.getValidDevicesDataOrEx () =
 
             let isValidDevice (dataChild : DeviceDataChild) =
@@ -38,29 +23,29 @@ type DevicesService private (devicesBroker : IDevicesBroker, consoleBroker : ICo
                 dataChild.PartTypeName |> String.compareNoCaseNoAccents "Linux filesystem" = 0
 
             let devicesData =
-                IDevicesBroker.getDeviceInfoOrEx ()
+                devicesBroker.getDeviceInfoOrEx ()
                 |> JsonConvert.DeserializeObject<BlockDevices>
 
             devicesData.BlockDevices
             |> Seq.collect (fun d -> d.Children)
             |> Seq.filter isValidDevice
-        // -----------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------
 
-        // -----------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------
         member _.isValidDeviceOrEx (device : SnapshotDevice) =
 
             (this :>IDevicesService).getValidDevicesDataOrEx ()
             |> Seq.exists (fun d -> d.Path = device.value)
-        // -----------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------
 
-        // -----------------------------------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------------------------------------------------
         member _.outputDevices (devices : DeviceDataChild seq) =
 
             [
                 Phrases.MountedDevices
                 ""
             ]
-            |> IConsoleBroker.writeLines
+            |> consoleBroker.writeLines
 
             [|
                 [| Phrases.Device ; Phrases.Size ; Phrases.MountPoint ; Phrases.Type ; Phrases.Label |]
@@ -68,7 +53,7 @@ type DevicesService private (devicesBroker : IDevicesBroker, consoleBroker : ICo
                 for d in devices do
                     [| d.Path ; d.Size ; d.MountPoint ; d.FileSystemType ; d.Label |]
             |]
-            |> IConsoleBroker.writeMatrixWithFooter [| false ; true ; false ; false ; false |] true [ "" ]
-        // -----------------------------------------------------------------------------------------------------------------
-    
+            |> consoleBroker.writeMatrixWithFooter [| false ; true ; false ; false ; false |] true [ "" ]
+        // -------------------------------------------------------------------------------------------------------------
+
     // -----------------------------------------------------------------------------------------------------------------

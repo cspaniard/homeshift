@@ -1,37 +1,22 @@
 namespace Services
 
-open DI
+open DI.Interfaces
 open Model
 
 
-type UsersService private (usersBroker : IUsersBroker) as this =
-
-    // -----------------------------------------------------------------------------------------------------------------
-    let IUsersBroker = usersBroker
-    // -----------------------------------------------------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------------------------------------------------
-    static let mutable instance = Unchecked.defaultof<IUsersService>
-    
-    static member getInstance (usersBroker : IUsersBroker) =
-        
-        if obj.ReferenceEquals(instance, null) then
-            instance <- UsersService(usersBroker)
-        
-        instance
-    // -----------------------------------------------------------------------------------------------------------------
+type UsersService (usersBroker : IUsersBroker) as this =
 
     // -----------------------------------------------------------------------------------------------------------------
     interface IUsersService with
-    
+
         // -------------------------------------------------------------------------------------------------------------
         member _.getHomeForUserOrEx (userName : UserName) =
 
-            let line = IUsersBroker.getUserInfoFromPasswordFileOrEx userName
+            let line = usersBroker.getUserInfoFromPasswordFileOrEx userName
 
             (line.Split ":")[5]
             |> Directory.create
-            |> IUsersBroker.checkUserHomeExistsOrEx
+            |> usersBroker.checkUserHomeExistsOrEx
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
@@ -42,5 +27,5 @@ type UsersService private (usersBroker : IUsersBroker) as this =
                 true
             with _ -> false
         // -------------------------------------------------------------------------------------------------------------
-    
+
     // -----------------------------------------------------------------------------------------------------------------

@@ -1,15 +1,19 @@
 module AppCore.ListDevices
 
-open DI.Dependencies
+open Microsoft.Extensions.DependencyInjection
+
+open DI.Interfaces
+open DI.Providers
+
 
 //----------------------------------------------------------------------------------------------------------------------
-let IDevicesService = IDevicesServiceDI.D ()
+let devicesService = serviceProvider.GetService<IDevicesService>()
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
 let getDeviceList () =
 
-    IDevicesService.getValidDevicesDataOrEx ()
+    devicesService.getValidDevicesDataOrEx ()
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -19,5 +23,5 @@ module CLI =
     let showDeviceList () =
 
         getDeviceList ()
-        |> IDevicesService.outputDevices
+        |> devicesService.outputDevices
     //------------------------------------------------------------------------------------------------------------------

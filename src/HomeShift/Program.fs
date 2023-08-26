@@ -3,10 +3,12 @@ open System
 open System.Diagnostics.CodeAnalysis
 open CommandLine
 open AppCore
+open DI.Interfaces
 open Localization
 open Model
 
-open DI.Dependencies
+open Microsoft.Extensions.DependencyInjection
+open DI.Providers
 
 // ---------------------------------------------------------------------------------------------------------------------
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<ListOptions>)>]
@@ -19,22 +21,22 @@ open DI.Dependencies
 [<DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof<CliOptions>)>]
 // ---------------------------------------------------------------------------------------------------------------------
 
-InjectionDI.init ()
-
 // ---------------------------------------------------------------------------------------------------------------------
-let IHelpService = IHelpServiceDI.D()
-let IConsoleBroker = IConsoleBrokerDI.D()
+let helpService = serviceProvider.GetService<IHelpService>()
+let consoleBroker = serviceProvider.GetService<IConsoleBroker>()
 // ---------------------------------------------------------------------------------------------------------------------
 
-
+// ---------------------------------------------------------------------------------------------------------------------
+// TODO: Move to some place else.
 let rec showInnerExceptions (e : Exception) =
 
-    IConsoleBroker.writeLine e.Message
+    consoleBroker.writeLine e.Message
     if e.InnerException <> null then showInnerExceptions e.InnerException
+// ---------------------------------------------------------------------------------------------------------------------
 
 
 try
-    IConsoleBroker.enableStdOut()
+    consoleBroker.enableStdOut()
 
     let args = Environment.GetCommandLineArgs() |> Array.tail
 
@@ -45,7 +47,7 @@ try
     |> function
     | :? Parsed<obj> as command ->
 
-        IHelpService.showHeading ()
+        helpService.showHeading ()
 
         match command.Value with
         | :? ListOptions as opts -> List.CLI.showSnapshotListOrEx opts
@@ -58,15 +60,15 @@ try
             match parser.ParseArguments<DeleteOptionsAtLeastOne> args with
             | :? Parsed<DeleteOptionsAtLeastOne> -> Delete.CLI.deleteSnapshotOrEx deleteOptions
             | :? NotParsed<DeleteOptionsAtLeastOne> as notParsed ->
-                    IHelpService.helpTextFromResult notParsed |> Console.WriteLine
+                    helpService.helpTextFromResult notParsed |> Console.WriteLine
             | _ -> Console.WriteLine "Should not get here 3."
 
         | _ -> Console.WriteLine "Should not get here 1."
 
     | :? NotParsed<obj> as notParsed when notParsed.Errors.IsVersion() ->
-            IHelpService.showHeading ()
+            helpService.showHeading ()
     | :? NotParsed<obj> as notParsed ->
-            IHelpService.helpTextFromResult notParsed |> Console.WriteLine
+            helpService.helpTextFromResult notParsed |> Console.WriteLine
     | _ -> Console.WriteLine "Should not get here 2."
 
 with e ->

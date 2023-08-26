@@ -1,16 +1,18 @@
 module AppCore.Helpers
 
 open System
+open Microsoft.Extensions.DependencyInjection
 open Motsoft.Util
 open Model
 
+open DI.Interfaces
+open DI.Providers
 open Localization
-open DI.Dependencies
 
 //----------------------------------------------------------------------------------------------------------------------
-let IDevicesService = IDevicesServiceDI.D ()
-let ISnapshotsService = ISnapshotsServiceDI.D ()
-let IUsersService = IUsersServiceDI.D ()
+let devicesService = serviceProvider.GetService<IDevicesService>()
+let snapshotsService = serviceProvider.GetService<ISnapshotsService>()
+let usersService = serviceProvider.GetService<IUsersService>()
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -23,19 +25,19 @@ let checkRootUserOrEx () =
 let checkDeviceOrEx (snapshotDevice : SnapshotDevice) =
 
     snapshotDevice
-    |> IDevicesService.isValidDeviceOrEx
+    |> devicesService.isValidDeviceOrEx
     |> failWithIfFalse $"{Errors.InvalidDevice} ({snapshotDevice})"
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
 let checkUserOrEx (userName : UserName) =
 
-   IUsersService.isValidUser userName |> failWithIfFalse Errors.UserInvalid
+   usersService.isValidUser userName |> failWithIfFalse Errors.UserInvalid
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
 let checkSnapshotOrEx (snapshotDevice : SnapshotDevice) (userName : UserName) (snapshotName : string) =
 
-   ISnapshotsService.isValidOrEx snapshotDevice userName snapshotName
+   snapshotsService.isValidOrEx snapshotDevice userName snapshotName
    |> failWithIfFalse $"{Errors.SnapshotInvalid} ({userName.value}): {snapshotName}"
 //----------------------------------------------------------------------------------------------------------------------

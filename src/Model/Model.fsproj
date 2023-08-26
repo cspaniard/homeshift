@@ -10,11 +10,12 @@
         <Compile Include="Validation\SnapshotDeviceValidation.fs" />
         <Compile Include="Validation\UserNameValidation.fs" />
         <Compile Include="Validation\DirectoryValidation.fs" />
+        <Compile Include="IValueType.fs" />
         <Compile Include="SnapshotDevice.fs" />
         <Compile Include="UserName.fs" />
         <Compile Include="Directory.fs" />
-        <Compile Include="JsonConverters\SnapshotDeviceConverter.fs" />
-        <Compile Include="JsonConverters\CommentsConverter.fs" />
+        <Compile Include="Comment.fs" />
+        <Compile Include="JsonConverters\GenericConverter.fs" />
         <Compile Include="Options.fs" />
         <Compile Include="Snapshot.fs" />
         <Compile Include="CommandData.fs" />

@@ -6,11 +6,6 @@ namespace Localization.LocalizedText
 
     public class LocalizedSentenceBuilder : CommandLine.Text.SentenceBuilder, ISentenceBuilder
     {
-        public static ISentenceBuilder GetInstance()
-        {
-            return new LocalizedSentenceBuilder();
-        }
-        
         public override Func<string> RequiredWord
         {
             get { return () => LocSentenceBuilder.SentenceRequiredWord; }

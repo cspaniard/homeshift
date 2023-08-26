@@ -2,9 +2,13 @@ namespace Model
 
 open Motsoft.Util
 
+
 type UserName =
 
     private UserName of string with
+
+        interface IValueType<UserName, string> with
+            static member create (value : string) = UserName.create value
 
         static member private canonicalize (value : string) =
             value

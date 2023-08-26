@@ -3,16 +3,12 @@ namespace Brokers
 open System.IO
 open Newtonsoft.Json
 
-open DI
+open DI.Interfaces
 open Model
 open Localization
 
 
-type SnapshotsBroker private (processBroker : IProcessBroker) as this =
-
-    // -----------------------------------------------------------------------------------------------------------------
-    let IProcessBroker = processBroker
-    // -----------------------------------------------------------------------------------------------------------------
+type SnapshotsBroker (processBroker : IProcessBroker) as this =
 
     // -----------------------------------------------------------------------------------------------------------------
     let [<Literal>] USER_FILES_DIRECTORY = "userfiles"
@@ -37,19 +33,8 @@ type SnapshotsBroker private (processBroker : IProcessBroker) as this =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static let mutable instance = Unchecked.defaultof<ISnapshotsBroker>
-    
-    static member getInstance (processBroker : IProcessBroker) =
-        
-        if obj.ReferenceEquals(instance, null) then
-            instance <- SnapshotsBroker processBroker
-        
-        instance
-    // -----------------------------------------------------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------------------------------------------------
     interface ISnapshotsBroker with
-    
+
         // -------------------------------------------------------------------------------------------------------------
         member _.getAllInfoInPathOrEx (path : Directory) =
 
@@ -103,13 +88,13 @@ type SnapshotsBroker private (processBroker : IProcessBroker) as this =
             | Some lsp ->
                 let linkDestPath = Path.Combine(lsp.value, USER_FILES_DIRECTORY) |> Directory.create
 
-                IProcessBroker.startProcessWithNotificationOrEx
+                processBroker.startProcessWithNotificationOrEx
                     progressCallBack
                     "rsync" ("-a --info=progress2 " +
                              $"--link-dest={linkDestPath.value} {sourcePath.value}/ {finalDestinationPath.value}")
 
             | None ->
-                IProcessBroker.startProcessWithNotificationOrEx
+                processBroker.startProcessWithNotificationOrEx
                     progressCallBack
                     "rsync" $"-a --info=progress2 {sourcePath.value}/ {finalDestinationPath.value}"
 
@@ -140,5 +125,5 @@ type SnapshotsBroker private (processBroker : IProcessBroker) as this =
             | Some path -> (this :> ISnapshotsBroker).deleteSnapshotPathOrEx path
             | None -> failwith Phrases.NeedToDeleteLastSnapshot
         // -------------------------------------------------------------------------------------------------------------
-    
+
     // -----------------------------------------------------------------------------------------------------------------

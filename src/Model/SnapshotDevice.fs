@@ -2,9 +2,13 @@ namespace Model
 
 open Motsoft.Util
 
+
 type SnapshotDevice =
 
     private SnapshotDevice of string with
+
+        interface IValueType<SnapshotDevice, string> with
+            static member create (value : string) = SnapshotDevice.create value
 
         static member private canonicalize (value : string) =
             value

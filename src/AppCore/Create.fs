@@ -3,11 +3,15 @@ module AppCore.Create
 open Model
 open AppCore.Helpers
 
-open DI.Dependencies
+open Microsoft.Extensions.DependencyInjection
+
+open DI.Interfaces
+open DI.Providers
+
 
 //----------------------------------------------------------------------------------------------------------------------
-let IConfigService = IConfigServiceDI.D ()
-let ISnapshotsService = ISnapshotsServiceDI.D ()
+let configService = serviceProvider.GetService<IConfigService>()
+let snapshotsService = serviceProvider.GetService<ISnapshotsService>()
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -15,11 +19,11 @@ let createSnapshotOrEx (createData : CreateData) =
 
     checkRootUserOrEx ()
 
-    let configData = IConfigService.getConfigDataOrEx ()
+    let configData = configService.getConfigDataOrEx ()
 
     checkDeviceOrEx configData.SnapshotDevice
 
-    ISnapshotsService.createOrEx configData createData
+    snapshotsService.createOrEx configData createData
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------

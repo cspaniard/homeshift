@@ -4,31 +4,20 @@ open System
 open System.IO
 open Motsoft.Util
 
-open DI
+open DI.Interfaces
 open Model
 open Localization
 
 
-type UsersBroker private (processBroker : IProcessBroker) =
+type UsersBroker (processBroker : IProcessBroker) =
 
     // -----------------------------------------------------------------------------------------------------------------
     let IProcessBroker = processBroker
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static let mutable instance = Unchecked.defaultof<IUsersBroker>
-    
-    static member getInstance (processBroker : IProcessBroker) =
-        
-        if obj.ReferenceEquals(instance, null) then
-            instance <- UsersBroker processBroker
-        
-        instance
-    // -----------------------------------------------------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------------------------------------------------
     interface IUsersBroker with
-        
+
         // -------------------------------------------------------------------------------------------------------------
         member _.getUserInfoFromPasswordFileOrEx (userName : UserName) =
 
@@ -41,7 +30,7 @@ type UsersBroker private (processBroker : IProcessBroker) =
 
             line
         // -------------------------------------------------------------------------------------------------------------
-            
+
         // -------------------------------------------------------------------------------------------------------------
         member _.checkUserHomeExistsOrEx (homeDirectory : Directory) =
 
@@ -50,5 +39,5 @@ type UsersBroker private (processBroker : IProcessBroker) =
 
             homeDirectory
         // -------------------------------------------------------------------------------------------------------------
-    
+
     // -----------------------------------------------------------------------------------------------------------------

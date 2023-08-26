@@ -6,20 +6,13 @@ open System.IO
 open System.Threading
 open Motsoft.Util
 
-open DI
+open DI.Interfaces
 open Model
 open Localization
 
 
-type SnapshotsService private (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapshotsBroker,
-                               consoleBroker : IConsoleBroker, usersService : IUsersService) as this =
-
-    // -----------------------------------------------------------------------------------------------------------------
-    let IDevicesBroker = devicesBroker
-    let ISnapshotsBroker = snapshotsBroker
-    let IConsoleBroker = consoleBroker
-    let IUsersService = usersService
-    // -----------------------------------------------------------------------------------------------------------------
+type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapshotsBroker,
+                       consoleBroker : IConsoleBroker, usersService : IUsersService) as this =
 
     // -----------------------------------------------------------------------------------------------------------------
     let getSnapshotPath (userSnapshotsPath : Directory) (dateTime : DateTimeOffset) =
@@ -36,7 +29,7 @@ type SnapshotsService private (devicesBroker : IDevicesBroker, snapshotsBroker :
         let rec tryUnmountOrEx n =
             if n < 10 then
                 try
-                    IDevicesBroker.unmountCurrentOrEx ()
+                    devicesBroker.unmountCurrentOrEx ()
                 with _ ->
                     Thread.Sleep 1000
                     tryUnmountOrEx (n + 1)
@@ -47,27 +40,15 @@ type SnapshotsService private (devicesBroker : IDevicesBroker, snapshotsBroker :
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-    static let mutable instance = Unchecked.defaultof<ISnapshotsService>
-    
-    static member getInstance (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapshotsBroker,
-                               consoleBroker : IConsoleBroker, usersService : IUsersService) =
-        
-        if obj.ReferenceEquals(instance, null) then
-            instance <- SnapshotsService (devicesBroker, snapshotsBroker, consoleBroker, usersService)
-        
-        instance
-    // -----------------------------------------------------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------------------------------------------------
     interface ISnapshotsService with
-    
+
         // -------------------------------------------------------------------------------------------------------------
         member _.createOrEx (configData : ConfigData) (createData : CreateData) =
 
             let mutable PressedCtrlC = false
 
-            let userHomePath = IUsersService.getHomeForUserOrEx createData.UserName
-            let mountPoint = IDevicesBroker.mountDeviceOrEx configData.SnapshotDevice
+            let userHomePath = usersService.getHomeForUserOrEx createData.UserName
+            let mountPoint = devicesBroker.mountDeviceOrEx configData.SnapshotDevice
 
             let userSnapshotsPath = $"{mountPoint}/homeshift/snapshots/{createData.UserName}"
                                     |> Directory.create
@@ -83,7 +64,7 @@ type SnapshotsService private (devicesBroker : IDevicesBroker, snapshotsBroker :
                         let progressParts = progressString |> String.split " "
 
                         if progressParts.Length > 3 then
-                            IConsoleBroker.write($"{Phrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
+                            consoleBroker.write($"{Phrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
                                                  $"%02i{stopWatch.Elapsed.Minutes}:%02i{stopWatch.Elapsed.Seconds} - " +
                                                  $"{Phrases.Completed}: {progressParts[1]} - " +
                                                  $"{Phrases.TimeRemaining}: {progressParts[3]}     \r")
@@ -95,18 +76,18 @@ type SnapshotsService private (devicesBroker : IDevicesBroker, snapshotsBroker :
                         $"{Path.GetFileName baseSnapshotPath.value}"
                     ""
                 ]
-                |> IConsoleBroker.writeLines
+                |> consoleBroker.writeLines
 
                 // -----------------------------------------------------------------------------------------------------
                 Console.CancelKeyPress.AddHandler CancelKeyHandler
 
-                ISnapshotsBroker.getLastSnapshotOptionInPathOrEx userSnapshotsPath
-                |> ISnapshotsBroker.createSnapshotOrEx userHomePath baseSnapshotPath createData progressCallBack
+                snapshotsBroker.getLastSnapshotOptionInPathOrEx userSnapshotsPath
+                |> snapshotsBroker.createSnapshotOrEx userHomePath baseSnapshotPath createData progressCallBack
                 // -----------------------------------------------------------------------------------------------------
 
                 stopWatch.Stop()
 
-                IConsoleBroker.writeLine($"{Phrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
+                consoleBroker.writeLine($"{Phrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
                                          $"%02i{stopWatch.Elapsed.Minutes}:%02i{stopWatch.Elapsed.Seconds} - " +
                                          $"{Phrases.Completed} 100%% - {Phrases.TimeRemaining}: 0:00:00          \n")
 
@@ -120,9 +101,9 @@ type SnapshotsService private (devicesBroker : IDevicesBroker, snapshotsBroker :
                         Phrases.DeletingIncompleteSnapshot
                         ""
                     ]
-                    |> IConsoleBroker.writeLines
+                    |> consoleBroker.writeLines
 
-                    ISnapshotsBroker.deleteLastSnapshotOrEx userSnapshotsPath
+                    snapshotsBroker.deleteLastSnapshotOrEx userSnapshotsPath
 
                 unmountDeviceOrEx ()
         // -------------------------------------------------------------------------------------------------------------
@@ -130,13 +111,13 @@ type SnapshotsService private (devicesBroker : IDevicesBroker, snapshotsBroker :
         // -------------------------------------------------------------------------------------------------------------
         member _.getListForUserOrEx (snapshotDevice : SnapshotDevice) (userName : UserName) =
 
-            let mountPoint = IDevicesBroker.mountDeviceOrEx snapshotDevice
+            let mountPoint = devicesBroker.mountDeviceOrEx snapshotDevice
 
             try
                 let userSnapshotsPath = $"{mountPoint}/homeshift/snapshots/{userName}"
                                         |> Directory.create
 
-                ISnapshotsBroker.getAllInfoInPathOrEx userSnapshotsPath
+                snapshotsBroker.getAllInfoInPathOrEx userSnapshotsPath
 
             finally
                 unmountDeviceOrEx ()
@@ -151,7 +132,7 @@ type SnapshotsService private (devicesBroker : IDevicesBroker, snapshotsBroker :
                 $"{Phrases.UserSnapshots}: {userName.value}"
                 ""
             ]
-            |> IConsoleBroker.writeLines
+            |> consoleBroker.writeLines
 
             [|
                 [| Phrases.SnapshotName ; Phrases.SnapshotComments |]
@@ -159,7 +140,7 @@ type SnapshotsService private (devicesBroker : IDevicesBroker, snapshotsBroker :
                 for d in snapshots do
                     [| d.Name ; d.Comments.value |]
             |]
-            |> IConsoleBroker.writeMatrixWithFooter [| false ; false |] true [ "" ]
+            |> consoleBroker.writeMatrixWithFooter [| false ; false |] true [ "" ]
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
@@ -169,20 +150,20 @@ type SnapshotsService private (devicesBroker : IDevicesBroker, snapshotsBroker :
                 $"{Phrases.SnapshotDeleting} ({deleteData.UserName.value}): {deleteData.SnapshotName}"
                 ""
             ]
-            |> IConsoleBroker.writeLines
+            |> consoleBroker.writeLines
 
 
-            let mountPoint = IDevicesBroker.mountDeviceOrEx snapshotDevice
+            let mountPoint = devicesBroker.mountDeviceOrEx snapshotDevice
 
             let snapshotPath = $"{mountPoint}/homeshift/snapshots/{deleteData.UserName}/{deleteData.SnapshotName}"
                                |> Directory.create
 
             try
-                ISnapshotsBroker.deleteSnapshotPathOrEx snapshotPath
+                snapshotsBroker.deleteSnapshotPathOrEx snapshotPath
 
                 $"{mountPoint}/homeshift/snapshots/{deleteData.UserName.value}"
                 |> Directory.create
-                |> ISnapshotsBroker.deleteUserPathIfEmptyOrEx
+                |> snapshotsBroker.deleteUserPathIfEmptyOrEx
 
             finally
                 unmountDeviceOrEx ()
@@ -193,7 +174,7 @@ type SnapshotsService private (devicesBroker : IDevicesBroker, snapshotsBroker :
 
             try
                 let snapshotList = (this :> ISnapshotsService).getListForUserOrEx snapshotDevice userName
-                let mountPoint = IDevicesBroker.mountDeviceOrEx snapshotDevice
+                let mountPoint = devicesBroker.mountDeviceOrEx snapshotDevice
 
                 snapshotList |> Seq.isEmpty |> failWithIfTrue $"{Errors.SnapshotNonFound} ({userName.value})"
 
@@ -201,22 +182,22 @@ type SnapshotsService private (devicesBroker : IDevicesBroker, snapshotsBroker :
                     $"{Phrases.SnapshotDeletingAll} ({userName.value})"
                     ""
                 ]
-                |> IConsoleBroker.writeLines
+                |> consoleBroker.writeLines
 
                 snapshotList
                 |> Seq.iter (fun s ->
                                 $"{Phrases.SnapshotDeleting} %s{s.Name}"
-                                |> IConsoleBroker.writeLine
+                                |> consoleBroker.writeLine
 
                                 $"{mountPoint}/homeshift/snapshots/{userName}/{s.Name}"
                                 |> Directory.create
-                                |> ISnapshotsBroker.deleteSnapshotPathOrEx)
+                                |> snapshotsBroker.deleteSnapshotPathOrEx)
 
                 $"{mountPoint}/homeshift/snapshots/{userName}"
                 |> Directory.create
-                |> ISnapshotsBroker.deleteUserPathIfEmptyOrEx
+                |> snapshotsBroker.deleteUserPathIfEmptyOrEx
 
-                IConsoleBroker.writeLine ""
+                consoleBroker.writeLine ""
 
             finally
                 unmountDeviceOrEx ()
@@ -228,5 +209,5 @@ type SnapshotsService private (devicesBroker : IDevicesBroker, snapshotsBroker :
             (this :> ISnapshotsService).getListForUserOrEx snapshotDevice userName
             |> Seq.exists (fun s -> s.Name = snapshotName)
         // -------------------------------------------------------------------------------------------------------------
-    
+
     // -----------------------------------------------------------------------------------------------------------------

@@ -1,12 +1,16 @@
-﻿module AppCore.Config
+module AppCore.Config
+
+open Microsoft.Extensions.DependencyInjection
 
 open Model
 open AppCore.Helpers
 
-open DI.Dependencies
+open DI.Interfaces
+open DI.Providers
+
 
 //----------------------------------------------------------------------------------------------------------------------
-let IConfigService = IConfigServiceDI.D ()
+let configService = serviceProvider.GetService<IConfigService>()
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -16,7 +20,7 @@ let storeConfigOrEx (configData : ConfigData) =
 
     checkDeviceOrEx configData.SnapshotDevice
 
-    IConfigService.storeConfigDataOrEx configData
+    configService.storeConfigDataOrEx configData
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -25,7 +29,7 @@ module CLI =
     //------------------------------------------------------------------------------------------------------------------
     let storeConfigOrEx (options : ConfigOptions) =
 
-        IConfigService.getConfigDataOrEx ()
+        configService.getConfigDataOrEx ()
         |> ConfigData.mergeWithOptions options
         |> storeConfigOrEx
     //------------------------------------------------------------------------------------------------------------------

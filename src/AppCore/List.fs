@@ -1,24 +1,26 @@
 module AppCore.List
 
+open Microsoft.Extensions.DependencyInjection
 open Helpers
 open Model
 
-open DI.Dependencies
+open DI.Interfaces
+open DI.Providers
 
 //----------------------------------------------------------------------------------------------------------------------
-let IConfigService = IConfigServiceDI.D ()
-let ISnapshotsService = ISnapshotsServiceDI.D ()
+let configService = serviceProvider.GetService<IConfigService>()
+let snapshotsService = serviceProvider.GetService<ISnapshotsService>()
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
 let getSnapshotListOrEx (listData : ListData) =
 
-    let configData = IConfigService.getConfigDataOrEx ()
+    let configData = configService.getConfigDataOrEx ()
 
     checkUserOrEx listData.UserName
     checkDeviceOrEx configData.SnapshotDevice
 
-    ISnapshotsService.getListForUserOrEx configData.SnapshotDevice listData.UserName
+    snapshotsService.getListForUserOrEx configData.SnapshotDevice listData.UserName
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -30,5 +32,5 @@ module CLI =
         listOptions
         |> ListData.ofOptions
         |> getSnapshotListOrEx
-        |> ISnapshotsService.outputOrEx (listOptions.UserName |> UserName.create)
+        |> snapshotsService.outputOrEx (listOptions.UserName |> UserName.create)
     //------------------------------------------------------------------------------------------------------------------

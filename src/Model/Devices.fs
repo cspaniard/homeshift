@@ -2,6 +2,7 @@ namespace Model
 
 open Newtonsoft.Json
 
+
 type DeviceDataChild =
     {
         [<JsonProperty("name")>]
@@ -34,6 +35,7 @@ type DeviceDataChild =
         [<JsonProperty("size")>]
         Size : string
     }
+
 
 type DeviceData =
     {
@@ -70,6 +72,7 @@ type DeviceData =
         [<JsonProperty("children")>]
         Children : DeviceDataChild[]
     }
+
 
 type BlockDevices =
     {

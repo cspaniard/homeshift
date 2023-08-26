@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="DI.fs" />
+        <Compile Include="Interfaces.fs" />
         <Compile Include="Brokers\Process.fs" />
         <Compile Include="Brokers\Config.fs" />
         <Compile Include="Brokers\Devices.fs" />
@@ -18,10 +18,12 @@
         <Compile Include="Services\Config.fs" />
         <Compile Include="Services\Snapshots.fs" />
         <Compile Include="Services\Devices.fs" />
+        <Compile Include="Providers.fs" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="CommandLineParser.FSharp" Version="2.9.1" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
       <PackageReference Include="Motsoft.Util" Version="1.7.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>

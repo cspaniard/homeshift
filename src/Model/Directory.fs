@@ -2,9 +2,13 @@ namespace Model
 
 open Motsoft.Util
 
+
 type Directory =
 
     private Directory of string with
+
+        interface IValueType<Directory, string> with
+            static member create (value : string) = Directory.create value
 
         static member private canonicalize (value : string) =
             value
@@ -26,23 +30,3 @@ type Directory =
             |> Directory.canonicalize
             |> Directory.validateOrEx
             |> Directory
-
-type Comments =
-
-    private Comments of string with
-
-        static member private canonicalize (value : string) =
-            value
-            |> trim
-
-        member this.value = let (Comments value) = this in value
-
-        override this.ToString () = this.value
-
-        static member create (value : string) =
-
-            let value = if value = null then "" else value
-
-            value
-            |> Comments.canonicalize
-            |> Comments
