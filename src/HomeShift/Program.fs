@@ -26,15 +26,6 @@ let helpService = serviceProvider.GetService<IHelpService>()
 let consoleBroker = serviceProvider.GetService<IConsoleBroker>()
 // ---------------------------------------------------------------------------------------------------------------------
 
-// ---------------------------------------------------------------------------------------------------------------------
-// TODO: Move to some place else.
-let rec showInnerExceptions (e : Exception) =
-
-    consoleBroker.writeLine e.Message
-    if e.InnerException <> null then showInnerExceptions e.InnerException
-// ---------------------------------------------------------------------------------------------------------------------
-
-
 try
     consoleBroker.enableStdOut()
 
@@ -72,6 +63,5 @@ try
     | _ -> Console.WriteLine "Should not get here 2."
 
 with e ->
-    // Console.WriteLine $"{e.Message}\n"
-    showInnerExceptions e
+    consoleBroker.writeInnerExceptions e
     // Console.WriteLine $"{e.StackTrace}\n"

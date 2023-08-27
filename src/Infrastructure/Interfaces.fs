@@ -1,5 +1,6 @@
 module DI.Interfaces
 
+open System
 open CommandLine
 open Model
 
@@ -12,6 +13,7 @@ type IConsoleBroker =
     abstract member writeLines: string seq -> unit
     abstract member writeMatrix: bool array -> bool -> string array array -> unit
     abstract member writeMatrixWithFooter: bool array -> bool -> string seq -> string array array -> unit
+    abstract member writeInnerExceptions: Exception -> unit
 
 type IConfigBroker =
     abstract member saveConfigDataToFileOrEx: ConfigData -> unit
