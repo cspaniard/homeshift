@@ -28,10 +28,7 @@ type DevicesBroker (processBroker : IProcessBroker) =
         // -------------------------------------------------------------------------------------------------------------
         member _.mountDeviceOrEx (snapshotDevice : SnapshotDevice) =
 
-            // TODO: Maybe we can avoid checking if the directory already exists.
-
-            if Directory.Exists mountPoint.value = false then
-                Directory.CreateDirectory mountPoint.value |> ignore
+            Directory.CreateDirectory mountPoint.value |> ignore
 
             try
                 processBroker.startProcessAndWaitOrEx "mount" $"{snapshotDevice.value} {mountPoint}"
