@@ -1,5 +1,6 @@
 namespace Brokers
 
+open System
 open System.IO
 open Newtonsoft.Json
 
@@ -22,15 +23,15 @@ type ConfigBroker () =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
-
     interface IConfigBroker with
+
         // -------------------------------------------------------------------------------------------------------------
         member _.saveConfigDataToFileOrEx (data : ConfigData) =
 
             createConfigPathOrEx ()
 
             (CONFIG_FILE,
-             JsonConvert.SerializeObject(data, Formatting.Indented))
+             JsonConvert.SerializeObject(data, Formatting.Indented) + Environment.NewLine)
             |> File.WriteAllText
         // -------------------------------------------------------------------------------------------------------------
 
