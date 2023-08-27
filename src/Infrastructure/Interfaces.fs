@@ -29,7 +29,7 @@ type IUsersBroker =
 
 type IDevicesBroker =
     abstract member getDeviceInfoOrEx: unit -> string
-    abstract member mountDeviceOrEx: SnapshotDevice -> string
+    abstract member mountDeviceOrEx: SnapshotDevice -> Directory
     abstract member unmountCurrentOrEx: unit -> unit
 
 type ISnapshotsBroker =

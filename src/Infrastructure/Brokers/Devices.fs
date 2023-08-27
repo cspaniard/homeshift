@@ -10,6 +10,11 @@ open Model
 type DevicesBroker (processBroker : IProcessBroker) =
 
     // -----------------------------------------------------------------------------------------------------------------
+    let mountPoint = $"/run/homeshift/{Process.GetCurrentProcess().Id}"
+                     |> Directory.create
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
     interface IDevicesBroker with
 
         // -------------------------------------------------------------------------------------------------------------
@@ -23,28 +28,26 @@ type DevicesBroker (processBroker : IProcessBroker) =
         // -------------------------------------------------------------------------------------------------------------
         member _.mountDeviceOrEx (snapshotDevice : SnapshotDevice) =
 
-            let pid = Process.GetCurrentProcess().Id
-            let mountPoint = $"/run/homeshift/{pid}"   // ToDo: Make it a Broker wide value.
+            // TODO: Maybe we can avoid checking if the directory already exists.
 
-            if Directory.Exists mountPoint = false then
-                Directory.CreateDirectory mountPoint |> ignore
+            if Directory.Exists mountPoint.value = false then
+                Directory.CreateDirectory mountPoint.value |> ignore
 
             try
                 processBroker.startProcessAndWaitOrEx "mount" $"{snapshotDevice.value} {mountPoint}"
+
                 mountPoint
+
             with e ->
-                Directory.Delete mountPoint
+                Directory.Delete mountPoint.value
                 reraise ()
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
         member _.unmountCurrentOrEx () =
 
-            let pid = Process.GetCurrentProcess().Id
-            let mountPoint = $"/run/homeshift/{pid}"   // ToDo: Make it a Broker wide value.
-
-            processBroker.startProcessNoOuputAtAll "umount" mountPoint
-            Directory.Delete mountPoint
+            processBroker.startProcessNoOuputAtAll "umount" mountPoint.value
+            Directory.Delete mountPoint.value
         // -------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------

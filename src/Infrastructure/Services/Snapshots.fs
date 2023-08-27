@@ -114,10 +114,9 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
             let mountPoint = devicesBroker.mountDeviceOrEx snapshotDevice
 
             try
-                let userSnapshotsPath = $"{mountPoint}/homeshift/snapshots/{userName}"
-                                        |> Directory.create
-
-                snapshotsBroker.getAllInfoInPathOrEx userSnapshotsPath
+                $"{mountPoint}/homeshift/snapshots/{userName}"
+                |> Directory.create
+                |> snapshotsBroker.getAllInfoInPathOrEx
 
             finally
                 unmountDeviceOrEx ()
@@ -137,8 +136,8 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
             [|
                 [| Phrases.SnapshotName ; Phrases.SnapshotComments |]
 
-                for d in snapshots do
-                    [| d.Name ; d.Comments.value |]
+                for s in snapshots do
+                    [| s.Name ; s.Comments.value |]
             |]
             |> consoleBroker.writeMatrixWithFooter [| false ; false |] true [ "" ]
         // -------------------------------------------------------------------------------------------------------------
@@ -152,16 +151,14 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
             ]
             |> consoleBroker.writeLines
 
-
-            let mountPoint = devicesBroker.mountDeviceOrEx snapshotDevice
-
-            let snapshotPath = $"{mountPoint}/homeshift/snapshots/{deleteData.UserName}/{deleteData.SnapshotName}"
-                               |> Directory.create
-
             try
-                snapshotsBroker.deleteSnapshotPathOrEx snapshotPath
+                let mountPoint = devicesBroker.mountDeviceOrEx snapshotDevice
 
-                $"{mountPoint}/homeshift/snapshots/{deleteData.UserName.value}"
+                $"{mountPoint.value}/homeshift/snapshots/{deleteData.UserName.value}/{deleteData.SnapshotName}"
+                |> Directory.create
+                |> snapshotsBroker.deleteSnapshotPathOrEx
+
+                $"{mountPoint.value}/homeshift/snapshots/{deleteData.UserName.value}"
                 |> Directory.create
                 |> snapshotsBroker.deleteUserPathIfEmptyOrEx
 

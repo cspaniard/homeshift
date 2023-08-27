@@ -34,7 +34,7 @@ type DevicesService (devicesBroker : IDevicesBroker, consoleBroker : IConsoleBro
         // -------------------------------------------------------------------------------------------------------------
         member _.isValidDeviceOrEx (device : SnapshotDevice) =
 
-            (this :>IDevicesService).getValidDevicesDataOrEx ()
+            (this :> IDevicesService).getValidDevicesDataOrEx ()
             |> Seq.exists (fun d -> d.Path = device.value)
         // -------------------------------------------------------------------------------------------------------------
 
