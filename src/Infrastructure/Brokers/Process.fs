@@ -13,7 +13,9 @@ type ProcessBroker () =
         // -------------------------------------------------------------------------------------------------------------
         member _.startProcessAndWaitOrEx (processName : string) (arguments : string) =
 
-            Process.Start(processName, arguments).WaitForExit()
+            Process
+                .Start(processName, arguments)
+                .WaitForExit()
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
@@ -26,9 +28,9 @@ type ProcessBroker () =
             startInfo.RedirectStandardOutput <- true
             startInfo.RedirectStandardError <- true
 
-            let proc = Process.Start(startInfo)
-
-            proc.WaitForExit()
+            Process
+                .Start(startInfo)
+                .WaitForExit()
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------

@@ -12,17 +12,13 @@ open Localization
 type UsersBroker (processBroker : IProcessBroker) =
 
     // -----------------------------------------------------------------------------------------------------------------
-    let IProcessBroker = processBroker
-    // -----------------------------------------------------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------------------------------------------------
     interface IUsersBroker with
 
         // -------------------------------------------------------------------------------------------------------------
         member _.getUserInfoFromPasswordFileOrEx (userName : UserName) =
 
             let line =
-                IProcessBroker.startProcessAndReadToEndOrEx
+                processBroker.startProcessAndReadToEndOrEx
                     "grep"
                     $"^{userName.value}: /etc/passwd"
 
