@@ -29,6 +29,8 @@ module CLI =
     //------------------------------------------------------------------------------------------------------------------
     let storeConfigOrEx (options : ConfigOptions) =
 
+        checkRootUserOrEx ()
+
         configService.getConfigDataOrEx ()
         |> ConfigData.mergeWithOptions options
         |> storeConfigOrEx
