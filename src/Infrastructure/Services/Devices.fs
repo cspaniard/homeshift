@@ -11,6 +11,10 @@ open Localization
 type DevicesService (devicesBroker : IDevicesBroker, consoleBroker : IConsoleBroker) as this =
 
     // -----------------------------------------------------------------------------------------------------------------
+    let self = this :> IDevicesService
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
     interface IDevicesService with
 
         // -------------------------------------------------------------------------------------------------------------
@@ -34,7 +38,7 @@ type DevicesService (devicesBroker : IDevicesBroker, consoleBroker : IConsoleBro
         // -------------------------------------------------------------------------------------------------------------
         member _.isValidDeviceOrEx (device : SnapshotDevice) =
 
-            (this :> IDevicesService).getValidDevicesDataOrEx ()
+            self.getValidDevicesDataOrEx ()
             |> Seq.exists (fun d -> d.Path = device.value)
         // -------------------------------------------------------------------------------------------------------------
 

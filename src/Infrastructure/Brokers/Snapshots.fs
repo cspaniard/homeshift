@@ -33,6 +33,10 @@ type SnapshotsBroker (processBroker : IProcessBroker) as this =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
+    let self = this :> ISnapshotsBroker
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
     interface ISnapshotsBroker with
 
         // -------------------------------------------------------------------------------------------------------------
@@ -121,8 +125,8 @@ type SnapshotsBroker (processBroker : IProcessBroker) as this =
         // -------------------------------------------------------------------------------------------------------------
         member _.deleteLastSnapshotOrEx (userSnapshotsPath : Directory) =
 
-            match (this :> ISnapshotsBroker).getLastSnapshotOptionInPathOrEx userSnapshotsPath with
-            | Some path -> (this :> ISnapshotsBroker).deleteSnapshotPathOrEx path
+            match self.getLastSnapshotOptionInPathOrEx userSnapshotsPath with
+            | Some path -> self.deleteSnapshotPathOrEx path
             | None -> failwith Phrases.NeedToDeleteLastSnapshot
         // -------------------------------------------------------------------------------------------------------------
 

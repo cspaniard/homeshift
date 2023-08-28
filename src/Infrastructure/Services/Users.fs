@@ -7,6 +7,10 @@ open Model
 type UsersService (usersBroker : IUsersBroker) as this =
 
     // -----------------------------------------------------------------------------------------------------------------
+    let self = this :> IUsersService
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
     interface IUsersService with
 
         // -------------------------------------------------------------------------------------------------------------
@@ -23,7 +27,7 @@ type UsersService (usersBroker : IUsersBroker) as this =
         member _.isValidUser (userName : UserName) =
 
             try
-                (this :> IUsersService).getHomeForUserOrEx userName |> ignore
+                self.getHomeForUserOrEx userName |> ignore
                 true
             with _ -> false
         // -------------------------------------------------------------------------------------------------------------

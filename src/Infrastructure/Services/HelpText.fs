@@ -13,6 +13,10 @@ open Localization.DI
 type HelpService (consoleBroker : IConsoleBroker, sentenceBuilder : ISentenceBuilder) as this =
 
     // -----------------------------------------------------------------------------------------------------------------
+    let self = this :> IHelpService
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
     interface IHelpService with
 
         // -------------------------------------------------------------------------------------------------------------
@@ -26,7 +30,7 @@ type HelpService (consoleBroker : IConsoleBroker, sentenceBuilder : ISentenceBui
 
             SentenceBuilder.Factory <- fun () -> (sentenceBuilder :?> SentenceBuilder)
             let helpText = HelpText.AutoBuild(result, Console.WindowWidth)
-            helpText.Heading <- (this :> IHelpService).Heading
+            helpText.Heading <- self.Heading
             helpText.Copyright <- ""
             helpText.AddNewLineBetweenHelpSections <- true
 
@@ -38,7 +42,7 @@ type HelpService (consoleBroker : IConsoleBroker, sentenceBuilder : ISentenceBui
         member _.showHeading () =
 
             [
-                (this :> IHelpService).Heading
+                self.Heading
                 ""
             ]
             |> consoleBroker.writeLines

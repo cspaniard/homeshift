@@ -17,6 +17,10 @@ type ConsoleBroker () as this =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
+    let self = this :> IConsoleBroker
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
     interface IConsoleBroker with
 
         // -------------------------------------------------------------------------------------------------------------
@@ -93,17 +97,17 @@ type ConsoleBroker () as this =
         member _.writeMatrixWithFooter (rightAlignments : bool array) (hasHeader : bool)
                                        (footer : string seq) (data : string array array) =
 
-            (this :> IConsoleBroker).writeMatrix rightAlignments hasHeader data
+            self.writeMatrix rightAlignments hasHeader data
 
             footer
-            |> (this :> IConsoleBroker).writeLines
+            |> self.writeLines
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
         member _.writeInnerExceptions (e : Exception) =
 
-            (this :> IConsoleBroker).writeLine e.Message
-            if e.InnerException <> null then (this :> IConsoleBroker).writeInnerExceptions e.InnerException
+            self.writeLine e.Message
+            if e.InnerException <> null then self.writeInnerExceptions e.InnerException
         // -------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------

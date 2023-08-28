@@ -40,6 +40,10 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
+    let self = this :> ISnapshotsService
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
     interface ISnapshotsService with
 
         // -------------------------------------------------------------------------------------------------------------
@@ -170,7 +174,7 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
         member _.deleteAll (snapshotDevice : SnapshotDevice) (userName : UserName) =
 
             try
-                let snapshotList = (this :> ISnapshotsService).getListForUserOrEx snapshotDevice userName
+                let snapshotList = self.getListForUserOrEx snapshotDevice userName
                 let mountPoint = devicesBroker.mountDeviceOrEx snapshotDevice
 
                 snapshotList |> Seq.isEmpty |> failWithIfTrue $"{Errors.SnapshotNonFound} ({userName.value})"
@@ -203,7 +207,7 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
         // -------------------------------------------------------------------------------------------------------------
         member _.isValidOrEx (snapshotDevice : SnapshotDevice) (userName : UserName) (snapshotName : string) =
 
-            (this :> ISnapshotsService).getListForUserOrEx snapshotDevice userName
+            self.getListForUserOrEx snapshotDevice userName
             |> Seq.exists (fun s -> s.Name = snapshotName)
         // -------------------------------------------------------------------------------------------------------------
 
