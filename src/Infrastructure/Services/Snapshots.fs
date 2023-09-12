@@ -69,15 +69,15 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
 
                         if progressParts.Length > 3 then
                             consoleBroker.write($"{Phrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
-                                                 $"%02i{stopWatch.Elapsed.Minutes}:%02i{stopWatch.Elapsed.Seconds} - " +
-                                                 $"{Phrases.Completed}: {progressParts[1]} - " +
-                                                 $"{Phrases.TimeRemaining}: {progressParts[3]}     \r")
+                                                $"%02i{stopWatch.Elapsed.Minutes}:%02i{stopWatch.Elapsed.Seconds} - " +
+                                                $"{Phrases.Completed}: {progressParts[1]} - " +
+                                                $"{Phrases.TimeRemaining}: {progressParts[3]}     \r")
 
                 let baseSnapshotPath = getSnapshotPath userSnapshotsPath createData.CreationDateTime
 
                 [
                     $"{Phrases.SnapshotCreating} ({createData.UserName.value}): " +
-                        $"{Path.GetFileName baseSnapshotPath.value}"
+                    $"{Path.GetFileName baseSnapshotPath.value}"
                     ""
                 ]
                 |> consoleBroker.writeLines
@@ -92,8 +92,8 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
                 stopWatch.Stop()
 
                 consoleBroker.writeLine($"{Phrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
-                                         $"%02i{stopWatch.Elapsed.Minutes}:%02i{stopWatch.Elapsed.Seconds} - " +
-                                         $"{Phrases.Completed} 100%% - {Phrases.TimeRemaining}: 0:00:00          \n")
+                                        $"%02i{stopWatch.Elapsed.Minutes}:%02i{stopWatch.Elapsed.Seconds} - " +
+                                        $"{Phrases.Completed} 100%% - {Phrases.TimeRemaining}: 0:00:00          \n")
 
 
             finally
