@@ -9,7 +9,7 @@ open Localization.LocalizedText
 open Localization.DI
 
 
-let serviceProvider =
+let ServiceProvider =
     ServiceCollection()
         .AddSingleton<IConsoleBroker, ConsoleBroker>()
         .AddSingleton<IConfigBroker, ConfigBroker>()

@@ -8,8 +8,8 @@ open DI.Interfaces
 open DI.Providers
 
 //----------------------------------------------------------------------------------------------------------------------
-let configService = serviceProvider.GetService<IConfigService>()
-let snapshotsService = serviceProvider.GetService<ISnapshotsService>()
+let configService = ServiceProvider.GetService<IConfigService>()
+let snapshotsService = ServiceProvider.GetService<ISnapshotsService>()
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------

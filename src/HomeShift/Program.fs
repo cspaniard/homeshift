@@ -22,8 +22,8 @@ open DI.Providers
 // ---------------------------------------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------------------------------------
-let helpService = serviceProvider.GetService<IHelpService>()
-let consoleBroker = serviceProvider.GetService<IConsoleBroker>()
+let helpService = ServiceProvider.GetService<IHelpService>()
+let consoleBroker = ServiceProvider.GetService<IConsoleBroker>()
 // ---------------------------------------------------------------------------------------------------------------------
 
 try

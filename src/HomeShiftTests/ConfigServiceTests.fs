@@ -43,7 +43,7 @@ let mutable configService = Unchecked.defaultof<IConfigService>
 [<SetUp>]
 let Setup () =
     configBroker <- ConfigBroker(true) :> IConfigBroker
-    consoleBroker <- serviceProvider.GetService<IConsoleBroker>()
+    consoleBroker <- ServiceProvider.GetService<IConsoleBroker>()
     configService <- ConfigService(configBroker, consoleBroker) :> IConfigService
 
 [<Test>]

@@ -10,9 +10,9 @@ open DI.Providers
 open Localization
 
 //----------------------------------------------------------------------------------------------------------------------
-let devicesService = serviceProvider.GetService<IDevicesService>()
-let snapshotsService = serviceProvider.GetService<ISnapshotsService>()
-let usersService = serviceProvider.GetService<IUsersService>()
+let devicesService = ServiceProvider.GetService<IDevicesService>()
+let snapshotsService = ServiceProvider.GetService<ISnapshotsService>()
+let usersService = ServiceProvider.GetService<IUsersService>()
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------
