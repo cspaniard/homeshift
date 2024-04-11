@@ -5,6 +5,6 @@ open Localization
 
 let getValidators () =
     [
-        checkEmptyTry Errors.UserNameIsEmpty
-        checkForSpaces Errors.UserNameHasSpaces
+        checkEmptyOrEx Errors.UserNameIsEmpty
+        checkForSpacesOrEx Errors.UserNameHasSpaces
     ]

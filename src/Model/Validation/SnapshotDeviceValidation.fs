@@ -5,6 +5,6 @@ open Localization
 
 let getValidators () =
     [
-        checkEmptyTry Errors.SnapshotDeviceIsEmpty
-        checkForSpaces Errors.SnapshotDeviceHasSpaces
+        checkEmptyOrEx Errors.SnapshotDeviceIsEmpty
+        checkForSpacesOrEx Errors.SnapshotDeviceHasSpaces
     ]

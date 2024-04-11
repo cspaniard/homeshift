@@ -5,5 +5,5 @@ open Localization
 
 let getValidators () =
     [
-        checkEmptyTry Errors.DirectoryIsEmpy
+        checkEmptyOrEx Errors.DirectoryIsEmpy
     ]
