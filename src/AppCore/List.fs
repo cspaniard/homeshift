@@ -2,6 +2,7 @@ module AppCore.List
 
 open Microsoft.Extensions.DependencyInjection
 open Helpers
+open AppCore.Helpers
 open Model
 
 open DI.Interfaces
@@ -14,6 +15,8 @@ let snapshotsService = ServiceProvider.GetService<ISnapshotsService>()
 
 //----------------------------------------------------------------------------------------------------------------------
 let getSnapshotListOrEx (listData : ListData) =
+
+    checkRootUserOrEx ()
 
     let configData = configService.getConfigDataOrEx ()
 
