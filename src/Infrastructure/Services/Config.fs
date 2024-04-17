@@ -44,9 +44,9 @@ type ConfigService (configBroker : IConfigBroker, consoleBroker : IConsoleBroker
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
-        member _.storeConfigDataOrEx (data : ConfigData) =
+        member _.storeConfigDataOrEx (configData : ConfigData) =
 
-            configBroker.saveConfigDataToFileOrEx data
+            configBroker.saveConfigDataToFileOrEx configData
 
             [
                 Phrases.ConfigSaved

@@ -26,10 +26,10 @@ type HelpService (consoleBroker : IConsoleBroker, sentenceBuilder : ISentenceBui
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
-        member _.helpTextFromResult (result : ParserResult<_>) =
+        member _.helpTextFromResult (parserResult : ParserResult<_>) =
 
             SentenceBuilder.Factory <- fun () -> (sentenceBuilder :?> SentenceBuilder)
-            let helpText = HelpText.AutoBuild(result, Console.WindowWidth)
+            let helpText = HelpText.AutoBuild(parserResult, Console.WindowWidth)
             helpText.Heading <- self.Heading
             helpText.Copyright <- ""
             helpText.AddNewLineBetweenHelpSections <- true

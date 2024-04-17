@@ -25,12 +25,12 @@ type ConfigBroker () =
     interface IConfigBroker with
 
         // -------------------------------------------------------------------------------------------------------------
-        member _.saveConfigDataToFileOrEx (data : ConfigData) =
+        member _.saveConfigDataToFileOrEx (configData : ConfigData) =
 
             createConfigPathOrEx ()
 
             (CONFIG_FILE,
-             JsonConvert.SerializeObject(data, Formatting.Indented) + Environment.NewLine)
+             JsonConvert.SerializeObject(configData, Formatting.Indented) + Environment.NewLine)
             |> File.WriteAllText
         // -------------------------------------------------------------------------------------------------------------
 

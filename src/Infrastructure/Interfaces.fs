@@ -17,7 +17,7 @@ type IConsoleBroker =
     abstract member writeInnerExceptions: Exception -> unit
 
 type IConfigBroker =
-    abstract member saveConfigDataToFileOrEx: ConfigData -> unit
+    abstract member saveConfigDataToFileOrEx: configData: ConfigData -> unit
     abstract member getConfigDataFromFileOrEx: unit -> string
     abstract member getConfigFullFileName: unit -> string
 
@@ -29,12 +29,12 @@ type IProcessBroker =
                                                       processName: string -> arguments: string -> unit
 
 type IUsersBroker =
-    abstract member getUserInfoFromPasswordFileOrEx: UserName -> string
+    abstract member getUserInfoFromPasswordFileOrEx: userName: UserName -> string
     abstract member checkUserHomeExistsOrEx: homeDirectory: Directory -> Directory
 
 type IDevicesBroker =
     abstract member getDeviceInfoOrEx: unit -> string
-    abstract member mountDeviceOrEx: SnapshotDevice -> Directory
+    abstract member mountDeviceOrEx: snapshotDevice: SnapshotDevice -> Directory
     abstract member unmountCurrentOrEx: unit -> unit
 
 type ISnapshotsBroker =
@@ -48,30 +48,30 @@ type ISnapshotsBroker =
     abstract member deleteLastSnapshotOrEx: userSnapshotsPath: Directory -> unit
 
 type IConfigService =
-    abstract member getConfigDataSource : unit -> string
-    abstract member getConfigDataStringOrEx : unit -> string
-    abstract member getConfigDataOrEx : unit -> ConfigData
-    abstract member storeConfigDataOrEx : ConfigData -> unit
+    abstract member getConfigDataSource: unit -> string
+    abstract member getConfigDataStringOrEx: unit -> string
+    abstract member getConfigDataOrEx: unit -> ConfigData
+    abstract member storeConfigDataOrEx: configData: ConfigData -> unit
 
 type IHelpService =
-    abstract member Heading : string with get
-    abstract member helpTextFromResult : ParserResult<'a> -> string
-    abstract member showHeading : unit -> unit
+    abstract member Heading: string with get
+    abstract member helpTextFromResult: parserResult: ParserResult<'a> -> string
+    abstract member showHeading: unit -> unit
 
 type ISnapshotsService =
-    abstract member createOrEx : ConfigData -> CreateData -> unit
-    abstract member getListForUserOrEx : SnapshotDevice -> UserName -> seq<Snapshot>
-    abstract member outputOrEx : UserName -> seq<Snapshot> -> unit
-    abstract member deleteOrEx : SnapshotDevice -> DeleteData -> unit
-    abstract member deleteAll : SnapshotDevice -> UserName -> unit
-    abstract member isValidOrEx : SnapshotDevice -> UserName -> string -> bool
+    abstract member createOrEx: configData: ConfigData -> createData: CreateData -> unit
+    abstract member getListForUserOrEx: snapshotDevice: SnapshotDevice -> userName: UserName -> seq<Snapshot>
+    abstract member outputOrEx: userName: UserName -> snapshots: seq<Snapshot> -> unit
+    abstract member deleteOrEx: snapshotDevice: SnapshotDevice -> deleteData: DeleteData -> unit
+    abstract member deleteAll: snapshotDevice: SnapshotDevice -> userName: UserName -> unit
+    abstract member isValidOrEx: snapshotDevice: SnapshotDevice -> userName: UserName -> snapshotName: string -> bool
 
 type IDevicesService =
     abstract member getValidDevicesDataOrEx: unit -> seq<DeviceDataChild>
-    abstract member isValidDeviceOrEx: SnapshotDevice -> bool
-    abstract member outputDevices: seq<DeviceDataChild> -> unit
+    abstract member isValidDeviceOrEx: snapshotDevice: SnapshotDevice -> bool
+    abstract member outputDevices: devices: seq<DeviceDataChild> -> unit
 
 type IUsersService =
-    abstract member getHomeForUserOrEx: UserName -> Directory
-    abstract member isValidUser: UserName -> bool
+    abstract member getHomeForUserOrEx: userName: UserName -> Directory
+    abstract member isValidUser: userName: UserName -> bool
 // ---------------------------------------------------------------------------------------------------------------------
