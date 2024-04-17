@@ -9,8 +9,11 @@ open DI.Interfaces
 open Model
 open Services
 
+let [<Literal>] VALID_USER_NAME = "valid_user_name"
+let [<Literal>] INVALID_USER_NAME = "invalid_user_name"
+let [<Literal>] HOME_DIR = "/var/empty"
 
-type UsersBroker () =
+type UsersBrokerMock () =
 
     // -----------------------------------------------------------------------------------------------------------------
     interface IUsersBroker with
@@ -18,9 +21,9 @@ type UsersBroker () =
         // -------------------------------------------------------------------------------------------------------------
         member _.getUserInfoFromPasswordFileOrEx (userName : UserName) =
 
-            if userName.value = "dsanroma"
-            then $"{userName.value}:*:441:441:OAH Daemon:/var/empty:/usr/bin/false"
-            else raise (Exception(Errors.UserNoInfoFound))
+            if userName.value = VALID_USER_NAME
+            then $"{userName.value}:*:441:441:OAH Daemon:{HOME_DIR}:/usr/bin/false"
+            else failwith Errors.UserNoInfoFound
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
@@ -31,39 +34,42 @@ type UsersBroker () =
 
     // -----------------------------------------------------------------------------------------------------------------
 
-let mutable usersBroker = Unchecked.defaultof<IUsersBroker>
-let mutable usersService = Unchecked.defaultof<IUsersService>
+[<TestFixture>]
+[<Category("IUsersService")>]
+type ``getHomeForUserOrEx tests`` () =
+    let usersBrokerMock = UsersBrokerMock() :> IUsersBroker
+    let usersService = UsersService(usersBrokerMock) :> IUsersService
 
-[<SetUp>]
-let Setup () =
-    usersBroker <- UsersBroker() :> IUsersBroker
-    usersService <- UsersService(usersBroker) :> IUsersService
+    [<Test>]
+    member _.``getHomeForUserOrEx: with valid user, it should returns home dir`` () =
 
-[<Test>]
-let ``getHomeForUserOrEx valid user returns home dir`` () =
+        (UserName.create VALID_USER_NAME |> usersService.getHomeForUserOrEx)
+            .value
+        |> should equal HOME_DIR
 
-    (UserName.create "dsanroma" |> usersService.getHomeForUserOrEx)
-        .value
-    |> should equal "/var/empty"
+    [<Test>]
+    member _.``getHomeForUserOrEx: with invalid user, it should throw exception`` () =
 
-[<Test>]
-let ``getHomeForUserOrEx invalid user throws exception`` () =
+        (fun () -> (UserName.create INVALID_USER_NAME |> usersService.getHomeForUserOrEx) |> ignore)
+        |> should throw typeof<Exception>
 
-    (fun () -> (UserName.create "pepito" |> usersService.getHomeForUserOrEx) |> ignore)
-    |> should throw typeof<Exception>
+[<TestFixture>]
+[<Category("IUsersService")>]
+type ``isValidUser tests`` () =
+    let usersBrokerMock = UsersBrokerMock() :> IUsersBroker
+    let usersService = UsersService(usersBrokerMock) :> IUsersService
 
-[<Test>]
-let ``isValidUser valid user returns true`` () =
+    [<Test>]
+    member _.``isValidUser: with valid user, it should return true`` () =
 
-    "dsanroma"
-    |> UserName.create
-    |> usersService.isValidUser
-    |> should equal true
+        UserName.create VALID_USER_NAME
+        |> usersService.isValidUser |> should equal true
 
-[<Test>]
-let ``isValidUser invalid user returns false`` () =
+    [<Test>]
+    member _.``isValidUser: with invalid user, it should return false`` () =
 
-    "_invalid_user_name_"
-    |> UserName.create
-    |> usersService.isValidUser
-    |> should equal false
+        UserName.create INVALID_USER_NAME
+        |> usersService.isValidUser |> should equal false
+
+
+let a = 0            // Avoid Warning FS0988: Main module of program is empty: nothing will happen when it is run

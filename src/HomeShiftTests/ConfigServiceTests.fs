@@ -9,11 +9,15 @@ open Microsoft.Extensions.DependencyInjection
 open DI.Interfaces
 open DI.Providers
 open Model
+open Newtonsoft.Json
 open Services
 
+let [<Literal>] DUMMY_FILE_NAME = "dummy_file_name"
 let [<Literal>] UNIT_TEST_DEV = "unit_test_dev"
 
-type ConfigBroker (configFileExists : bool) =
+type ConfigBrokerMock (configFileExists : bool) =
+
+    new () = ConfigBrokerMock(true)
 
     // -----------------------------------------------------------------------------------------------------------------
     interface IConfigBroker with
@@ -25,38 +29,78 @@ type ConfigBroker (configFileExists : bool) =
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
+        member _.getConfigFullFileName () = DUMMY_FILE_NAME
+        // -------------------------------------------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------------------------------------------
         member _.getConfigDataFromFileOrEx () =
 
             if configFileExists then
-                { (ConfigData.getDefault())
-                  with SnapshotDevice = (UNIT_TEST_DEV |> SnapshotDevice.create) }
+                let data = { (ConfigData.getDefault())
+                             with SnapshotDevice = (UNIT_TEST_DEV |> SnapshotDevice.create) }
+
+                JsonConvert.SerializeObject(data, Formatting.Indented)
             else
                 raise (FileNotFoundException("Config File Not found."))
         // -------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
 
-let mutable configBroker = Unchecked.defaultof<IConfigBroker>
-let mutable consoleBroker = Unchecked.defaultof<IConsoleBroker>
-let mutable configService = Unchecked.defaultof<IConfigService>
 
-[<SetUp>]
-let Setup () =
-    configBroker <- ConfigBroker(true) :> IConfigBroker
-    consoleBroker <- ServiceProvider.GetService<IConsoleBroker>()
-    configService <- ConfigService(configBroker, consoleBroker) :> IConfigService
+[<TestFixture>]
+[<Category("IConfigService")>]
+type ``getConfigDataOrEx tests`` () =
 
-[<Test>]
-let ``config file exists should return ConfigData with stored data`` () =
+    let configBrokerMock = ConfigBrokerMock() :> IConfigBroker
+    let consoleBroker = ServiceProvider.GetService<IConsoleBroker>()
+    let configService = ConfigService(configBrokerMock, consoleBroker) :> IConfigService
 
-    let configData = configService.getConfigDataOrEx()
-    configData.SnapshotDevice.value |> should equal UNIT_TEST_DEV
+    [<Test>]
+    member _.``getConfigDataOrEx: when config file exists, it should return ConfigData with stored data`` () =
 
-[<Test>]
-let ``config file does not exist should give default data`` () =
+        let configData = configService.getConfigDataOrEx ()
+        configData.SnapshotDevice.value |> should equal UNIT_TEST_DEV
 
-    configBroker <- ConfigBroker(false) :> IConfigBroker
-    configService <- ConfigService(configBroker, consoleBroker) :> IConfigService
+    [<Test>]
+    member _.``getConfigDataOrEx: when config file does not exist, it should return default data`` () =
 
-    let configData = configService.getConfigDataOrEx()
-    configData |> should equal (ConfigData.getDefault())
+        let configBrokerMock = ConfigBrokerMock(false) :> IConfigBroker
+        let configService = ConfigService(configBrokerMock, consoleBroker) :> IConfigService
+
+        configService.getConfigDataOrEx()
+        |> should equal (ConfigData.getDefault())
+
+[<TestFixture>]
+[<Category("IConfigService")>]
+type ``getConfigDataSource tests`` () =
+
+    let configBrokerMock = ConfigBrokerMock() :> IConfigBroker
+    let consoleBroker = ServiceProvider.GetService<IConsoleBroker>()
+    let configService = ConfigService(configBrokerMock, consoleBroker) :> IConfigService
+
+    [<Test>]
+    member _.``getConfigDataSource: gets the config data source`` () =
+
+        configService.getConfigDataSource() |> should equal DUMMY_FILE_NAME
+
+[<TestFixture>]
+[<Category("IConfigService")>]
+type ``getConfigDataStringOrEx tests`` () =
+
+    let configBrokerMock = ConfigBrokerMock() :> IConfigBroker
+    let consoleBroker = ServiceProvider.GetService<IConsoleBroker>()
+    let configService = ConfigService(configBrokerMock, consoleBroker) :> IConfigService
+
+    [<Test>]
+    member _.``getConfigDataStringOrEx: when config file exists, it should return config file content`` () =
+
+        let data = configBrokerMock.getConfigDataFromFileOrEx ()
+        configService.getConfigDataStringOrEx () |> should equal data
+
+    [<Test>]
+    member _.``getConfigDataStringOrEx: when config file does not exist, it should return an error string`` () =
+
+        let configBrokerMock = ConfigBrokerMock(false) :> IConfigBroker
+        let configService = ConfigService(configBrokerMock, consoleBroker) :> IConfigService
+
+        configService.getConfigDataStringOrEx () |> should equal Errors.ConfigFileDoesNotExist
