@@ -22,27 +22,43 @@ type ListDevicesOptions () = class end
 
 //----------------------------------------------------------------------------------------------------------------------
 [<Verb("config", HelpText = nameof VerbConfig, ResourceType = typeof<CliOptions>)>]
-type ConfigOptions = {
-    [<Option ("snapshot-device", Group = "config",
-              HelpText = nameof ConfigSnapshotDevice, ResourceType = typeof<CliOptions>)>]
-    SnapshotDevice : string
+type ConfigOptions =
+    {
+        [<Option ("show", Required = false, Group = "config",
+                  HelpText = nameof ConfigShow, ResourceType = typeof<CliOptions>)>]
+        ShowConfig : bool
 
-    [<Option ("schedule-monthly", Group = "config",
-              HelpText = nameof ConfigScheduleMonthly, ResourceType = typeof<CliOptions>)>]
-    ScheduleMonthly : Nullable<bool>
+        [<Option ("snapshot-device", Group = "config",
+                  HelpText = nameof ConfigSnapshotDevice, ResourceType = typeof<CliOptions>)>]
+        SnapshotDevice : string
 
-    [<Option ("schedule-weekly", Group = "config",
-              HelpText = nameof ConfigScheduleWeekly, ResourceType = typeof<CliOptions>)>]
-    ScheduleWeekly : Nullable<bool>
+        [<Option ("schedule-monthly", Group = "config",
+                  HelpText = nameof ConfigScheduleMonthly, ResourceType = typeof<CliOptions>)>]
+        ScheduleMonthly : Nullable<bool>
 
-    [<Option ("schedule-daily", Group = "config",
-              HelpText = nameof ConfigScheduleDaily, ResourceType = typeof<CliOptions>)>]
-    ScheduleDaily : Nullable<bool>
+        [<Option ("schedule-weekly", Group = "config",
+                  HelpText = nameof ConfigScheduleWeekly, ResourceType = typeof<CliOptions>)>]
+        ScheduleWeekly : Nullable<bool>
 
-    [<Option ("schedule-hourly", Group = "config",
-              HelpText = nameof ConfigScheduleHourly, ResourceType = typeof<CliOptions>)>]
-    ScheduleHourly : Nullable<bool>
-}
+        [<Option ("schedule-daily", Group = "config",
+                  HelpText = nameof ConfigScheduleDaily, ResourceType = typeof<CliOptions>)>]
+        ScheduleDaily : Nullable<bool>
+
+        [<Option ("schedule-hourly", Group = "config",
+                  HelpText = nameof ConfigScheduleHourly, ResourceType = typeof<CliOptions>)>]
+        ScheduleHourly : Nullable<bool>
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    static member ConfigValueWasPassed (options : ConfigOptions) : bool =
+        [
+            options.SnapshotDevice <> null
+            options.ScheduleMonthly.HasValue
+            options.ScheduleWeekly.HasValue
+            options.ScheduleDaily.HasValue
+            options.ScheduleHourly.HasValue
+        ]
+        |> List.exists (fun x -> x = true)
+    //------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------

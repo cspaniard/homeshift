@@ -60,4 +60,7 @@
     <data name="NotInitialized" xml:space="preserve">
         <value>Sin Inicializar</value>
     </data>
+    <data name="ConfigFileDoesNotExist" xml:space="preserve">
+        <value>El fichero de configuración no existe.</value>
+    </data>
 </root>

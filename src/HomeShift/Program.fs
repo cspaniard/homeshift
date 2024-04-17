@@ -43,7 +43,7 @@ try
         match command.Value with
         | :? ListOptions as opts -> List.CLI.showSnapshotListOrEx opts
         | :? ListDevicesOptions -> ListDevices.CLI.showDeviceList ()
-        | :? ConfigOptions as opts -> Config.CLI.storeConfigOrEx opts
+        | :? ConfigOptions as opts -> Config.CLI.configOrEx opts
         | :? CreateOptions as opts -> Create.CLI.createSnapshotOrEx opts
         | :? RestoreOptions as opts -> RestoreData.ofOptions opts |> Restore.runOrEx
 

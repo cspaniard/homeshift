@@ -152,5 +152,11 @@ namespace Localization {
                 return ResourceManager.GetString("ListUser", resourceCulture);
             }
         }
+        
+        public static string ConfigShow {
+            get {
+                return ResourceManager.GetString("ConfigShow", resourceCulture);
+            }
+        }
     }
 }

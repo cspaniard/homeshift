@@ -1,6 +1,7 @@
 namespace Services
 
 open System.IO
+open Newtonsoft.Json
 
 open DI.Interfaces
 open Model
@@ -13,10 +14,27 @@ type ConfigService (configBroker : IConfigBroker, consoleBroker : IConsoleBroker
     interface IConfigService with
 
         // -------------------------------------------------------------------------------------------------------------
+        member _.getConfigDataSource () =
+
+            configBroker.getConfigFullFileName ()
+        // -------------------------------------------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------------------------------------------
+        member _.getConfigDataStringOrEx () =
+
+            try
+                configBroker.getConfigDataFromFileOrEx ()
+
+            with
+            | :? FileNotFoundException -> Errors.ConfigFileDoesNotExist
+        // -------------------------------------------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------------------------------------------
         member _.getConfigDataOrEx () =
 
             try
                 configBroker.getConfigDataFromFileOrEx ()
+                |> JsonConvert.DeserializeObject<ConfigData>
 
             with
             | :? FileNotFoundException ->

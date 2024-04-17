@@ -31,7 +31,7 @@ type DevicesService (devicesBroker : IDevicesBroker, consoleBroker : IConsoleBro
                 |> JsonConvert.DeserializeObject<BlockDevices>
 
             devicesData.BlockDevices
-            |> Seq.collect (fun d -> d.Children)
+            |> Seq.collect _.Children
             |> Seq.filter isValidDevice
         // -------------------------------------------------------------------------------------------------------------
 

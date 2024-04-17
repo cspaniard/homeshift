@@ -49,7 +49,7 @@ function _homeshift()
 
     "config")
         COMPREPLY=( $(compgen -W '
-            --snapshot-device --schedule-monthly --schedule-weekly --schedule-daily --schedule-hourly --help --version
+            --show --snapshot-device --schedule-monthly --schedule-weekly --schedule-daily --schedule-hourly --help --version
             ' -- "$cur" ) )
         return 0
         ;;

@@ -11,23 +11,26 @@ type IConsoleBroker =
     abstract member write: string -> unit
     abstract member writeLine: string -> unit
     abstract member writeLines: string seq -> unit
-    abstract member writeMatrix: bool array -> bool -> string array array -> unit
-    abstract member writeMatrixWithFooter: bool array -> bool -> string seq -> string array array -> unit
+    abstract member writeMatrix: rightAlignments: bool array -> hasHeader: bool -> data: string array array -> unit
+    abstract member writeMatrixWithFooter: rightAlignments: bool array -> hasHeader: bool ->
+                                           footer: string seq -> data: string array array -> unit
     abstract member writeInnerExceptions: Exception -> unit
 
 type IConfigBroker =
     abstract member saveConfigDataToFileOrEx: ConfigData -> unit
-    abstract member getConfigDataFromFileOrEx: unit -> ConfigData
+    abstract member getConfigDataFromFileOrEx: unit -> string
+    abstract member getConfigFullFileName: unit -> string
 
 type IProcessBroker =
-    abstract member startProcessAndWaitOrEx: string -> string -> unit
-    abstract member startProcessNoOuputAtAll: string -> string -> unit
-    abstract member startProcessAndReadToEndOrEx: string -> string -> string
-    abstract member startProcessWithNotificationOrEx: (string -> unit) -> string -> string -> unit
+    abstract member startProcessAndWaitOrEx: processName: string -> arguments: string -> unit
+    abstract member startProcessNoOuputAtAll: processName: string -> arguments: string -> unit
+    abstract member startProcessAndReadToEndOrEx: processName: string -> arguments: string -> string
+    abstract member startProcessWithNotificationOrEx: callBack: (string -> unit) ->
+                                                      processName: string -> arguments: string -> unit
 
 type IUsersBroker =
     abstract member getUserInfoFromPasswordFileOrEx: UserName -> string
-    abstract member checkUserHomeExistsOrEx: Directory -> Directory
+    abstract member checkUserHomeExistsOrEx: homeDirectory: Directory -> Directory
 
 type IDevicesBroker =
     abstract member getDeviceInfoOrEx: unit -> string
@@ -43,6 +46,8 @@ type ISnapshotsBroker =
     abstract member deleteLastSnapshotOrEx: Directory -> unit
 
 type IConfigService =
+    abstract member getConfigDataSource : unit -> string
+    abstract member getConfigDataStringOrEx : unit -> string
     abstract member getConfigDataOrEx : unit -> ConfigData
     abstract member storeConfigDataOrEx : ConfigData -> unit
 

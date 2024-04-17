@@ -9,7 +9,10 @@ open Model
 open Localization
 
 
+
 type UsersBroker (processBroker : IProcessBroker) =
+
+    let [<Literal>] PASSWORD_FILE = "/etc/passwd"
 
     // -----------------------------------------------------------------------------------------------------------------
     interface IUsersBroker with
@@ -20,7 +23,7 @@ type UsersBroker (processBroker : IProcessBroker) =
             let line =
                 processBroker.startProcessAndReadToEndOrEx
                     "grep"
-                    $"^{userName.value}: /etc/passwd"
+                    $"^{userName.value}: {PASSWORD_FILE}"
 
             line |> String.IsNullOrWhiteSpace |> failWithIfTrue Errors.UserNoInfoFound
 

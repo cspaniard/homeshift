@@ -76,4 +76,7 @@
     <data name="ListUser" xml:space="preserve">
         <value>User for whom to list snapshots.</value>
     </data>
+    <data name="ConfigShow" xml:space="preserve">
+        <value>Shows configuration file. Can also be used when changing a value.</value>
+    </data>
 </root>

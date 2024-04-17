@@ -128,5 +128,11 @@ namespace Localization {
                 return ResourceManager.GetString("NotInitialized", resourceCulture);
             }
         }
+        
+        public static string ConfigFileDoesNotExist {
+            get {
+                return ResourceManager.GetString("ConfigFileDoesNotExist", resourceCulture);
+            }
+        }
     }
 }

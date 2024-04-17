@@ -10,6 +10,7 @@ open DI.Providers
 
 
 //----------------------------------------------------------------------------------------------------------------------
+let consoleBroker = ServiceProvider.GetService<IConsoleBroker>()
 let configService = ServiceProvider.GetService<IConfigService>()
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -27,11 +28,21 @@ let storeConfigOrEx (configData : ConfigData) =
 module CLI =
 
     //------------------------------------------------------------------------------------------------------------------
-    let storeConfigOrEx (options : ConfigOptions) =
+    let configOrEx (options : ConfigOptions) =
 
         checkRootUserOrEx ()
 
-        configService.getConfigDataOrEx ()
-        |> ConfigData.mergeWithOptions options
-        |> storeConfigOrEx
+        if options |> ConfigOptions.ConfigValueWasPassed then
+            configService.getConfigDataOrEx ()
+            |> ConfigData.mergeWithOptions options
+            |> storeConfigOrEx
+
+        if options.ShowConfig then
+            [
+                configService.getConfigDataSource ()
+                ""
+                configService.getConfigDataStringOrEx ()
+                ""
+            ]
+            |> consoleBroker.writeLines
     //------------------------------------------------------------------------------------------------------------------

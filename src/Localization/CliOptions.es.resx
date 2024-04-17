@@ -69,4 +69,7 @@
     <data name="ListUser" xml:space="preserve">
         <value>Usuario del que listar instantáneas.</value>
     </data>
+    <data name="ConfigShow" xml:space="preserve">
+        <value>Muestra el fichero de configuración. También puede usarse al cambiar algún valor.</value>
+    </data>
 </root>
