@@ -38,12 +38,14 @@ type IDevicesBroker =
     abstract member unmountCurrentOrEx: unit -> unit
 
 type ISnapshotsBroker =
-    abstract member getAllInfoInPathOrEx: Directory -> seq<Snapshot>
-    abstract member getLastSnapshotOptionInPathOrEx: Directory -> Directory option
-    abstract member createSnapshotOrEx: Directory -> Directory -> CreateData -> (string -> unit) -> Directory option -> unit
-    abstract member deleteSnapshotPathOrEx: Directory -> unit
-    abstract member deleteUserPathIfEmptyOrEx: Directory -> unit
-    abstract member deleteLastSnapshotOrEx: Directory -> unit
+    abstract member getAllInfoInPathOrEx: path: Directory -> seq<Snapshot>
+    abstract member getLastSnapshotOptionInPathOrEx: path: Directory -> Directory option
+    abstract member createSnapshotOrEx: sourcePath: Directory -> baseSnapshotPath: Directory ->
+                                        createData:  CreateData -> progressCallBack: (string -> unit) ->
+                                        lastSnapshotPathOption: Directory option -> unit
+    abstract member deleteSnapshotPathOrEx: snapshotsPath: Directory -> unit
+    abstract member deleteUserPathIfEmptyOrEx: snapshotsPath: Directory -> unit
+    abstract member deleteLastSnapshotOrEx: userSnapshotsPath: Directory -> unit
 
 type IConfigService =
     abstract member getConfigDataSource : unit -> string
