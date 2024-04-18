@@ -10,8 +10,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="MockBrokers\UsersBrokerMock.fs" />
+        <Compile Include="MockBrokers\DevicesBrokerMock.fs" />
         <Compile Include="ConfigServiceTests.fs" />
         <Compile Include="DevicesServiceTests.fs" />
+        <Compile Include="SnapshotsServiceTests.fs" />
         <Compile Include="UsersServiceTests.fs" />
     </ItemGroup>
 

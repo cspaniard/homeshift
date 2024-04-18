@@ -5,92 +5,12 @@ open Localization
 open NUnit.Framework
 open FsUnit
 open Microsoft.Extensions.DependencyInjection
-open Motsoft.Util
 
 open DI.Interfaces
 open DI.Providers
 open Model
 open Services
-
-type DevicesBrokerMock (throwError: bool) =
-
-    new () = DevicesBrokerMock(false)
-
-    // -----------------------------------------------------------------------------------------------------------------
-    interface IDevicesBroker with
-
-        // -------------------------------------------------------------------------------------------------------------
-        member _.getDeviceInfoOrEx() =
-
-            throwError |> failWithIfTrue "Mock Exception"
-
-            """{
-              "blockdevices": [
-                {
-                  "name": "sda",
-                  "kname": "sda",
-                  "ro": false,
-                  "type": "disk",
-                  "mountpoint": "/",
-                  "label": "root",
-                  "path": "/dev/sda",
-                  "fstype": "ext4",
-                  "parttypename": "Linux",
-                  "size": "50G",
-                  "children": [
-                    {
-                      "name": "sda1",
-                      "kname": "sda1",
-                      "ro": false,
-                      "type": "part",
-                      "mountpoint": "/boot",
-                      "label": "boot",
-                      "path": "/dev/sda1",
-                      "fstype": "ext4",
-                      "parttypename": "Linux filesystem",
-                      "size": "500M"
-                    },
-                    {
-                      "name": "sda2",
-                      "kname": "sda2",
-                      "ro": false,
-                      "type": "part",
-                      "mountpoint": "/",
-                      "label": "root",
-                      "path": "/dev/sda2",
-                      "fstype": "ext4",
-                      "parttypename": "Linux filesystem",
-                      "size": "45G"
-                    }
-                  ]
-                },
-                {
-                  "name": "sdb",
-                  "kname": "sdb",
-                  "ro": false,
-                  "type": "disk",
-                  "mountpoint": "",
-                  "label": "",
-                  "path": "/dev/sdb",
-                  "fstype": "",
-                  "parttypename": "",
-                  "size": "10G",
-                  "children": []
-                }
-              ]
-            }"""
-        // -------------------------------------------------------------------------------------------------------------
-
-        // -------------------------------------------------------------------------------------------------------------
-        member _.mountDeviceOrEx(_: SnapshotDevice) =
-            failwith "Not implemented"
-        // -------------------------------------------------------------------------------------------------------------
-
-        // -------------------------------------------------------------------------------------------------------------
-        member _.unmountCurrentOrEx() =
-            failwith "Not implemented"
-        // -------------------------------------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------------------------------------
+open MockBrokers.DevicesBrokerMock
 
 
 [<TestFixture>]

@@ -9,30 +9,12 @@ open DI.Interfaces
 open Model
 open Services
 
+open MockBrokers.UsersBrokerMock
+
 let [<Literal>] VALID_USER_NAME = "valid_user_name"
 let [<Literal>] INVALID_USER_NAME = "invalid_user_name"
 let [<Literal>] HOME_DIR = "/var/empty"
 
-type UsersBrokerMock () =
-
-    // -----------------------------------------------------------------------------------------------------------------
-    interface IUsersBroker with
-
-        // -------------------------------------------------------------------------------------------------------------
-        member _.getUserInfoFromPasswordFileOrEx (userName : UserName) =
-
-            if userName.value = VALID_USER_NAME
-            then $"{userName.value}:*:441:441:OAH Daemon:{HOME_DIR}:/usr/bin/false"
-            else failwith Errors.UserNoInfoFound
-        // -------------------------------------------------------------------------------------------------------------
-
-        // -------------------------------------------------------------------------------------------------------------
-        member _.checkUserHomeExistsOrEx (homeDirectory : Directory) =
-
-            homeDirectory
-        // -------------------------------------------------------------------------------------------------------------
-
-    // -----------------------------------------------------------------------------------------------------------------
 
 [<TestFixture>]
 [<Category("IUsersService")>]
