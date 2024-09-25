@@ -59,14 +59,18 @@ type DevicesService (devicesBroker : IDevicesBroker, consoleBroker : IConsoleBro
                 TableColumn(Phrases.Label)
             |]
 
-            [|
+            let data = [|
                 for d in devices do
                     [|
-                        d.Path ; d.Size ; d.MountPoint ; d.FileSystemType
+                        d.Path
+                        d.Size
+                        d.MountPoint
+                        d.FileSystemType
                         d.Label |> Option.ofObj |> Option.defaultValue ""
                     |]
             |]
-            |> consoleBroker.writeTable columns
+
+            consoleBroker.writeTable (columns, data)
         // -------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------

@@ -55,6 +55,13 @@ type ConsoleBroker () as this =
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
+    let getConfiguredTable (columns : TableColumn array) =
+
+        Table(Border = TableBorderAscii())
+            .AddColumns columns
+    // -----------------------------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------------------------
     interface IConsoleBroker with
 
         // -------------------------------------------------------------------------------------------------------------
@@ -83,15 +90,24 @@ type ConsoleBroker () as this =
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
-        member _.writeTable (columns : TableColumn array) (data : string array array) =
+        member _.writeTable (columns : TableColumn array, data : string array array) =
 
-            let outputTable = Table()
-            outputTable.Border <- TableBorderAscii ()
-
-            outputTable.AddColumns columns |> ignore
+            let outputTable = getConfiguredTable columns
 
             data
             |> Array.iter (fun row -> outputTable.AddRow row |> ignore)
+
+            AnsiConsole.Write outputTable
+        // -------------------------------------------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------------------------------------------
+        member _.writeTable (columns : TableColumn array, data : Text array array) =
+
+            let outputTable = getConfiguredTable columns
+
+            data
+            |> Seq.map Seq.cast<IRenderable>
+            |> Seq.iter (fun row -> outputTable.AddRow row |> ignore)
 
             AnsiConsole.Write outputTable
         // -------------------------------------------------------------------------------------------------------------

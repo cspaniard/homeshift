@@ -144,11 +144,15 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
             |]
 
 
-            [|
+            let data = [|
                 for s in snapshots do
-                    [| s.Name ; s.Comments.value |]
+                    [|
+                        s.Name
+                        s.Comments.value
+                    |]
             |]
-            |> consoleBroker.writeTable columns
+
+            consoleBroker.writeTable (columns, data)
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
