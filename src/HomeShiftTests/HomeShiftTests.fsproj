@@ -12,6 +12,7 @@
     <ItemGroup>
         <Compile Include="MockBrokers\UsersBrokerMock.fs" />
         <Compile Include="MockBrokers\DevicesBrokerMock.fs" />
+        <Compile Include="MockBrokers\SnapshotsBrokerMock.fs" />
         <Compile Include="ConfigServiceTests.fs" />
         <Compile Include="DevicesServiceTests.fs" />
         <Compile Include="SnapshotsServiceTests.fs" />
@@ -23,7 +24,7 @@
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
         <PackageReference Include="NUnit" Version="4.1.0" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
-        <PackageReference Include="NUnit.Analyzers" Version="4.1.0">
+        <PackageReference Include="NUnit.Analyzers" Version="4.2.0">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

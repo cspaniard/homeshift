@@ -5,9 +5,13 @@ open Motsoft.Util
 open Model
 open DI.Interfaces
 
-type DevicesBrokerMock (throwError: bool) =
+type DevicesBrokerMock (throwError: bool) as this =
 
-    new () = DevicesBrokerMock(false)
+    // -----------------------------------------------------------------------------------------------------------------
+    let self = this :> IDevicesBroker
+
+    new () = DevicesBrokerMock (throwError = false)
+    // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
     interface IDevicesBroker with
@@ -15,7 +19,7 @@ type DevicesBrokerMock (throwError: bool) =
         // -------------------------------------------------------------------------------------------------------------
         member _.getDeviceInfoOrEx () =
 
-            throwError |> failWithIfTrue "Mock Exception"
+            throwError |> failWithIfTrue $"{self.getDeviceInfoOrEx}: Mock Exception"
 
             """{
               "blockdevices": [
@@ -77,7 +81,7 @@ type DevicesBrokerMock (throwError: bool) =
         // -------------------------------------------------------------------------------------------------------------
         member _.mountDeviceOrEx (_: SnapshotDevice) =
 
-            throwError |> failWithIfTrue "Mock Exception"
+            throwError |> failWithIfTrue $"{self.mountDeviceOrEx}: Mock Exception"
 
             Directory.create "/run/homeshift/_dummy_pid"
         // -------------------------------------------------------------------------------------------------------------
@@ -85,7 +89,7 @@ type DevicesBrokerMock (throwError: bool) =
         // -------------------------------------------------------------------------------------------------------------
         member _.unmountCurrentOrEx () =
 
-            throwError |> failWithIfTrue "Mock Exception"
+            throwError |> failWithIfTrue $"{self.unmountCurrentOrEx}: Mock Exception"
 
             ()
         // -------------------------------------------------------------------------------------------------------------

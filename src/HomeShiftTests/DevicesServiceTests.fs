@@ -13,14 +13,16 @@ open Services
 open MockBrokers.DevicesBrokerMock
 
 
+// ---------------------------------------------------------------------------------------------------------------------
 [<TestFixture>]
 [<Category("IDevicesService")>]
 type ``getValidDevicesDataOrEx tests`` () =
 
-    let devicesBrokerMock = DevicesBrokerMock() :> IDevicesBroker
+    let devicesBrokerMock = DevicesBrokerMock () :> IDevicesBroker
     let consoleBroker = ServiceProvider.GetService<IConsoleBroker>()
-    let devicesService = DevicesService(devicesBrokerMock, consoleBroker) :> IDevicesService
+    let devicesService = DevicesService (devicesBrokerMock, consoleBroker) :> IDevicesService
 
+    // -----------------------------------------------------------------------------------------------------------------
     [<Test>]
     member _.``getValidDevicesDataOrEx: under normal conditions should return valid data`` () =
 
@@ -32,24 +34,30 @@ type ``getValidDevicesDataOrEx tests`` () =
         let deviceNames = data |> Seq.map _.Name
         deviceNames |> should contain "sda1"
         deviceNames |> should contain "sda2"
+    // -----------------------------------------------------------------------------------------------------------------
 
+    // -----------------------------------------------------------------------------------------------------------------
     [<Test>]
     member _.``getValidDevicesDataOrEx: if error, an Exception should be propagated.`` () =
 
-        let devicesBrokerMock = DevicesBrokerMock(true) :> IDevicesBroker
-        let devicesService = DevicesService(devicesBrokerMock, consoleBroker) :> IDevicesService
+        let devicesBrokerMockWithError = DevicesBrokerMock (throwError = true) :> IDevicesBroker
+        let devicesService = DevicesService (devicesBrokerMockWithError, consoleBroker) :> IDevicesService
 
         (fun () -> devicesService.getValidDevicesDataOrEx () |> ignore)
         |> should throw typeof<Exception>
+    // -----------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------------------------------------
 [<TestFixture>]
 [<Category("IDevicesService")>]
 type ``isValidDeviceOrEx tests`` () =
 
-    let devicesBrokerMock = DevicesBrokerMock() :> IDevicesBroker
-    let consoleBroker = ServiceProvider.GetService<IConsoleBroker>()
-    let devicesService = DevicesService(devicesBrokerMock, consoleBroker) :> IDevicesService
+    let devicesBrokerMock = DevicesBrokerMock () :> IDevicesBroker
+    let consoleBroker = ServiceProvider.GetService<IConsoleBroker> ()
+    let devicesService = DevicesService (devicesBrokerMock, consoleBroker) :> IDevicesService
 
+    // -----------------------------------------------------------------------------------------------------------------
     [<Test>]
     member _.``isValidDeviceOrEx: with a valid device, it should return true`` () =
 
@@ -57,18 +65,23 @@ type ``isValidDeviceOrEx tests`` () =
         |> devicesService.isValidDeviceOrEx
         |> should equal true
 
+    // -----------------------------------------------------------------------------------------------------------------
     [<Test>]
     member _.``isValidDeviceOrEx: with an invalid device, it should return false`` () =
 
         SnapshotDevice.create "bad_snapshot_device"
         |> devicesService.isValidDeviceOrEx
         |> should equal false
+    // -----------------------------------------------------------------------------------------------------------------
 
+    // -----------------------------------------------------------------------------------------------------------------
     [<Test>]
     member _.``isValidDeviceOrEx: when an error occurs, an Exception should be propagated.`` () =
 
-        let devicesBrokerMock = DevicesBrokerMock(true) :> IDevicesBroker
-        let devicesService = DevicesService(devicesBrokerMock, consoleBroker) :> IDevicesService
+        let devicesBrokerMockWithError = DevicesBrokerMock (throwError = true) :> IDevicesBroker
+        let devicesService = DevicesService (devicesBrokerMockWithError, consoleBroker) :> IDevicesService
 
         (fun () -> (devicesService.isValidDeviceOrEx (SnapshotDevice.create "/dev/sda1")) |> ignore)
         |> should throw typeof<Exception>
+    // -----------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
