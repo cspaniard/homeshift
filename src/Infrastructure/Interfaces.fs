@@ -3,6 +3,7 @@ module DI.Interfaces
 open System
 open CommandLine
 open Model
+open Spectre.Console
 
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -11,9 +12,7 @@ type IConsoleBroker =
     abstract member write: string -> unit
     abstract member writeLine: string -> unit
     abstract member writeLines: string seq -> unit
-    abstract member writeMatrix: rightAlignments: bool array -> hasHeader: bool -> data: string array array -> unit
-    abstract member writeMatrixWithFooter: rightAlignments: bool array -> hasHeader: bool ->
-                                           footer: string seq -> data: string array array -> unit
+    abstract member writeTable: columns : TableColumn array -> data : string array array -> unit
     abstract member writeInnerExceptions: Exception -> unit
 
 type IConfigBroker =

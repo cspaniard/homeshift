@@ -2,10 +2,44 @@ namespace Brokers
 
 open System
 open System.IO
-open Motsoft.Util
 
 open DI.Interfaces
+open Spectre.Console
+open Spectre.Console.Rendering
 
+type private TableBorderAscii () =
+    inherit TableBorder()
+
+    override _.GetPart (part : TableBorderPart) : string =
+
+        match part with
+        | TableBorderPart.HeaderTopLeft -> ""
+        | TableBorderPart.HeaderTop -> ""
+        | TableBorderPart.HeaderTopSeparator -> ""
+        | TableBorderPart.HeaderTopRight -> ""
+        | TableBorderPart.HeaderLeft -> ""
+        | TableBorderPart.HeaderSeparator -> ""
+        | TableBorderPart.HeaderRight -> ""
+        | TableBorderPart.HeaderBottomLeft -> ""
+        | TableBorderPart.HeaderBottom -> "-"
+        | TableBorderPart.HeaderBottomSeparator -> ""
+        | TableBorderPart.HeaderBottomRight -> ""
+        | TableBorderPart.CellLeft -> ""
+        | TableBorderPart.CellSeparator -> ""
+        | TableBorderPart.CellRight -> ""
+        | TableBorderPart.FooterTopLeft -> ""
+        | TableBorderPart.FooterTop -> ""
+        | TableBorderPart.FooterTopSeparator -> ""
+        | TableBorderPart.FooterTopRight -> ""
+        | TableBorderPart.FooterBottomLeft -> ""
+        | TableBorderPart.FooterBottom -> ""
+        | TableBorderPart.FooterBottomSeparator -> ""
+        | TableBorderPart.FooterBottomRight -> ""
+        | TableBorderPart.RowLeft -> ""
+        | TableBorderPart.RowCenter -> ""
+        | TableBorderPart.RowSeparator -> ""
+        | TableBorderPart.RowRight -> ""
+        | _ -> failwith "Unknown border part."
 
 type ConsoleBroker () as this =
 
@@ -49,58 +83,17 @@ type ConsoleBroker () as this =
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
-        member _.writeMatrix (rightAlignments : bool array) (hasHeader : bool) (data : string array array) =
+        member _.writeTable (columns : TableColumn array) (data : string array array) =
 
-            // ToDo: Check rightAlignments size vs data line size. Must be the same.
-            // ToDo: Maybe there is way to pass less information in the rightAlignments array.
+            let outputTable = Table()
+            outputTable.Border <- TableBorderAscii ()
 
-            let columnGap = "   "
-
-            let widths =
-                array2D
-                    [|
-                        for row in data do
-                            [|
-                                for column in row do
-                                    if column <> null
-                                        then column.Length
-                                        else 0
-                            |]
-                    |]
-
-            let columnWidths =
-                [|
-                    for i in [0..Array2D.length2 widths - 1] do
-                        widths[*, i] |> Array.max
-                |]
+            outputTable.AddColumns columns |> ignore
 
             data
-            |> Array.iteri (
-                    fun rowIdx line ->
-                        line
-                        |> Array.iteri (
-                                fun colIdx column ->
-                                    let format = "{0," +
-                                                 (if rightAlignments[colIdx] then "" else "-") +
-                                                 columnWidths[colIdx].ToString() + "}" + columnGap
+            |> Array.iter (fun row -> outputTable.AddRow row |> ignore)
 
-                                    String.Format(format, column)
-                                    |> Console.Write)
-                        Console.WriteLine ""
-
-                        if rowIdx = 0 && hasHeader then
-                            let length = (columnWidths |> Array.sum) + (columnGap.Length * (columnWidths.Length - 1))
-                            Console.WriteLine(String('-', length)))
-        // -------------------------------------------------------------------------------------------------------------
-
-        // -------------------------------------------------------------------------------------------------------------
-        member _.writeMatrixWithFooter (rightAlignments : bool array) (hasHeader : bool)
-                                       (footer : string seq) (data : string array array) =
-
-            self.writeMatrix rightAlignments hasHeader data
-
-            footer
-            |> self.writeLines
+            AnsiConsole.Write outputTable
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------

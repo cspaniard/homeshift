@@ -9,6 +9,7 @@ open Motsoft.Util
 open DI.Interfaces
 open Model
 open Localization
+open Spectre.Console
 
 
 type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapshotsBroker,
@@ -65,7 +66,7 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
 
                 let progressCallBack (progressString : string) =
                     if progressString <> null then
-                        let progressParts = progressString |> String.split " "
+                        let progressParts = progressString |> split " "
 
                         if progressParts.Length > 3 then
                             consoleBroker.write($"{Phrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
@@ -133,17 +134,21 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
 
             [
                 $"{Phrases.UserSnapshots}: {userName.value}"
-                ""
             ]
             |> consoleBroker.writeLines
 
-            [|
-                [| Phrases.SnapshotName ; Phrases.SnapshotComments |]
 
+            let columns = [|
+                TableColumn(Phrases.SnapshotName).PadLeft(0)
+                TableColumn(Phrases.SnapshotComments)
+            |]
+
+
+            [|
                 for s in snapshots do
                     [| s.Name ; s.Comments.value |]
             |]
-            |> consoleBroker.writeMatrixWithFooter [| false ; false |] true [ "" ]
+            |> consoleBroker.writeTable columns
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
