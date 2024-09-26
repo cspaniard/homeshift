@@ -1,7 +1,6 @@
 namespace Services
 
 open System
-open System.Diagnostics
 open System.IO
 open System.Threading
 open Motsoft.Util
@@ -50,53 +49,59 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
         // -------------------------------------------------------------------------------------------------------------
         member _.createOrEx (configData : ConfigData) (createData : CreateData) =
 
-            let mutable PressedCtrlC = false
-
             let userHomePath = usersService.getHomeForUserOrEx createData.UserName
             let mountPoint = devicesBroker.mountDeviceOrEx configData.SnapshotDevice
 
             let userSnapshotsPath = $"{mountPoint}/homeshift/snapshots/{createData.UserName}"
                                     |> Directory.create
 
+            let mutable PressedCtrlC = false
             let CancelKeyHandler =
                 ConsoleCancelEventHandler(fun _ args -> args.Cancel <- true ; PressedCtrlC <- true)
 
+            let baseSnapshotPath = getSnapshotPath userSnapshotsPath createData.CreationDateTime
+
+            // ---------------------------------------------------------------------------------------------------------
+            [
+                $"{Phrases.SnapshotCreating} ({createData.UserName.value}): " +
+                $"{Path.GetFileName baseSnapshotPath.value}"
+            ]
+            |> consoleBroker.writeLines
+
+            let consoleProgress =
+                AnsiConsole.Progress(AutoClear = false)
+                    .Columns([|
+                        ElapsedTimeColumn()
+                        ProgressBarColumn()
+                        PercentageColumn()
+                        RemainingTimeColumn()
+                        SpinnerColumn()
+                    |] : ProgressColumn array)
+            // ---------------------------------------------------------------------------------------------------------
+
+            // ---------------------------------------------------------------------------------------------------------
             try
-                let stopWatch = Stopwatch.StartNew()
+                consoleProgress
+                    .Start(fun ctx ->
+                        let progressTask = ctx.AddTask("Snapshot progress")
 
-                let progressCallBack (progressString : string) =
-                    if progressString <> null then
-                        let progressParts = progressString |> split " "
+                        let progressCallBack (progressString : string) =
+                            if progressString <> null then
+                                let progressParts = progressString |> split " "
 
-                        if progressParts.Length > 3 then
-                            consoleBroker.write($"{Phrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
-                                                $"%02i{stopWatch.Elapsed.Minutes}:%02i{stopWatch.Elapsed.Seconds} - " +
-                                                $"{Phrases.Completed}: {progressParts[1]} - " +
-                                                $"{Phrases.TimeRemaining}: {progressParts[3]}     \r")
+                                if progressParts.Length > 3 then
+                                    progressTask.Value <- progressParts[1] |> trimStringChars "%" |> float
 
-                let baseSnapshotPath = getSnapshotPath userSnapshotsPath createData.CreationDateTime
+                        // ---------------------------------------------------------------------------------------------
+                        Console.CancelKeyPress.AddHandler CancelKeyHandler
 
-                [
-                    $"{Phrases.SnapshotCreating} ({createData.UserName.value}): " +
-                    $"{Path.GetFileName baseSnapshotPath.value}"
-                    ""
-                ]
-                |> consoleBroker.writeLines
+                        snapshotsBroker.getLastSnapshotOptionInPathOrEx userSnapshotsPath
+                        |> snapshotsBroker.createSnapshotOrEx userHomePath baseSnapshotPath createData progressCallBack
 
-                // -----------------------------------------------------------------------------------------------------
-                Console.CancelKeyPress.AddHandler CancelKeyHandler
-
-                snapshotsBroker.getLastSnapshotOptionInPathOrEx userSnapshotsPath
-                |> snapshotsBroker.createSnapshotOrEx userHomePath baseSnapshotPath createData progressCallBack
-                // -----------------------------------------------------------------------------------------------------
-
-                stopWatch.Stop()
-
-                consoleBroker.writeLine($"{Phrases.Elapsed}: %02i{stopWatch.Elapsed.Hours}:" +
-                                        $"%02i{stopWatch.Elapsed.Minutes}:%02i{stopWatch.Elapsed.Seconds} - " +
-                                        $"{Phrases.Completed} 100%% - {Phrases.TimeRemaining}: 0:00:00          \n")
-
-
+                        if not PressedCtrlC then
+                            progressTask.Value <- 100.
+                        // ---------------------------------------------------------------------------------------------
+                    )
             finally
                 Console.CancelKeyPress.RemoveHandler CancelKeyHandler
 
@@ -111,6 +116,7 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
                     snapshotsBroker.deleteLastSnapshotOrEx userSnapshotsPath
 
                 unmountDeviceOrEx ()
+            // ---------------------------------------------------------------------------------------------------------
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
