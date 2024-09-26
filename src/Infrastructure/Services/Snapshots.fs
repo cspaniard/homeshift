@@ -164,23 +164,36 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
         // -------------------------------------------------------------------------------------------------------------
         member _.deleteOrEx (snapshotDevice : SnapshotDevice) (deleteData : DeleteData) =
 
-            [
+            consoleBroker.writeLine
                 $"{Phrases.SnapshotDeleting} ({deleteData.UserName.value}): {deleteData.SnapshotName}"
-                ""
-            ]
-            |> consoleBroker.writeLines
+
+            let consoleProgress =
+                AnsiConsole.Progress()
+                    .Columns(
+                        [|
+                            ElapsedTimeColumn()
+                            ProgressBarColumn()
+                            SpinnerColumn()
+                        |] : ProgressColumn array
+                    )
 
             try
-                let mountPoint = devicesBroker.mountDeviceOrEx snapshotDevice
+                consoleProgress
+                    .Start(fun ctx ->
+                        let progressTask = ctx.AddTask("Delete progress", IsIndeterminate = true)
 
-                $"{mountPoint.value}/homeshift/snapshots/{deleteData.UserName.value}/{deleteData.SnapshotName}"
-                |> Directory.create
-                |> snapshotsBroker.deleteSnapshotPathOrEx
+                        let mountPoint = devicesBroker.mountDeviceOrEx snapshotDevice
 
-                $"{mountPoint.value}/homeshift/snapshots/{deleteData.UserName.value}"
-                |> Directory.create
-                |> snapshotsBroker.deleteUserPathIfEmptyOrEx
+                        $"{mountPoint.value}/homeshift/snapshots/{deleteData.UserName.value}/{deleteData.SnapshotName}"
+                        |> Directory.create
+                        |> snapshotsBroker.deleteSnapshotPathOrEx
 
+                        $"{mountPoint.value}/homeshift/snapshots/{deleteData.UserName.value}"
+                        |> Directory.create
+                        |> snapshotsBroker.deleteUserPathIfEmptyOrEx
+
+                        progressTask.Value <- 100.
+                    )
             finally
                 unmountDeviceOrEx ()
         // -------------------------------------------------------------------------------------------------------------
