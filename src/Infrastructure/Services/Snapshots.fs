@@ -9,6 +9,7 @@ open DI.Interfaces
 open Model
 open Localization
 open Spectre.Console
+open Spectre.Console.Rendering
 
 
 type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapshotsBroker,
@@ -153,9 +154,9 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
             let data = [|
                 for s in snapshots do
                     [|
-                        s.Name
-                        s.Comments.value
-                    |]
+                        Text(s.Name, Style(Color.Default))
+                        Text(s.Comments.value)
+                    |] : IRenderable array
             |]
 
             consoleBroker.writeTable (columns, data)

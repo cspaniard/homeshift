@@ -4,6 +4,7 @@ open System
 open CommandLine
 open Model
 open Spectre.Console
+open Spectre.Console.Rendering
 
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -13,7 +14,7 @@ type IConsoleBroker =
     abstract member writeLine: string -> unit
     abstract member writeLines: string seq -> unit
     abstract member writeTable: columns : TableColumn array * data : string array array -> unit
-    abstract member writeTable: columns : TableColumn array * data : Text array array -> unit
+    abstract member writeTable: columns : TableColumn array * data : IRenderable array array -> unit
     abstract member writeInnerExceptions: Exception -> unit
     abstract member writeJson: json : string -> unit
 

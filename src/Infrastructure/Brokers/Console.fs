@@ -102,12 +102,11 @@ type ConsoleBroker () as this =
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
-        member _.writeTable (columns : TableColumn array, data : Text array array) =
+        member _.writeTable (columns : TableColumn array, data : IRenderable array array) =
 
             let outputTable = getConfiguredTable columns
 
             data
-            |> Seq.map Seq.cast<IRenderable>
             |> Seq.iter (fun row -> outputTable.AddRow row |> ignore)
 
             AnsiConsole.Write outputTable
