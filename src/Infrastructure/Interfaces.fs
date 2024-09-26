@@ -15,6 +15,7 @@ type IConsoleBroker =
     abstract member writeTable: columns : TableColumn array * data : string array array -> unit
     abstract member writeTable: columns : TableColumn array * data : Text array array -> unit
     abstract member writeInnerExceptions: Exception -> unit
+    abstract member writeJson: json : string -> unit
 
 type IConfigBroker =
     abstract member saveConfigDataToFileOrEx: configData: ConfigData -> unit

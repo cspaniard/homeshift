@@ -5,6 +5,7 @@ open System.IO
 
 open DI.Interfaces
 open Spectre.Console
+open Spectre.Console.Json
 open Spectre.Console.Rendering
 
 type private TableBorderAscii () =
@@ -117,6 +118,15 @@ type ConsoleBroker () as this =
 
             self.writeLine e.Message
             if e.InnerException <> null then self.writeInnerExceptions e.InnerException
+        // -------------------------------------------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------------------------------------------
+        member _.writeJson (json : string) =
+
+            JsonText(json)
+            |> AnsiConsole.Write
+
+            self.writeLine ""
         // -------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------

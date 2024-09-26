@@ -41,8 +41,11 @@ module CLI =
             [
                 configService.getConfigDataSource ()
                 ""
-                configService.getConfigDataStringOrEx ()
-                ""
             ]
             |> consoleBroker.writeLines
+
+            configService.getConfigDataStringOrEx ()
+            |> consoleBroker.writeJson
+
+            consoleBroker.writeLine ""
     //------------------------------------------------------------------------------------------------------------------
