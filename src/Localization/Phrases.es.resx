@@ -68,4 +68,7 @@
     <data name="SnapshotCreating" xml:space="preserve">
         <value>Creando instantánea</value>
     </data>
+    <data name="DateTimeLocal" xml:space="preserve">
+        <value>Fecha y Hora (local)</value>
+    </data>
 </root>

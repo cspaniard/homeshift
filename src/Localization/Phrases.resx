@@ -75,4 +75,7 @@
     <data name="SnapshotCreating" xml:space="preserve">
         <value>Creating snapshot</value>
     </data>
+    <data name="DateTimeLocal" xml:space="preserve">
+        <value>Date &amp; Time (local)</value>
+    </data>
 </root>

@@ -148,14 +148,15 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
             let columns = [|
                 TableColumn(Phrases.SnapshotName).PadLeft(0)
                 TableColumn(Phrases.SnapshotComments)
+                TableColumn(Phrases.DateTimeLocal).RightAligned().PadRight(0)
             |]
-
 
             let data = [|
                 for s in snapshots do
                     [|
-                        Text(s.Name, Style(Color.Default))
-                        Text(s.Comments.value)
+                        Text(s.Name, Style(Color.Green))
+                        Text(s.Comments.value, Style(Color.Default))
+                        Text(s.CreationDateTime.LocalDateTime.ToString(), Style(Color.Blue))
                     |] : IRenderable array
             |]
 

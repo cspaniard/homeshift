@@ -158,5 +158,11 @@ namespace Localization {
                 return ResourceManager.GetString("SnapshotCreating", resourceCulture);
             }
         }
+        
+        public static string DateTimeLocal {
+            get {
+                return ResourceManager.GetString("DateTimeLocal", resourceCulture);
+            }
+        }
     }
 }
