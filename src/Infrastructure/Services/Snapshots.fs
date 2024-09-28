@@ -139,11 +139,7 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
 
             snapshots |> Seq.isEmpty |> failWithIfTrue $"{Errors.SnapshotNonFound} ({userName.value})"
 
-            [
-                $"{Phrases.UserSnapshots}: {userName.value}"
-            ]
-            |> consoleBroker.writeLines
-
+            consoleBroker.writeLine $"{Phrases.UserSnapshots}: {userName.value}"
 
             let columns = [|
                 TableColumn(Phrases.SnapshotName).PadLeft(0)

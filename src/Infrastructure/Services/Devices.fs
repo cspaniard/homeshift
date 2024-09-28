@@ -46,10 +46,7 @@ type DevicesService (devicesBroker : IDevicesBroker, consoleBroker : IConsoleBro
         // -------------------------------------------------------------------------------------------------------------
         member _.outputDevices (devices : DeviceDataChild seq) =
 
-            [
-                Phrases.MountedDevices
-            ]
-            |> consoleBroker.writeLines
+            consoleBroker.writeLine Phrases.MountedDevices
 
             let columns = [|
                 TableColumn(Phrases.Device).PadLeft(0)
