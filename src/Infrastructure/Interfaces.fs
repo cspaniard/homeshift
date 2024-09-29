@@ -11,6 +11,10 @@ open Spectre.Console.Rendering
 type IApp =
     abstract member Run : unit -> unit
 
+type IList =
+    abstract member getSnapshotListOrEx: ListData -> Snapshot seq
+    abstract member cliShowSnapshotListOrEx: ListOptions -> unit
+
 type IConsoleBroker =
     abstract member enableStdOut: unit -> unit
     abstract member write: string -> unit

@@ -1,39 +1,35 @@
-module AppCore.List
+namespace AppCore
 
-open Microsoft.Extensions.DependencyInjection
 open Helpers
-open AppCore.Helpers
 open Model
 
 open DI.Interfaces
-open DI.Providers
 
-//----------------------------------------------------------------------------------------------------------------------
-let configService = ServiceProvider.GetService<IConfigService>()
-let snapshotsService = ServiceProvider.GetService<ISnapshotsService>()
-//----------------------------------------------------------------------------------------------------------------------
+type List (configService : IConfigService, snapshotsService : ISnapshotsService) as this =
 
-//----------------------------------------------------------------------------------------------------------------------
-let getSnapshotListOrEx (listData : ListData) =
+    // -----------------------------------------------------------------------------------------------------------------
+    let self = this :> IList
+    // -----------------------------------------------------------------------------------------------------------------
 
-    checkRootUserOrEx ()
+    interface IList with
+        //--------------------------------------------------------------------------------------------------------------
+        member _.getSnapshotListOrEx (listData : ListData) =
 
-    let configData = configService.getConfigDataOrEx ()
+            checkRootUserOrEx ()
 
-    checkUserOrEx listData.UserName
-    checkDeviceOrEx configData.SnapshotDevice
+            let configData = configService.getConfigDataOrEx ()
 
-    snapshotsService.getListForUserOrEx configData.SnapshotDevice listData.UserName
-//----------------------------------------------------------------------------------------------------------------------
+            checkUserOrEx listData.UserName
+            checkDeviceOrEx configData.SnapshotDevice
 
-//----------------------------------------------------------------------------------------------------------------------
-module CLI =
+            snapshotsService.getListForUserOrEx configData.SnapshotDevice listData.UserName
+        //--------------------------------------------------------------------------------------------------------------
 
-    //------------------------------------------------------------------------------------------------------------------
-    let showSnapshotListOrEx (listOptions : ListOptions) =
+        //--------------------------------------------------------------------------------------------------------------
+        member _.cliShowSnapshotListOrEx (listOptions : ListOptions) =
 
-        listOptions
-        |> ListData.ofOptions
-        |> getSnapshotListOrEx
-        |> snapshotsService.outputOrEx (listOptions.UserName |> UserName.create)
-    //------------------------------------------------------------------------------------------------------------------
+            listOptions
+            |> ListData.ofOptions
+            |> self.getSnapshotListOrEx
+            |> snapshotsService.outputOrEx (listOptions.UserName |> UserName.create)
+        //--------------------------------------------------------------------------------------------------------------

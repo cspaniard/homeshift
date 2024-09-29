@@ -6,7 +6,7 @@ open CommandLine
 open DI.Interfaces
 open Model
 
-type App (helpService : IHelpService, consoleBroker : IConsoleBroker) =
+type App (helpService : IHelpService, consoleBroker : IConsoleBroker, listCore : IList) =
 
     interface IApp with
 
@@ -26,7 +26,7 @@ type App (helpService : IHelpService, consoleBroker : IConsoleBroker) =
                     helpService.showHeading ()
 
                     match command.Value with
-                    | :? ListOptions as opts -> List.CLI.showSnapshotListOrEx opts
+                    | :? ListOptions as opts -> listCore.cliShowSnapshotListOrEx opts
                     | :? ListDevicesOptions -> ListDevices.CLI.showDeviceList ()
                     | :? ConfigOptions as opts -> Config.CLI.configOrEx opts
                     | :? CreateOptions as opts -> Create.CLI.createSnapshotOrEx opts
