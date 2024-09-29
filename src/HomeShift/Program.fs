@@ -12,9 +12,10 @@ ServiceProvider
     .AddSingleton<IListDevices, AppCore.ListDevices>()
     .AddSingleton<IConfig, AppCore.Config>()
     .AddSingleton<ICreate, AppCore.Create>()
+    .AddSingleton<IApp, App>()
 |> ignore
 
-ServiceProvider.AddAndRebuild<IApp, App> ()
+ServiceProvider.Rebuild()
 
 DI.Providers.ServiceProvider.GetService<IApp>().Run ()
 // ---------------------------------------------------------------------------------------------------------------------

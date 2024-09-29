@@ -34,6 +34,9 @@ type ServiceProvider () =
     static member AddSingleton<'TService, 'TImplementation> () =
         serviceCollection.AddSingleton(typeof<'TService>, typeof<'TImplementation>)
 
+    static member Rebuild<'TService, 'TImplementation> () =
+        _serviceProvider <- serviceCollection.BuildServiceProvider()
+
     static member AddAndRebuild<'TService, 'TImplementation> () =
         ServiceProvider.AddSingleton<'TService, 'TImplementation> () |> ignore
-        _serviceProvider <- serviceCollection.BuildServiceProvider()
+        ServiceProvider.Rebuild()
