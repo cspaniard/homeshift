@@ -8,6 +8,9 @@ open Spectre.Console.Rendering
 
 
 // ---------------------------------------------------------------------------------------------------------------------
+type IApp =
+    abstract member Run : unit -> unit
+
 type IConsoleBroker =
     abstract member enableStdOut: unit -> unit
     abstract member write: string -> unit
