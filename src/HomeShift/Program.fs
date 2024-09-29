@@ -9,6 +9,7 @@ open Microsoft.Extensions.DependencyInjection
 ServiceProvider
     .AddSingleton<IList, AppCore.List>()
     .AddSingleton<IListDevices, AppCore.ListDevices>()
+    .AddSingleton<IConfig, AppCore.Config>()
 |> ignore
 
 ServiceProvider.AddAndRebuild<IApp, App> ()

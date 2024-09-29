@@ -19,6 +19,10 @@ type IListDevices =
     abstract member getDeviceList: unit -> DeviceDataChild seq
     abstract member showDeviceList: unit -> unit
 
+type IConfig =
+    abstract member storeConfigOrEx : configData : ConfigData -> unit
+    abstract member configOrEx : options : ConfigOptions -> unit
+
 type IConsoleBroker =
     abstract member enableStdOut: unit -> unit
     abstract member write: string -> unit

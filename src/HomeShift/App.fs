@@ -6,8 +6,9 @@ open CommandLine
 open DI.Interfaces
 open Model
 
+
 type App (helpService : IHelpService, consoleBroker : IConsoleBroker, listCore : IList,
-    listDevicesCore : IListDevices) =
+          listDevicesCore : IListDevices, configCore : IConfig) =
 
     interface IApp with
 
@@ -29,7 +30,7 @@ type App (helpService : IHelpService, consoleBroker : IConsoleBroker, listCore :
                     match command.Value with
                     | :? ListOptions as opts -> listCore.cliShowSnapshotListOrEx opts
                     | :? ListDevicesOptions -> listDevicesCore.showDeviceList ()
-                    | :? ConfigOptions as opts -> Config.CLI.configOrEx opts
+                    | :? ConfigOptions as opts -> configCore.configOrEx opts
                     | :? CreateOptions as opts -> Create.CLI.createSnapshotOrEx opts
                     | :? RestoreOptions as opts -> RestoreData.ofOptions opts |> Restore.runOrEx
 
