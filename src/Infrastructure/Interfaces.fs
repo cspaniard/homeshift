@@ -15,6 +15,10 @@ type IList =
     abstract member getSnapshotListOrEx: ListData -> Snapshot seq
     abstract member cliShowSnapshotListOrEx: ListOptions -> unit
 
+type IListDevices =
+    abstract member getDeviceList: unit -> DeviceDataChild seq
+    abstract member showDeviceList: unit -> unit
+
 type IConsoleBroker =
     abstract member enableStdOut: unit -> unit
     abstract member write: string -> unit
