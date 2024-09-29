@@ -30,6 +30,10 @@ type ICreate =
 type IRestore =
     abstract member runOrEx : options : RestoreData -> unit
 
+type IDelete =
+    abstract member deleteSnapshotOrEx : DeleteData -> unit
+    abstract member deleteSnapshotOrEx : DeleteOptions -> unit
+
 type IConsoleBroker =
     abstract member enableStdOut: unit -> unit
     abstract member write: string -> unit

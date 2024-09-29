@@ -1,7 +1,6 @@
 namespace HomeShift
 
 open System
-open AppCore
 open CommandLine
 open DI.Interfaces
 open Model
@@ -9,7 +8,7 @@ open Model
 
 type App (helpService : IHelpService, consoleBroker : IConsoleBroker, listCore : IList,
           listDevicesCore : IListDevices, configCore : IConfig, createCore : ICreate,
-          restoreCore : IRestore) =
+          restoreCore : IRestore, deleteCore : IDelete) =
 
     interface IApp with
 
@@ -37,7 +36,7 @@ type App (helpService : IHelpService, consoleBroker : IConsoleBroker, listCore :
 
                     | :? DeleteOptions as deleteOptions ->
                         match parser.ParseArguments<DeleteOptionsAtLeastOne> args with
-                        | :? Parsed<DeleteOptionsAtLeastOne> -> Delete.CLI.deleteSnapshotOrEx deleteOptions
+                        | :? Parsed<DeleteOptionsAtLeastOne> -> deleteCore.deleteSnapshotOrEx deleteOptions
                         | :? NotParsed<DeleteOptionsAtLeastOne> as notParsed ->
                                 helpService.helpTextFromResult notParsed |> Console.WriteLine
                         | _ -> Console.WriteLine "Should not get here 3."

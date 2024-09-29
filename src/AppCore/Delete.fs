@@ -1,43 +1,41 @@
-module AppCore.Delete
-
-open Microsoft.Extensions.DependencyInjection
+namespace AppCore
 
 open Model
 open Helpers
 
 open DI.Interfaces
-open DI.Providers
 
 
-//----------------------------------------------------------------------------------------------------------------------
-let configService = ServiceProvider.GetService<IConfigService>()
-let snapshotsService = ServiceProvider.GetService<ISnapshotsService>()
-//----------------------------------------------------------------------------------------------------------------------
-
-//----------------------------------------------------------------------------------------------------------------------
-let deleteSnapshotOrEx (deleteData : DeleteData) =
-
-    checkRootUserOrEx ()
-
-    let configData = configService.getConfigDataOrEx ()
-
-    checkUserOrEx deleteData.UserName
-    checkDeviceOrEx configData.SnapshotDevice
-
-    if deleteData.DeleteAll then
-        snapshotsService.deleteAll configData.SnapshotDevice deleteData.UserName
-    else
-        checkSnapshotOrEx configData.SnapshotDevice deleteData.UserName deleteData.SnapshotName
-        snapshotsService.deleteOrEx configData.SnapshotDevice deleteData
-//----------------------------------------------------------------------------------------------------------------------
-
-//----------------------------------------------------------------------------------------------------------------------
-module CLI =
+type Delete (configService : IConfigService, snapshotsService : ISnapshotsService) as this =
 
     //------------------------------------------------------------------------------------------------------------------
-    let deleteSnapshotOrEx (deleteOptions : DeleteOptions) =
-
-        deleteOptions
-        |> DeleteData.ofOptions
-        |> deleteSnapshotOrEx
+    let self = this :> IDelete
     //------------------------------------------------------------------------------------------------------------------
+
+    interface IDelete with
+
+        //--------------------------------------------------------------------------------------------------------------
+        member _.deleteSnapshotOrEx (deleteData : DeleteData) =
+
+            checkRootUserOrEx ()
+
+            let configData = configService.getConfigDataOrEx ()
+
+            checkUserOrEx deleteData.UserName
+            checkDeviceOrEx configData.SnapshotDevice
+
+            if deleteData.DeleteAll then
+                snapshotsService.deleteAll configData.SnapshotDevice deleteData.UserName
+            else
+                checkSnapshotOrEx configData.SnapshotDevice deleteData.UserName deleteData.SnapshotName
+                snapshotsService.deleteOrEx configData.SnapshotDevice deleteData
+        //--------------------------------------------------------------------------------------------------------------
+
+
+        //--------------------------------------------------------------------------------------------------------------
+        member _.deleteSnapshotOrEx (deleteOptions : DeleteOptions) =
+
+            deleteOptions
+            |> DeleteData.ofOptions
+            |> self.deleteSnapshotOrEx
+        //--------------------------------------------------------------------------------------------------------------
