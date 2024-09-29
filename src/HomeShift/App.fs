@@ -8,7 +8,7 @@ open Model
 
 
 type App (helpService : IHelpService, consoleBroker : IConsoleBroker, listCore : IList,
-          listDevicesCore : IListDevices, configCore : IConfig) =
+          listDevicesCore : IListDevices, configCore : IConfig, createCore : ICreate) =
 
     interface IApp with
 
@@ -31,7 +31,7 @@ type App (helpService : IHelpService, consoleBroker : IConsoleBroker, listCore :
                     | :? ListOptions as opts -> listCore.cliShowSnapshotListOrEx opts
                     | :? ListDevicesOptions -> listDevicesCore.showDeviceList ()
                     | :? ConfigOptions as opts -> configCore.configOrEx opts
-                    | :? CreateOptions as opts -> Create.CLI.createSnapshotOrEx opts
+                    | :? CreateOptions as opts -> createCore.createSnapshotOrEx opts
                     | :? RestoreOptions as opts -> RestoreData.ofOptions opts |> Restore.runOrEx
 
                     | :? DeleteOptions as deleteOptions ->

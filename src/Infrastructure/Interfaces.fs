@@ -23,6 +23,10 @@ type IConfig =
     abstract member storeConfigOrEx : configData : ConfigData -> unit
     abstract member configOrEx : options : ConfigOptions -> unit
 
+type ICreate =
+    abstract member createSnapshotOrEx : CreateData -> unit
+    abstract member createSnapshotOrEx : CreateOptions -> unit
+
 type IConsoleBroker =
     abstract member enableStdOut: unit -> unit
     abstract member write: string -> unit
