@@ -27,6 +27,9 @@ type ICreate =
     abstract member createSnapshotOrEx : CreateData -> unit
     abstract member createSnapshotOrEx : CreateOptions -> unit
 
+type IRestore =
+    abstract member runOrEx : options : RestoreData -> unit
+
 type IConsoleBroker =
     abstract member enableStdOut: unit -> unit
     abstract member write: string -> unit

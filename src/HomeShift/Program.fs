@@ -12,6 +12,7 @@ ServiceProvider
     .AddSingleton<IListDevices, AppCore.ListDevices>()
     .AddSingleton<IConfig, AppCore.Config>()
     .AddSingleton<ICreate, AppCore.Create>()
+    .AddSingleton<IRestore, AppCore.Restore>()
     .AddSingleton<IApp, App>()
 |> ignore
 

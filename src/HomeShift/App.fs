@@ -8,7 +8,8 @@ open Model
 
 
 type App (helpService : IHelpService, consoleBroker : IConsoleBroker, listCore : IList,
-          listDevicesCore : IListDevices, configCore : IConfig, createCore : ICreate) =
+          listDevicesCore : IListDevices, configCore : IConfig, createCore : ICreate,
+          restoreCore : IRestore) =
 
     interface IApp with
 
@@ -32,7 +33,7 @@ type App (helpService : IHelpService, consoleBroker : IConsoleBroker, listCore :
                     | :? ListDevicesOptions -> listDevicesCore.showDeviceList ()
                     | :? ConfigOptions as opts -> configCore.configOrEx opts
                     | :? CreateOptions as opts -> createCore.createSnapshotOrEx opts
-                    | :? RestoreOptions as opts -> RestoreData.ofOptions opts |> Restore.runOrEx
+                    | :? RestoreOptions as opts -> RestoreData.ofOptions opts |> restoreCore.runOrEx
 
                     | :? DeleteOptions as deleteOptions ->
                         match parser.ParseArguments<DeleteOptionsAtLeastOne> args with
