@@ -28,8 +28,8 @@ type App (helpService : IHelpService, consoleBroker : IConsoleBroker, listCore :
                     helpService.showHeading ()
 
                     match command.Value with
-                    | :? ListOptions as opts -> listCore.cliShowSnapshotListOrEx opts
-                    | :? ListDevicesOptions -> listDevicesCore.showDeviceList ()
+                    | :? ListOptions as opts -> listCore.showSnapshotListOrEx opts
+                    | :? ListDevicesOptions -> listDevicesCore.showDeviceListOrEx ()
                     | :? ConfigOptions as opts -> configCore.configOrEx opts
                     | :? CreateOptions as opts -> createCore.createSnapshotOrEx opts
                     | :? RestoreOptions as opts -> RestoreData.ofOptions opts |> restoreCore.runOrEx

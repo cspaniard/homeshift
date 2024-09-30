@@ -26,7 +26,7 @@ type List (configService : IConfigService, snapshotsService : ISnapshotsService)
         //--------------------------------------------------------------------------------------------------------------
 
         //--------------------------------------------------------------------------------------------------------------
-        member _.cliShowSnapshotListOrEx (listOptions : ListOptions) =
+        member _.showSnapshotListOrEx (listOptions : ListOptions) =
 
             listOptions
             |> ListData.ofOptions

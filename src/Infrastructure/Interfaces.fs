@@ -13,11 +13,11 @@ type IApp =
 
 type IList =
     abstract member getSnapshotListOrEx: ListData -> Snapshot seq
-    abstract member cliShowSnapshotListOrEx: ListOptions -> unit
+    abstract member showSnapshotListOrEx: ListOptions -> unit
 
 type IListDevices =
-    abstract member getDeviceList: unit -> DeviceDataChild seq
-    abstract member showDeviceList: unit -> unit
+    abstract member getDeviceListOrEx: unit -> DeviceDataChild seq
+    abstract member showDeviceListOrEx: unit -> unit
 
 type IConfig =
     abstract member storeConfigOrEx : configData : ConfigData -> unit

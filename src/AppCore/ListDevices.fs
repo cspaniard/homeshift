@@ -12,14 +12,14 @@ type ListDevices (devicesService : IDevicesService) as this =
     interface IListDevices with
 
         //--------------------------------------------------------------------------------------------------------------
-        member _.getDeviceList () =
+        member _.getDeviceListOrEx () =
 
             devicesService.getValidDevicesDataOrEx ()
         //--------------------------------------------------------------------------------------------------------------
 
         //--------------------------------------------------------------------------------------------------------------
-        member _.showDeviceList () =
+        member _.showDeviceListOrEx () =
 
-            self.getDeviceList ()
+            self.getDeviceListOrEx ()
             |> devicesService.outputDevices
         //--------------------------------------------------------------------------------------------------------------
