@@ -9,7 +9,7 @@ open Spectre.Console.Rendering
 
 // ---------------------------------------------------------------------------------------------------------------------
 type IApp =
-    abstract member Run : unit -> unit
+    abstract member run : unit -> unit
 
 type IHelpers =
     abstract member checkRootUserOrEx: unit -> unit
@@ -19,8 +19,8 @@ type IHelpers =
                                        snapshotName: string -> unit
 
 type IList =
-    abstract member getSnapshotListOrEx: ListData -> Snapshot seq
-    abstract member showSnapshotListOrEx: ListOptions -> unit
+    abstract member getSnapshotListOrEx: listData: ListData -> Snapshot seq
+    abstract member showSnapshotListOrEx: listOptions: ListOptions -> unit
 
 type IListDevices =
     abstract member getDeviceListOrEx: unit -> DeviceDataChild seq
@@ -31,24 +31,24 @@ type IConfig =
     abstract member configOrEx : options : ConfigOptions -> unit
 
 type ICreate =
-    abstract member createSnapshotOrEx : CreateData -> unit
-    abstract member createSnapshotOrEx : CreateOptions -> unit
+    abstract member createSnapshotOrEx : createData : CreateData -> unit
+    abstract member createSnapshotOrEx : createOptions : CreateOptions -> unit
 
 type IRestore =
-    abstract member runOrEx : options : RestoreOptions -> unit
+    abstract member restoreSnapshotOrEx : restoreOptions : RestoreOptions -> unit
 
 type IDelete =
-    abstract member deleteSnapshotOrEx : DeleteData -> unit
-    abstract member deleteSnapshotOrEx : DeleteOptions -> unit
+    abstract member deleteSnapshotOrEx : deleteData : DeleteData -> unit
+    abstract member deleteSnapshotOrEx : deleteOptions : DeleteOptions -> unit
 
 type IConsoleBroker =
     abstract member enableStdOut: unit -> unit
-    abstract member write: string -> unit
-    abstract member writeLine: string -> unit
-    abstract member writeLines: string seq -> unit
+    abstract member write: line: string -> unit
+    abstract member writeLine: line: string -> unit
+    abstract member writeLines: lines: string seq -> unit
     abstract member writeTable: columns : TableColumn array * data : string array array -> unit
     abstract member writeTable: columns : TableColumn array * data : IRenderable array array -> unit
-    abstract member writeInnerExceptions: Exception -> unit
+    abstract member writeInnerExceptions: ex : Exception -> unit
     abstract member writeJson: json : string -> unit
 
 type IConfigBroker =

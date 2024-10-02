@@ -20,5 +20,5 @@ ServiceProvider
 
 ServiceProvider.Rebuild()
 
-DI.Providers.ServiceProvider.GetService<IApp>().Run ()
+DI.Providers.ServiceProvider.GetService<IApp>().run ()
 // ---------------------------------------------------------------------------------------------------------------------

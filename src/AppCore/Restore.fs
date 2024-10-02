@@ -8,7 +8,7 @@ type Restore (configService : IConfigService, snapshotsService : ISnapshotsServi
 
     interface IRestore with
         //--------------------------------------------------------------------------------------------------------------
-        member _.runOrEx (options : RestoreOptions) =
+        member _.restoreSnapshotOrEx (options : RestoreOptions) =
 
             helpers.checkRootUserOrEx ()
 

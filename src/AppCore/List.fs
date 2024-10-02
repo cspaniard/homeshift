@@ -1,8 +1,8 @@
 namespace AppCore
 
 open Model
-
 open DI.Interfaces
+
 
 type List (configService : IConfigService, snapshotsService : ISnapshotsService, helpers : IHelpers) as this =
 

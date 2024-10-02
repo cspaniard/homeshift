@@ -12,7 +12,7 @@ type App (helpService : IHelpService, consoleBroker : IConsoleBroker, listCore :
 
     interface IApp with
 
-        member _.Run () =
+        member _.run () =
             try
                 consoleBroker.enableStdOut()
 
@@ -32,7 +32,7 @@ type App (helpService : IHelpService, consoleBroker : IConsoleBroker, listCore :
                     | :? ListDevicesOptions -> listDevicesCore.showDeviceListOrEx ()
                     | :? ConfigOptions as opts -> configCore.configOrEx opts
                     | :? CreateOptions as opts -> createCore.createSnapshotOrEx opts
-                    | :? RestoreOptions as opts -> restoreCore.runOrEx opts
+                    | :? RestoreOptions as opts -> restoreCore.restoreSnapshotOrEx opts
 
                     | :? DeleteOptions as deleteOptions ->
                         match parser.ParseArguments<DeleteOptionsAtLeastOne> args with

@@ -29,7 +29,6 @@ type Delete (configService : IConfigService, snapshotsService : ISnapshotsServic
                 snapshotsService.deleteOrEx configData.SnapshotDevice deleteData
         //--------------------------------------------------------------------------------------------------------------
 
-
         //--------------------------------------------------------------------------------------------------------------
         member _.deleteSnapshotOrEx (deleteOptions : DeleteOptions) =
 
