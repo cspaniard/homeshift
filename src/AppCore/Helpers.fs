@@ -1,7 +1,6 @@
 module AppCore.Helpers
 
 open System
-open Microsoft.Extensions.DependencyInjection
 open Motsoft.Util
 open Model
 
@@ -32,7 +31,7 @@ let checkDeviceOrEx (snapshotDevice : SnapshotDevice) =
 //----------------------------------------------------------------------------------------------------------------------
 let checkUserOrEx (userName : UserName) =
 
-   usersService.isValidUser userName |> failWithIfFalse Errors.UserInvalid
+   usersService.isValidUser userName |> ignore
 //----------------------------------------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------------------------------------

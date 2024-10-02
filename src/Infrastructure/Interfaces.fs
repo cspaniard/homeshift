@@ -58,7 +58,6 @@ type IProcessBroker =
 
 type IUsersBroker =
     abstract member getUserInfoFromPasswordFileOrEx: userName: UserName -> string
-    abstract member checkUserHomeExistsOrEx: homeDirectory: Directory -> Directory
 
 type IDevicesBroker =
     abstract member getDeviceInfoOrEx: unit -> string

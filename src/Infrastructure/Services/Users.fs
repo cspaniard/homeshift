@@ -20,16 +20,13 @@ type UsersService (usersBroker : IUsersBroker) as this =
 
             (line.Split ":")[5]
             |> Directory.create
-            |> usersBroker.checkUserHomeExistsOrEx
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
         member _.isValidUser (userName : UserName) =
 
-            try
-                self.getHomeForUserOrEx userName |> ignore
-                true
-            with _ -> false
+            self.getHomeForUserOrEx userName |> ignore
+            true
         // -------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
