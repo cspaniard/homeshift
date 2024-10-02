@@ -8,6 +8,7 @@ open Microsoft.Extensions.DependencyInjection
 
 // ---------------------------------------------------------------------------------------------------------------------
 ServiceProvider
+    .AddSingleton<IHelpers, AppCore.Helpers>()
     .AddSingleton<IList, AppCore.List>()
     .AddSingleton<IListDevices, AppCore.ListDevices>()
     .AddSingleton<IConfig, AppCore.Config>()

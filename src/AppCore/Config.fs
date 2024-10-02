@@ -1,11 +1,10 @@
 namespace AppCore
 
 open Model
-open AppCore.Helpers
 open DI.Interfaces
 
 
-type Config (configService : IConfigService, consoleBroker : IConsoleBroker) as this =
+type Config (configService : IConfigService, consoleBroker : IConsoleBroker, helpers : IHelpers) as this =
 
     //------------------------------------------------------------------------------------------------------------------
     let self = this :> IConfig
@@ -15,9 +14,9 @@ type Config (configService : IConfigService, consoleBroker : IConsoleBroker) as 
         //--------------------------------------------------------------------------------------------------------------
         member _.storeConfigOrEx (configData : ConfigData) =
 
-            checkRootUserOrEx ()
+            helpers.checkRootUserOrEx ()
 
-            checkDeviceOrEx configData.SnapshotDevice
+            helpers.checkDeviceOrEx configData.SnapshotDevice
 
             configService.storeConfigDataOrEx configData
         //--------------------------------------------------------------------------------------------------------------
@@ -25,7 +24,7 @@ type Config (configService : IConfigService, consoleBroker : IConsoleBroker) as 
         //--------------------------------------------------------------------------------------------------------------
         member _.configOrEx (options : ConfigOptions) =
 
-            checkRootUserOrEx ()
+            helpers.checkRootUserOrEx ()
 
             if options |> ConfigOptions.ConfigValueWasPassed then
                 configService.getConfigDataOrEx ()

@@ -1,11 +1,10 @@
 namespace AppCore
 
 open Model
-open AppCore.Helpers
 open DI.Interfaces
 
 
-type Create (configService : IConfigService, snapshotsService : ISnapshotsService) as this =
+type Create (configService : IConfigService, snapshotsService : ISnapshotsService, helpers : IHelpers) as this =
 
     //------------------------------------------------------------------------------------------------------------------
     let self = this :> ICreate
@@ -15,11 +14,11 @@ type Create (configService : IConfigService, snapshotsService : ISnapshotsServic
         //--------------------------------------------------------------------------------------------------------------
         member _.createSnapshotOrEx (createData : CreateData) =
 
-            checkRootUserOrEx ()
+            helpers.checkRootUserOrEx ()
 
             let configData = configService.getConfigDataOrEx ()
 
-            checkDeviceOrEx configData.SnapshotDevice
+            helpers.checkDeviceOrEx configData.SnapshotDevice
 
             snapshotsService.createOrEx configData createData
         //--------------------------------------------------------------------------------------------------------------

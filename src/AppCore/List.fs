@@ -1,11 +1,10 @@
 namespace AppCore
 
-open Helpers
 open Model
 
 open DI.Interfaces
 
-type List (configService : IConfigService, snapshotsService : ISnapshotsService) as this =
+type List (configService : IConfigService, snapshotsService : ISnapshotsService, helpers : IHelpers) as this =
 
     // -----------------------------------------------------------------------------------------------------------------
     let self = this :> IList
@@ -15,12 +14,12 @@ type List (configService : IConfigService, snapshotsService : ISnapshotsService)
         //--------------------------------------------------------------------------------------------------------------
         member _.getSnapshotListOrEx (listData : ListData) =
 
-            checkRootUserOrEx ()
+            helpers.checkRootUserOrEx ()
 
             let configData = configService.getConfigDataOrEx ()
 
-            checkUserOrEx listData.UserName
-            checkDeviceOrEx configData.SnapshotDevice
+            helpers.checkUserOrEx listData.UserName
+            helpers.checkDeviceOrEx configData.SnapshotDevice
 
             snapshotsService.getListForUserOrEx configData.SnapshotDevice listData.UserName
         //--------------------------------------------------------------------------------------------------------------

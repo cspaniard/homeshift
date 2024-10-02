@@ -1,42 +1,39 @@
-module AppCore.Helpers
+namespace AppCore
 
 open System
 open Motsoft.Util
 open Model
 
 open DI.Interfaces
-open DI.Providers
 open Localization
 
-//----------------------------------------------------------------------------------------------------------------------
-let devicesService = ServiceProvider.GetService<IDevicesService>()
-let snapshotsService = ServiceProvider.GetService<ISnapshotsService>()
-let usersService = ServiceProvider.GetService<IUsersService>()
-//----------------------------------------------------------------------------------------------------------------------
 
-//----------------------------------------------------------------------------------------------------------------------
-let checkRootUserOrEx () =
+type Helpers(devicesService : IDevicesService, snapshotsService : ISnapshotsService, usersService : IUsersService) =
 
-    Environment.UserName = "root" |> failWithIfFalse Errors.NeedRootAccess
-//----------------------------------------------------------------------------------------------------------------------
+    interface IHelpers with
+        //--------------------------------------------------------------------------------------------------------------
+        member _.checkRootUserOrEx () =
 
-//----------------------------------------------------------------------------------------------------------------------
-let checkDeviceOrEx (snapshotDevice : SnapshotDevice) =
+            Environment.UserName = "root" |> failWithIfFalse Errors.NeedRootAccess
+        //--------------------------------------------------------------------------------------------------------------
 
-    snapshotDevice
-    |> devicesService.isValidDeviceOrEx
-    |> failWithIfFalse $"{Errors.InvalidDevice} ({snapshotDevice})"
-//----------------------------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------------------
+        member _.checkDeviceOrEx (snapshotDevice : SnapshotDevice) =
 
-//----------------------------------------------------------------------------------------------------------------------
-let checkUserOrEx (userName : UserName) =
+            snapshotDevice
+            |> devicesService.isValidDeviceOrEx
+            |> failWithIfFalse $"{Errors.InvalidDevice} ({snapshotDevice})"
+        //--------------------------------------------------------------------------------------------------------------
 
-   usersService.isValidUser userName |> ignore
-//----------------------------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------------------
+        member _.checkUserOrEx (userName : UserName) =
 
-//----------------------------------------------------------------------------------------------------------------------
-let checkSnapshotOrEx (snapshotDevice : SnapshotDevice) (userName : UserName) (snapshotName : string) =
+           usersService.isValidUser userName |> ignore
+        //--------------------------------------------------------------------------------------------------------------
 
-   snapshotsService.isValidOrEx snapshotDevice userName snapshotName
-   |> failWithIfFalse $"{Errors.SnapshotInvalid} ({userName.value}): {snapshotName}"
-//----------------------------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------------------
+        member _.checkSnapshotOrEx (snapshotDevice : SnapshotDevice) (userName : UserName) (snapshotName : string) =
+
+           snapshotsService.isValidOrEx snapshotDevice userName snapshotName
+           |> failWithIfFalse $"{Errors.SnapshotInvalid} ({userName.value}): {snapshotName}"
+        //--------------------------------------------------------------------------------------------------------------

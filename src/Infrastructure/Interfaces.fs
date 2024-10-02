@@ -11,6 +11,13 @@ open Spectre.Console.Rendering
 type IApp =
     abstract member Run : unit -> unit
 
+type IHelpers =
+    abstract member checkRootUserOrEx: unit -> unit
+    abstract member checkUserOrEx: userName: UserName -> unit
+    abstract member checkDeviceOrEx: snapshotDevice: SnapshotDevice -> unit
+    abstract member checkSnapshotOrEx: snapshotDevice: SnapshotDevice -> userName: UserName ->
+                                       snapshotName: string -> unit
+
 type IList =
     abstract member getSnapshotListOrEx: ListData -> Snapshot seq
     abstract member showSnapshotListOrEx: ListOptions -> unit

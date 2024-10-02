@@ -1,12 +1,10 @@
 namespace AppCore
 
 open Model
-open Helpers
-
 open DI.Interfaces
 
 
-type Delete (configService : IConfigService, snapshotsService : ISnapshotsService) as this =
+type Delete (configService : IConfigService, snapshotsService : ISnapshotsService, helpers : IHelpers) as this =
 
     //------------------------------------------------------------------------------------------------------------------
     let self = this :> IDelete
@@ -17,17 +15,17 @@ type Delete (configService : IConfigService, snapshotsService : ISnapshotsServic
         //--------------------------------------------------------------------------------------------------------------
         member _.deleteSnapshotOrEx (deleteData : DeleteData) =
 
-            checkRootUserOrEx ()
+            helpers.checkRootUserOrEx ()
 
             let configData = configService.getConfigDataOrEx ()
 
-            checkUserOrEx deleteData.UserName
-            checkDeviceOrEx configData.SnapshotDevice
+            helpers.checkUserOrEx deleteData.UserName
+            helpers.checkDeviceOrEx configData.SnapshotDevice
 
             if deleteData.DeleteAll then
                 snapshotsService.deleteAll configData.SnapshotDevice deleteData.UserName
             else
-                checkSnapshotOrEx configData.SnapshotDevice deleteData.UserName deleteData.SnapshotName
+                helpers.checkSnapshotOrEx configData.SnapshotDevice deleteData.UserName deleteData.SnapshotName
                 snapshotsService.deleteOrEx configData.SnapshotDevice deleteData
         //--------------------------------------------------------------------------------------------------------------
 
