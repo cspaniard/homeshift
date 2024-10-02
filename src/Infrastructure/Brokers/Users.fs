@@ -1,13 +1,11 @@
 namespace Brokers
 
 open System
-open System.IO
 open Motsoft.Util
 
 open DI.Interfaces
 open Model
 open Localization
-
 
 
 type UsersBroker (processBroker : IProcessBroker) =
@@ -25,7 +23,7 @@ type UsersBroker (processBroker : IProcessBroker) =
                     "grep"
                     $"^{userName.value}: {PASSWORD_FILE}"
 
-            line |> String.IsNullOrWhiteSpace |> failWithIfTrue Errors.UserNoInfoFound
+            line |> String.IsNullOrWhiteSpace |> failWithIfTrue $"{Errors.UserNoInfoFound} ({userName.value})"
 
             line
         // -------------------------------------------------------------------------------------------------------------
