@@ -56,7 +56,7 @@ function _homeshift()
 
     "restore")
         COMPREPLY=( $(compgen -W '
-            --snapshot --help --version
+            --user --snapshot --help --version
             ' -- "$cur" ) )
         return 0
         ;;
