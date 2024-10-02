@@ -1,7 +1,6 @@
 module MockBrokers.SnapshotsBrokerMock
 
 open System
-open Microsoft.Extensions.DependencyInjection
 open Motsoft.Util
 
 open DI.Providers
@@ -90,5 +89,11 @@ type SnapshotsBrokerMock (throwError: bool, noPreviousSnapshots: bool, sendCtrlC
             throwError |> failWithIfTrue $"{self.getLastSnapshotOptionInPathOrEx}: Mock Exception"
 
             Some <| Directory.create "/dummy/path"
+        // -------------------------------------------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------------------------------------------
+        member _.restoreSnapshotOrEx _ _ _ =
+
+            failwith "restoreSnapshotOrEx not implemented"
         // -------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------

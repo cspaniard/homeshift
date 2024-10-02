@@ -71,12 +71,14 @@ with
 
 //----------------------------------------------------------------------------------------------------------------------
 type RestoreData = {
-    Snapshot : string
+    UserName : UserName
+    SnapshotName : string
 }
 with
     static member ofOptions (o : RestoreOptions) =
         {
-            Snapshot = o.Snapshot
+            UserName = o.UserName |> UserName.create
+            SnapshotName = o.Snapshot
         } : RestoreData
 //----------------------------------------------------------------------------------------------------------------------
 

@@ -79,4 +79,7 @@
     <data name="ConfigShow" xml:space="preserve">
         <value>Shows configuration file. Can also be used when changing a value.</value>
     </data>
+    <data name="RestoreUser" xml:space="preserve">
+        <value>User for whom restore the snapshot.</value>
+    </data>
 </root>

@@ -32,7 +32,7 @@ type App (helpService : IHelpService, consoleBroker : IConsoleBroker, listCore :
                     | :? ListDevicesOptions -> listDevicesCore.showDeviceListOrEx ()
                     | :? ConfigOptions as opts -> configCore.configOrEx opts
                     | :? CreateOptions as opts -> createCore.createSnapshotOrEx opts
-                    | :? RestoreOptions as opts -> RestoreData.ofOptions opts |> restoreCore.runOrEx
+                    | :? RestoreOptions as opts -> restoreCore.runOrEx opts
 
                     | :? DeleteOptions as deleteOptions ->
                         match parser.ParseArguments<DeleteOptionsAtLeastOne> args with

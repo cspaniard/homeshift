@@ -72,4 +72,7 @@
     <data name="ConfigShow" xml:space="preserve">
         <value>Muestra el fichero de configuración. También puede usarse al cambiar algún valor.</value>
     </data>
+    <data name="RestoreUser" xml:space="preserve">
+        <value>Usuario para el que restaurar la instantánea.</value>
+    </data>
 </root>

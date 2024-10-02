@@ -28,7 +28,7 @@ type ICreate =
     abstract member createSnapshotOrEx : CreateOptions -> unit
 
 type IRestore =
-    abstract member runOrEx : options : RestoreData -> unit
+    abstract member runOrEx : options : RestoreOptions -> unit
 
 type IDelete =
     abstract member deleteSnapshotOrEx : DeleteData -> unit
@@ -71,6 +71,8 @@ type ISnapshotsBroker =
     abstract member createSnapshotOrEx: sourcePath: Directory -> baseSnapshotPath: Directory ->
                                         createData:  CreateData -> progressCallBack: (string -> unit) ->
                                         lastSnapshotPathOption: Directory option -> unit
+    abstract member restoreSnapshotOrEx: progressCallBack : (string -> unit) ->
+                                         snapshotPath: Directory -> userHomePath: Directory -> unit
     abstract member deleteSnapshotPathOrEx: snapshotsPath: Directory -> unit
     abstract member deleteUserPathIfEmptyOrEx: snapshotsPath: Directory -> unit
     abstract member deleteLastSnapshotOrEx: userSnapshotsPath: Directory -> unit
@@ -93,6 +95,7 @@ type ISnapshotsService =
     abstract member deleteOrEx: snapshotDevice: SnapshotDevice -> deleteData: DeleteData -> unit
     abstract member deleteAll: snapshotDevice: SnapshotDevice -> userName: UserName -> unit
     abstract member isValidOrEx: snapshotDevice: SnapshotDevice -> userName: UserName -> snapshotName: string -> bool
+    abstract member restoreOrEx: snapshotDevice: SnapshotDevice -> restoreData: RestoreData -> unit
 
 type IDevicesService =
     abstract member getValidDevicesDataOrEx: unit -> seq<DeviceDataChild>

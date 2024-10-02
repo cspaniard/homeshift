@@ -113,6 +113,16 @@ type SnapshotsBroker (processBroker : IProcessBroker) as this =
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
+        member _.restoreSnapshotOrEx (progressCallBack : string -> unit) (snapshotPath : Directory)
+                                     (userHomePath : Directory) =
+
+            processBroker.startProcessWithNotificationOrEx
+                progressCallBack
+                "rsync"
+                $"-a --info=progress2 --delete {snapshotPath.value}/{USER_FILES_DIRECTORY}/ {userHomePath.value}/"
+        // -------------------------------------------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------------------------------------------
         member _.deleteUserPathIfEmptyOrEx (snapshotsPath : Directory) =
 
             Directory.EnumerateDirectories snapshotsPath.value

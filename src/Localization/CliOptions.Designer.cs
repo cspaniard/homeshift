@@ -158,5 +158,11 @@ namespace Localization {
                 return ResourceManager.GetString("ConfigShow", resourceCulture);
             }
         }
+        
+        public static string RestoreUser {
+            get {
+                return ResourceManager.GetString("RestoreUser", resourceCulture);
+            }
+        }
     }
 }

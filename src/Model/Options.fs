@@ -75,6 +75,9 @@ type CreateOptions = {
 //----------------------------------------------------------------------------------------------------------------------
 [<Verb("restore", HelpText = nameof VerbRestore, ResourceType = typeof<CliOptions>)>]
 type RestoreOptions = {
+    [<Option ("user", Required = true, Group = "user", HelpText = nameof RestoreUser, ResourceType = typeof<CliOptions>)>]
+    UserName : string
+
     [<Option ("snapshot", Required = true, HelpText = nameof RestoreSnapshot, ResourceType = typeof<CliOptions>)>]
     Snapshot : string
 }

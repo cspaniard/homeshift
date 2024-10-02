@@ -160,6 +160,51 @@ type SnapshotsService (devicesBroker : IDevicesBroker, snapshotsBroker : ISnapsh
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
+        member _.restoreOrEx (snapshotDevice : SnapshotDevice) (restoreData : RestoreData) =
+
+            consoleBroker.writeLine
+                $"{Phrases.SnapshotRestoring} ({restoreData.UserName.value}): {restoreData.SnapshotName}"
+
+            let consoleProgress =
+                AnsiConsole.Progress()
+                    .Columns(
+                        [|
+                            ElapsedTimeColumn()
+                            ProgressBarColumn()
+                            PercentageColumn()
+                            RemainingTimeColumn()
+                            SpinnerColumn()
+                        |] : ProgressColumn array
+                    )
+
+            try
+                consoleProgress
+                    .Start(fun ctx ->
+                        let progressTask = ctx.AddTask("Restore progress", IsIndeterminate = false)
+
+                        let progressCallBack (progressString : string) =
+                            if progressString <> null then
+                                let progressParts = progressString |> split " "
+
+                                if progressParts.Length > 3 then
+                                    progressTask.Value <- progressParts[1] |> trimStringChars "%" |> float
+
+                        let mountPoint = devicesBroker.mountDeviceOrEx snapshotDevice
+
+                        let snapshotDirectory =
+                            $"{mountPoint.value}/homeshift/snapshots/{restoreData.UserName.value}/{restoreData.SnapshotName}"
+                            |> Directory.create
+
+                        usersService.getHomeForUserOrEx restoreData.UserName
+                        |> snapshotsBroker.restoreSnapshotOrEx progressCallBack snapshotDirectory
+
+                        progressTask.Value <- 100.
+                    )
+            finally
+                unmountDeviceOrEx ()
+        // -------------------------------------------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------------------------------------------
         member _.deleteOrEx (snapshotDevice : SnapshotDevice) (deleteData : DeleteData) =
 
             consoleBroker.writeLine

@@ -71,4 +71,7 @@
     <data name="DateTimeLocal" xml:space="preserve">
         <value>Fecha y Hora (local)</value>
     </data>
+    <data name="SnapshotRestoring" xml:space="preserve">
+        <value>Restaurando instantánea</value>
+    </data>
 </root>
