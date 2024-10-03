@@ -22,7 +22,7 @@ type DevicesBroker (processBroker : IProcessBroker) =
 
             processBroker.startProcessAndReadToEndOrEx
                 "lsblk"
-                "--json --output NAME,KNAME,RO,TYPE,MOUNTPOINT,LABEL,PATH,FSTYPE,PARTTYPENAME,SIZE"
+                "--json --output NAME,KNAME,RO,TYPE,MOUNTPOINT,LABEL,PATH,FSTYPE,PARTTYPENAME,SIZE,UUID,PARTLABEL"
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------

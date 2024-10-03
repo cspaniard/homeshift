@@ -54,6 +54,7 @@ type DevicesService (devicesBroker : IDevicesBroker, consoleBroker : IConsoleBro
                 TableColumn(Phrases.MountPoint)
                 TableColumn(Phrases.Type)
                 TableColumn(Phrases.Label)
+                TableColumn("UUID").PadRight(0)
             |]
 
             let data = [|
@@ -63,7 +64,8 @@ type DevicesService (devicesBroker : IDevicesBroker, consoleBroker : IConsoleBro
                         d.Size
                         d.MountPoint
                         d.FileSystemType
-                        d.Label |> Option.ofObj |> Option.defaultValue ""
+                        d.PartLabel |> Option.ofObj |> Option.defaultValue ""
+                        d.Uuid
                     |]
             |]
 

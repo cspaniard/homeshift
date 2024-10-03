@@ -34,6 +34,12 @@ type DeviceDataChild =
 
         [<JsonProperty("size")>]
         Size : string
+
+        [<JsonProperty("uuid")>]
+        Uuid : string
+
+        [<JsonProperty("partlabel")>]
+        PartLabel : string
     }
 
 

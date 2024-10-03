@@ -38,7 +38,7 @@ type App (helpService : IHelpService, consoleBroker : IConsoleBroker, listCore :
                         match parser.ParseArguments<DeleteOptionsAtLeastOne> args with
                         | :? Parsed<DeleteOptionsAtLeastOne> -> deleteCore.deleteSnapshotOrEx deleteOptions
                         | :? NotParsed<DeleteOptionsAtLeastOne> as notParsed ->
-                                helpService.helpTextFromResult notParsed |> Console.WriteLine
+                                helpService.helpTextFromResult notParsed |> consoleBroker.writeLine
                         | _ -> Console.WriteLine "Should not get here 3."
 
                     | _ -> Console.WriteLine "Should not get here 1."
