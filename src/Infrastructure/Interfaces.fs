@@ -104,9 +104,10 @@ type ISnapshotsService =
     abstract member restoreOrEx: snapshotDevice: SnapshotDevice -> restoreData: RestoreData -> unit
 
 type IDevicesService =
-    abstract member getValidDevicesDataOrEx: unit -> seq<DeviceDataChild>
+    abstract member getValidDevicesDataOrEx: unit -> DeviceDataChild seq
+    abstract member findDeviceOrEx: device: string -> DeviceDataChild
     abstract member isValidDeviceOrEx: snapshotDevice: SnapshotDevice -> bool
-    abstract member outputDevices: devices: seq<DeviceDataChild> -> unit
+    abstract member outputDevices: devices: DeviceDataChild seq -> unit
 
 type IUsersService =
     abstract member getHomeForUserOrEx: userName: UserName -> Directory

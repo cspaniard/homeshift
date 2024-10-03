@@ -37,6 +37,24 @@ type DevicesService (devicesBroker : IDevicesBroker, consoleBroker : IConsoleBro
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
+        member _.findDeviceOrEx (device : string) =
+
+            let devices = self.getValidDevicesDataOrEx ()
+
+            let foundDevice =
+                devices
+                |> Seq.tryFind (fun d -> d.Path = device)
+                |> Option.orElseWith (fun _ -> devices |>
+                                               Seq.tryFind (fun d -> d.Uuid |> compareNoCaseNoAccents device = 0))
+                |> Option.orElseWith (fun _ -> devices
+                                               |> Seq.tryFind (fun d -> d.MountPoint = device))
+
+            foundDevice |> Option.isNone |> failWithIfTrue $"{Errors.InvalidDevice} ({device})"
+
+            foundDevice.Value
+        // -------------------------------------------------------------------------------------------------------------
+
+        // -------------------------------------------------------------------------------------------------------------
         member _.isValidDeviceOrEx (device : SnapshotDevice) =
 
             self.getValidDevicesDataOrEx ()

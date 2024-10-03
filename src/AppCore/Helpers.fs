@@ -20,9 +20,7 @@ type Helpers(devicesService : IDevicesService, snapshotsService : ISnapshotsServ
         //--------------------------------------------------------------------------------------------------------------
         member _.checkDeviceOrEx (snapshotDevice : SnapshotDevice) =
 
-            snapshotDevice
-            |> devicesService.isValidDeviceOrEx
-            |> failWithIfFalse $"{Errors.InvalidDevice} ({snapshotDevice})"
+            devicesService.findDeviceOrEx snapshotDevice.value |> ignore
         //--------------------------------------------------------------------------------------------------------------
 
         //--------------------------------------------------------------------------------------------------------------

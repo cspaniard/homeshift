@@ -25,7 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Motsoft.Util" Version="1.7.0" />
+      <PackageReference Include="Motsoft.Util" Version="1.9.0" />
     </ItemGroup>
 
 </Project>

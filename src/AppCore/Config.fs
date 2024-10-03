@@ -4,7 +4,8 @@ open Model
 open DI.Interfaces
 
 
-type Config (configService : IConfigService, consoleBroker : IConsoleBroker, helpers : IHelpers) as this =
+type Config (configService : IConfigService, consoleBroker : IConsoleBroker, devicesService : IDevicesService,
+             helpers : IHelpers) as this =
 
     //------------------------------------------------------------------------------------------------------------------
     let self = this :> IConfig
@@ -16,7 +17,9 @@ type Config (configService : IConfigService, consoleBroker : IConsoleBroker, hel
 
             helpers.checkRootUserOrEx ()
 
-            helpers.checkDeviceOrEx configData.SnapshotDevice
+            let deviceDataChild = devicesService.findDeviceOrEx configData.SnapshotDevice.value
+
+            let configData = { configData with SnapshotDevice = SnapshotDevice.create deviceDataChild.Uuid }
 
             configService.storeConfigDataOrEx configData
         //--------------------------------------------------------------------------------------------------------------

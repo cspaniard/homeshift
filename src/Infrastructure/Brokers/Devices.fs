@@ -31,7 +31,7 @@ type DevicesBroker (processBroker : IProcessBroker) =
             Directory.CreateDirectory mountPoint.value |> ignore
 
             try
-                processBroker.startProcessAndWaitOrEx "mount" $"{snapshotDevice.value} {mountPoint}"
+                processBroker.startProcessAndWaitOrEx "mount" $"-U {snapshotDevice.value} {mountPoint}"
 
                 mountPoint
 
