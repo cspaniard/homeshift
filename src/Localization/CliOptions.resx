@@ -47,7 +47,8 @@
         <value>Enable hourly snapshots. (bool)</value>
     </data>
     <data name="ConfigSnapshotDevice" xml:space="preserve">
-        <value>Device where snapshots will be stored.</value>
+        <value>Device where snapshots will be stored.
+One of: device path, mount point, UUID.</value>
     </data>
     <data name="VerbList" xml:space="preserve">
         <value>List snapshots for a user.</value>

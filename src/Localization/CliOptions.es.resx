@@ -40,7 +40,8 @@
         <value>Habilita instantáneas semanales. (bool)</value>
     </data>
     <data name="ConfigSnapshotDevice" xml:space="preserve">
-        <value>Dispositivo donde se guardarán las instantáneas.</value>
+        <value>Dispositivo donde se guardarán las instantáneas.
+Uno de: senda del dispositivo, senda de montaje, UUID.</value>
     </data>
     <data name="VerbList" xml:space="preserve">
         <value>Lista las instantáneas de un usuario.</value>
