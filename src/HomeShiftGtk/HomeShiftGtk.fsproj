@@ -12,7 +12,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Program.fs"/>
+        <Content Include="MainWindow.glade">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="App.css">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Compile Include="BaseWindow.fs" />
+        <Compile Include="MainWindowVM.fs" />
+        <Compile Include="MainWindow.fs" />
+        <Compile Include="Program.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="GtkSharp" Version="3.24.24.95" />
+      <PackageReference Include="Motsoft.Binder" Version="1.1.6" />
+      <PackageReference Include="Motsoft.Util" Version="1.9.0" />
     </ItemGroup>
 
 </Project>
