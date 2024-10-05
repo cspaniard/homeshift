@@ -1,8 +1,12 @@
 button {
-    font-size: 1.4em;
+    font-size: 1.0em;
 }
 
 button:hover {
+}
+
+toolbutton button label {
+    margin-top: 0.3em;
 }
 
 #company_id_label {
@@ -12,6 +16,10 @@ button:hover {
 
 .titulos {
     color: yellow;
+}
+
+.bgcolor {
+    background-color: yellow;
 }
 
 .cabecera {
