@@ -27,6 +27,11 @@
           <AutoGen>True</AutoGen>
           <DependentUpon>Phrases.resx</DependentUpon>
         </Compile>
+        <Compile Update="GuiPhrases.Designer.cs">
+          <DesignTime>True</DesignTime>
+          <AutoGen>True</AutoGen>
+          <DependentUpon>GuiPhrases.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Update="CliOptions.resx">
@@ -44,6 +49,25 @@
         <EmbeddedResource Update="Phrases.resx">
           <Generator>PublicResXFileCodeGenerator</Generator>
           <LastGenOutput>Phrases.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="GuiPhrases.resx">
+          <Generator>PublicResXFileCodeGenerator</Generator>
+          <LastGenOutput>GuiPhrases.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="GuiPhrases.es.resx">
+          <DependentUpon>GuiPhrases.resx</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="LocSentenceBuilder.es.resx">
+          <DependentUpon>LocSentenceBuilder.resx</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Phrases.es.resx">
+          <DependentUpon>Phrases.resx</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Errors.es.resx">
+          <DependentUpon>Errors.resx</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="CliOptions.es.resx">
+          <DependentUpon>CliOptions.resx</DependentUpon>
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>

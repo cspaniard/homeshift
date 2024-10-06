@@ -3,6 +3,7 @@ namespace HomeShiftGtk
 open System
 open GLib        // Necesario. Ambiguedad entre System.Object y GLib.Object
 open Gtk
+open Localization
 
 
 type MainWindow(WindowIdName : string) as this =
@@ -26,12 +27,12 @@ type MainWindow(WindowIdName : string) as this =
     // Inicializa el formulario.
     // -----------------------------------------------------------------------------------------------------------------
     do
-        CreateToolButton.Label <- "Crear"
-        RestoreToolButton.Label <- "Restaurar"
-        DeleteToolButton.Label <- "Eliminar"
-        ExamineToolButton.Label <- "Examinar"
-        ConfigureToolButton.Label <- "Configurar"
-        MenuToolButton.Label <- "Menú"
+        CreateToolButton.Label <- GuiPhrases.Create
+        RestoreToolButton.Label <- GuiPhrases.Restore
+        DeleteToolButton.Label <- GuiPhrases.Delete
+        ExamineToolButton.Label <- GuiPhrases.Examine
+        ConfigureToolButton.Label <- GuiPhrases.Configure
+        MenuToolButton.Label <- GuiPhrases.Menu
         // -------------------------------------------------------------------------------------------------------------
         // Prepara y muestra la ventana.
         // -------------------------------------------------------------------------------------------------------------
