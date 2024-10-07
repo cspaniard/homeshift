@@ -80,5 +80,41 @@ namespace Localization {
                 return ResourceManager.GetString("Menu", resourceCulture);
             }
         }
+        
+        public static string Snapshot {
+            get {
+                return ResourceManager.GetString("Snapshot", resourceCulture);
+            }
+        }
+        
+        public static string Comment {
+            get {
+                return ResourceManager.GetString("Comment", resourceCulture);
+            }
+        }
+        
+        public static string DateTime {
+            get {
+                return ResourceManager.GetString("DateTime", resourceCulture);
+            }
+        }
+        
+        public static string SnapshotsForUser {
+            get {
+                return ResourceManager.GetString("SnapshotsForUser", resourceCulture);
+            }
+        }
+        
+        public static string Snapshots {
+            get {
+                return ResourceManager.GetString("Snapshots", resourceCulture);
+            }
+        }
+        
+        public static string Available {
+            get {
+                return ResourceManager.GetString("Available", resourceCulture);
+            }
+        }
     }
 }

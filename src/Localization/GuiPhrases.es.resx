@@ -29,4 +29,22 @@
     <data name="Menu" xml:space="preserve">
         <value>Menú</value>
     </data>
+    <data name="Comment" xml:space="preserve">
+        <value>Comentario</value>
+    </data>
+    <data name="DateTime" xml:space="preserve">
+        <value>Fecha-Hora (local)</value>
+    </data>
+    <data name="Snapshot" xml:space="preserve">
+        <value>Instantánea</value>
+    </data>
+    <data name="SnapshotsForUser" xml:space="preserve">
+        <value>Instantáneas del Usuario:</value>
+    </data>
+    <data name="Snapshots" xml:space="preserve">
+        <value>Instantáneas</value>
+    </data>
+    <data name="Available" xml:space="preserve">
+        <value>Disponible</value>
+    </data>
 </root>

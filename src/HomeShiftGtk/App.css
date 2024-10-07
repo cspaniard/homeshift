@@ -9,8 +9,12 @@ toolbutton button label {
     margin-top: 0.3em;
 }
 
-#company_id_label {
-    font-size: 1.1em;
+#searchbar {
+    font-size: 1.2em;
+}
+
+.status_main_text {
+    font-size: 1.4em;
     font-weight: bold;
 }
 

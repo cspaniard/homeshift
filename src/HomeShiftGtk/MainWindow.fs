@@ -13,13 +13,29 @@ type MainWindow(WindowIdName : string) as this =
     // Referencias a controles.
     //------------------------------------------------------------------------------------------------------------------
 
-    let MainLabel = this.Gui.GetObject("MainLabel") :?> Label
     let CreateToolButton = this.Gui.GetObject("CreateToolButton") :?> ToolButton
     let RestoreToolButton = this.Gui.GetObject("RestoreToolButton") :?> ToolButton
     let DeleteToolButton = this.Gui.GetObject("DeleteToolButton") :?> ToolButton
     let ExamineToolButton = this.Gui.GetObject("ExamineToolButton") :?> ToolButton
     let ConfigureToolButton = this.Gui.GetObject("ConfigureToolButton") :?> ToolButton
     let MenuToolButton = this.Gui.GetObject("MenuToolButton") :?> ToolButton
+
+    let SnapshotsForUserLabel = this.Gui.GetObject("SnapshotsForUserLabel") :?> Label
+    let UserNameSearchEntry = this.Gui.GetObject("UserNameSearchEntry") :?> SearchEntry
+
+    let SnapshotColumn = this.Gui.GetObject("SnapshotColumn") :?> TreeViewColumn
+    let CommentColumn = this.Gui.GetObject("CommentColumn") :?> TreeViewColumn
+    let DateTimeColumn = this.Gui.GetObject("DateTimeColumn") :?> TreeViewColumn
+
+    let StatusMainLineLabel = this.Gui.GetObject("StatusMainLineLabel") :?> Label
+    let StatusSubLineLabel = this.Gui.GetObject("StatusSubLineLabel") :?> Label
+
+    let SnapshotCounterLabel = this.Gui.GetObject("SnapshotCounterLabel") :?> Label
+    let SnapshotsLabel = this.Gui.GetObject("SnapshotsLabel") :?> Label
+
+    let AvailableAmountLabel = this.Gui.GetObject("AvailableAmountLabel") :?> Label
+    let AvailableLabel = this.Gui.GetObject("AvailableLabel") :?> Label
+    let DeviceNameLabel = this.Gui.GetObject("DeviceNameLabel") :?> Label
 
     let VM = MainWindowVM()
 
@@ -33,13 +49,31 @@ type MainWindow(WindowIdName : string) as this =
         ExamineToolButton.Label <- GuiPhrases.Examine
         ConfigureToolButton.Label <- GuiPhrases.Configure
         MenuToolButton.Label <- GuiPhrases.Menu
+
+        SnapshotsForUserLabel.Text <- GuiPhrases.SnapshotsForUser
+        UserNameSearchEntry.Text <- Environment.GetEnvironmentVariable("USER")   // TODO: Temp. Move to VM.
+
+        SnapshotColumn.Title <- GuiPhrases.Snapshot
+        CommentColumn.Title <- GuiPhrases.Comment
+        DateTimeColumn.Title <- GuiPhrases.DateTime
+
+        StatusMainLineLabel.Text <- "Este es un mensaje de estado."
+        StatusSubLineLabel.Text <- "Este es un mensaje de estado, pero pequeño."
+
+        SnapshotCounterLabel.Text <- "47"
+        SnapshotsLabel.Text <- GuiPhrases.Snapshots
+
+        AvailableAmountLabel.Text <- "5.0 TB"
+        AvailableLabel.Text <- GuiPhrases.Available
+        DeviceNameLabel.Text <- "/dev/dummy/device"            // TODO: Temp. Move to VM.
+
         // -------------------------------------------------------------------------------------------------------------
         // Prepara y muestra la ventana.
         // -------------------------------------------------------------------------------------------------------------
         // this.ThisWindow.Maximize()
         this.EnableCtrlQ()
-
         this.ThisWindow.Show()
+
     //------------------------------------------------------------------------------------------------------------------
 
 
@@ -63,22 +97,22 @@ type MainWindow(WindowIdName : string) as this =
     //------------------------------------------------------------------------------------------------------------------
 
     member _.TestButtonClicked (_ : System.Object) (_ : EventArgs) =
-        MainLabel.Text <- "Hello, World!"
+        ()
 
     member _.CreateToolButtonClicked (_ : System.Object) (_ : EventArgs) =
-        MainLabel.Text <- "Creamos un nuevo snapshot."
+        ()
 
     member _.RestoreToolButtonClicked (_ : System.Object) (_ : EventArgs) =
-        MainLabel.Text <- "Restauramos un snapshot."
+        ()
 
     member _.DeleteToolButtonClicked (_ : System.Object) (_ : EventArgs) =
-        MainLabel.Text <- "Eliminamos un snapshot."
+        ()
 
     member _.ExamineToolButtonClicked (_ : System.Object) (_ : EventArgs) =
-        MainLabel.Text <- "Examinamos un snapshot."
+        ()
 
     member _.ConfigureToolButtonClicked (_ : System.Object) (_ : EventArgs) =
-        MainLabel.Text <- "Configuramos la aplicación."
+        ()
 
     member _.MenuToolButtonClicked (_ : System.Object) (_ : EventArgs) =
-        MainLabel.Text <- "Mostramos el menú."
+        ()
