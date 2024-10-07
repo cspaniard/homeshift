@@ -6,7 +6,7 @@
         <RootNamespace>HomeShiftGtk</RootNamespace>
         <AssemblyName>homeshift-gtk</AssemblyName>
         <Company>David Sanroma</Company>
-        <AssemblyVersion>0.0.2</AssemblyVersion>
+        <AssemblyVersion>0.0.4</AssemblyVersion>
         <FileVersion>0.0.0</FileVersion>
         <Version>0.0.0</Version>
     </PropertyGroup>
@@ -18,6 +18,7 @@
         <Content Include="App.css">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Compile Include="DynamicCssManager.fs" />
         <Compile Include="BaseWindow.fs" />
         <Compile Include="MainWindowVM.fs" />
         <Compile Include="MainWindow.fs" />

@@ -1,6 +1,5 @@
 open System
 open System.IO
-open Gdk
 open Gtk
 open HomeShiftGtk
 
@@ -11,9 +10,8 @@ app.Register(GLib.Cancellable.Current) |> ignore
 Directory.SetCurrentDirectory AppContext.BaseDirectory
 
 // Carga el CSS para toda la aplicación.
-let cssProvider = new CssProvider()
-cssProvider.LoadFromPath("App.css") |> ignore
-StyleContext.AddProviderForScreen(Screen.Default, cssProvider, StyleProviderPriority.User)
+DynamicCssManager.loadFromPath("App.css")
+DynamicCssManager.applyToScreen()
 
 MainWindow("MainWindow") |> ignore
 Application.Run()

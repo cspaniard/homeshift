@@ -67,6 +67,9 @@ type MainWindow(WindowIdName : string) as this =
         AvailableLabel.Text <- GuiPhrases.Available
         DeviceNameLabel.Text <- "/dev/dummy/device"            // TODO: Temp. Move to VM.
 
+
+        DynamicCssManager.addOrUpdate "status_main_text" "color" "yellow" |> ignore
+
         // -------------------------------------------------------------------------------------------------------------
         // Prepara y muestra la ventana.
         // -------------------------------------------------------------------------------------------------------------
