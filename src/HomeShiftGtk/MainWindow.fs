@@ -26,6 +26,7 @@ type MainWindow(WindowIdName : string, iListService : IList) as this =
 
     let SnapshotsForUserLabel = this.Gui.GetObject("SnapshotsForUserLabel") :?> Label
     let UserNameSearchEntry = this.Gui.GetObject("UserNameSearchEntry") :?> SearchEntry
+    let InvalidUserNameImage = this.Gui.GetObject("InvalidUserNameImage") :?> Image
 
     let SnapshotColumn = this.Gui.GetObject("SnapshotColumn") :?> TreeViewColumn
     let CommentColumn = this.Gui.GetObject("CommentColumn") :?> TreeViewColumn
@@ -50,7 +51,9 @@ type MainWindow(WindowIdName : string, iListService : IList) as this =
     // Inicializa el formulario.
     // -----------------------------------------------------------------------------------------------------------------
     do
-        binder.AddBinding(UserNameSearchEntry, "text", "UserName")
+        binder
+            .AddBinding(UserNameSearchEntry, "text", nameof VM.UserName)
+            .AddBinding(InvalidUserNameImage, "visible", nameof VM.IsInvalidUser)
         |> ignore
 
         CreateToolButton.Label <- GuiPhrases.Create
@@ -85,7 +88,7 @@ type MainWindow(WindowIdName : string, iListService : IList) as this =
 
         Timeout.Add(100u, fun _ ->
             try
-                VM.getSnapshotList()
+                VM.GetSnapshotList()
                 true
             with e ->
                 this.ErrorDialogBox e.Message
@@ -117,7 +120,7 @@ type MainWindow(WindowIdName : string, iListService : IList) as this =
     member _.CreateToolButtonClicked (_ : System.Object) (_ : EventArgs) =
 
         try
-            VM.getSnapshotList()
+            VM.GetSnapshotList()
         with e -> this.ErrorDialogBox e.Message
 
     member _.RestoreToolButtonClicked (_ : System.Object) (_ : EventArgs) =
