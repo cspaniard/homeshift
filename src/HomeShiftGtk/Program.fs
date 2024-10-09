@@ -10,8 +10,7 @@ open Microsoft.Extensions.DependencyInjection
 ServiceProvider
     .AddSingleton<IHelpers, AppCore.Helpers>()
     .AddSingleton<IList, AppCore.List>()
-    .AddSingleton<MainWindow>(fun sp ->
-        MainWindow("MainWindow", sp.GetRequiredService<IList>()))
+    .AddSingleton<MainWindow>(fun sp -> MainWindow("MainWindow"))
 |> ignore
 
 ServiceProvider.Rebuild()

@@ -3,14 +3,12 @@ namespace HomeShiftGtk
 open System
 open GLib        // Necesario. Ambiguedad entre System.Object y GLib.Object
 open Gtk
-open Localization
-
-open DI.Interfaces
-open Model
 open Motsoft.Binder
 
+open Localization
 
-type MainWindow(WindowIdName : string, iListService : IList) as this =
+
+type MainWindow(WindowIdName : string) as this =
     inherit BaseWindow(WindowIdName)
 
     //------------------------------------------------------------------------------------------------------------------
@@ -44,7 +42,7 @@ type MainWindow(WindowIdName : string, iListService : IList) as this =
 
     let SnapshotsListStore = this.Gui.GetObject("SnapshotsListStore") :?> ListStore
 
-    let VM = MainWindowVM(SnapshotsListStore, iListService)
+    let VM = MainWindowVM(SnapshotsListStore)
 
     let binder = Binder(VM)
     // -----------------------------------------------------------------------------------------------------------------
@@ -83,18 +81,14 @@ type MainWindow(WindowIdName : string, iListService : IList) as this =
         // Prepara y muestra la ventana.
         // -------------------------------------------------------------------------------------------------------------
         // this.ThisWindow.Maximize()
+
         this.EnableCtrlQ()
         this.ThisWindow.Show()
 
         Timeout.Add(100u, fun _ ->
-            try
-                VM.GetSnapshotList()
-                true
-            with e ->
-                this.ErrorDialogBox e.Message
-                false
+            try VM.GetSnapshotList() with e -> this.ErrorDialogBox e.Message
+            false
         ) |> ignore
-
     //------------------------------------------------------------------------------------------------------------------
 
 
@@ -118,13 +112,9 @@ type MainWindow(WindowIdName : string, iListService : IList) as this =
     //------------------------------------------------------------------------------------------------------------------
 
     member _.CreateToolButtonClicked (_ : System.Object) (_ : EventArgs) =
-
-        try
-            VM.GetSnapshotList()
-        with e -> this.ErrorDialogBox e.Message
+        ()
 
     member _.RestoreToolButtonClicked (_ : System.Object) (_ : EventArgs) =
-        VM.UserName <- "Juanito"
         ()
 
     member _.DeleteToolButtonClicked (_ : System.Object) (_ : EventArgs) =
@@ -138,3 +128,9 @@ type MainWindow(WindowIdName : string, iListService : IList) as this =
 
     member _.MenuToolButtonClicked (_ : System.Object) (_ : EventArgs) =
         ()
+
+    member _.UserNameSearchEntryActivate (_ : System.Object) (_ : EventArgs) =
+
+        try
+            VM.GetSnapshotList()
+        with e -> this.ErrorDialogBox e.Message

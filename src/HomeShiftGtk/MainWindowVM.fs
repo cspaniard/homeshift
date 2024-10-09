@@ -9,9 +9,10 @@ open Model
 open DI.Interfaces
 
 
-type MainWindowVM(SnapshotsListStore : ListStore, iListService : IList) =
+type MainWindowVM(SnapshotsListStore : ListStore) =
     inherit NotifyObject()
 
+    let iListService = ServiceProvider.GetService<IList> ()
     let iUsersService = ServiceProvider.GetService<IUsersService> ()
 
     let mutable userName = try Environment.GetCommandLineArgs()[1] with _ -> ""
@@ -56,7 +57,5 @@ type MainWindowVM(SnapshotsListStore : ListStore, iListService : IList) =
                 |] |> ignore)
 
         SnapshotsListStore.Clear()
-
-        if this.IsValidUser then
-            getSnapshots()
+        getSnapshots()
     //------------------------------------------------------------------------------------------------------------------

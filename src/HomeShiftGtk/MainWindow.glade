@@ -169,6 +169,7 @@
                 <property name="primary-icon-name">edit-find-symbolic</property>
                 <property name="primary-icon-activatable">False</property>
                 <property name="primary-icon-sensitive">False</property>
+                <signal name="activate" handler="UserNameSearchEntryActivate" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
