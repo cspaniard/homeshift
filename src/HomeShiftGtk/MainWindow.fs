@@ -83,6 +83,15 @@ type MainWindow(WindowIdName : string, iListService : IList) as this =
         this.EnableCtrlQ()
         this.ThisWindow.Show()
 
+        Timeout.Add(100u, fun _ ->
+            try
+                VM.getSnapshotList()
+                true
+            with e ->
+                this.ErrorDialogBox e.Message
+                false
+        ) |> ignore
+
     //------------------------------------------------------------------------------------------------------------------
 
 
@@ -107,7 +116,9 @@ type MainWindow(WindowIdName : string, iListService : IList) as this =
 
     member _.CreateToolButtonClicked (_ : System.Object) (_ : EventArgs) =
 
-        VM.getSnapshotList()
+        try
+            VM.getSnapshotList()
+        with e -> this.ErrorDialogBox e.Message
 
     member _.RestoreToolButtonClicked (_ : System.Object) (_ : EventArgs) =
         VM.UserName <- "Juanito"
