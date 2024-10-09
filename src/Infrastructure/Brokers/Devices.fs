@@ -2,10 +2,10 @@ namespace Brokers
 
 open System.Diagnostics
 open System.IO
-open Motsoft.Util
 
 open DI.Interfaces
 open Model
+
 
 type DevicesBroker (processBroker : IProcessBroker) =
 
@@ -22,7 +22,8 @@ type DevicesBroker (processBroker : IProcessBroker) =
 
             processBroker.startProcessAndReadToEndOrEx
                 "lsblk"
-                "--json --output NAME,KNAME,RO,TYPE,MOUNTPOINT,LABEL,PATH,FSTYPE,PARTTYPENAME,SIZE,UUID,PARTLABEL"
+                ("--json --output " +
+                 "NAME,KNAME,RO,TYPE,MOUNTPOINT,LABEL,PATH,FSTYPE,PARTTYPENAME,SIZE,FSAVAIL,UUID,PARTLABEL")
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------

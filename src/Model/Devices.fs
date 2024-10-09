@@ -75,6 +75,9 @@ type DeviceData =
         [<JsonProperty("size")>]
         Size : string
 
+        [<JsonProperty("fsavail")>]
+        Available : string
+
         [<JsonProperty("children")>]
         Children : DeviceDataChild[]
     }

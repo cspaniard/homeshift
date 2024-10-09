@@ -12,8 +12,12 @@ open DI.Interfaces
 type MainWindowVM(SnapshotsListStore : ListStore) =
     inherit NotifyObject()
 
-    let iListService = ServiceProvider.GetService<IList> ()
-    let iUsersService = ServiceProvider.GetService<IUsersService> ()
+    let list = ServiceProvider.GetService<IList> ()
+    let listDevices = ServiceProvider.GetService<IListDevices> ()
+    let usersService = ServiceProvider.GetService<IUsersService> ()
+
+    let mutable devices = Seq.empty<DeviceDataChild>
+    let mutable deviceSelected = Unchecked.defaultof<DeviceDataChild>
 
     let mutable userName = try Environment.GetCommandLineArgs()[1] with _ -> ""
 
@@ -32,7 +36,7 @@ type MainWindowVM(SnapshotsListStore : ListStore) =
     member this.IsValidUser
         with get() =
             try
-                iUsersService.isValidUserOrEx (UserName.create this.UserName)
+                usersService.isValidUserOrEx (UserName.create this.UserName)
             with _ -> false
     //------------------------------------------------------------------------------------------------------------------
 
@@ -46,7 +50,7 @@ type MainWindowVM(SnapshotsListStore : ListStore) =
 
         let getSnapshots() =
             let listData = { UserName = UserName.create this.UserName } : ListData
-            let snapshots = iListService.getSnapshotListOrEx listData
+            let snapshots = list.getSnapshotListOrEx listData
 
             snapshots
             |> Seq.iter (fun s ->
@@ -58,4 +62,9 @@ type MainWindowVM(SnapshotsListStore : ListStore) =
 
         SnapshotsListStore.Clear()
         getSnapshots()
+    //------------------------------------------------------------------------------------------------------------------
+
+    //------------------------------------------------------------------------------------------------------------------
+    member this.GetDeviceList() =
+        devices <- listDevices.getDeviceListOrEx ()
     //------------------------------------------------------------------------------------------------------------------
