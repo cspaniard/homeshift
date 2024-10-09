@@ -59,7 +59,7 @@ type ``isValidUser tests`` () =
     member _.``isValidUser: with valid user, it should return true`` () =
 
         UserName.create VALID_USER_NAME
-        |> usersService.isValidUser |> should equal true
+        |> usersService.isValidUserOrEx |> should equal true
     // -----------------------------------------------------------------------------------------------------------------
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ type ``isValidUser tests`` () =
     member _.``isValidUser: with invalid user, it should return false`` () =
 
         UserName.create INVALID_USER_NAME
-        |> usersService.isValidUser |> should equal false
+        |> usersService.isValidUserOrEx |> should equal false
     // -----------------------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------------------------
 

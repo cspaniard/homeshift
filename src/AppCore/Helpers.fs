@@ -26,7 +26,7 @@ type Helpers(devicesService : IDevicesService, snapshotsService : ISnapshotsServ
         //--------------------------------------------------------------------------------------------------------------
         member _.checkUserOrEx (userName : UserName) =
 
-           usersService.isValidUser userName |> ignore
+           usersService.isValidUserOrEx userName |> ignore
         //--------------------------------------------------------------------------------------------------------------
 
         //--------------------------------------------------------------------------------------------------------------

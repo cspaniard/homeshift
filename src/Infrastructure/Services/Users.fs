@@ -23,7 +23,7 @@ type UsersService (usersBroker : IUsersBroker) as this =
         // -------------------------------------------------------------------------------------------------------------
 
         // -------------------------------------------------------------------------------------------------------------
-        member _.isValidUser (userName : UserName) =
+        member _.isValidUserOrEx (userName : UserName) =
 
             self.getHomeForUserOrEx userName |> ignore
             true

@@ -111,5 +111,5 @@ type IDevicesService =
 
 type IUsersService =
     abstract member getHomeForUserOrEx: userName: UserName -> Directory
-    abstract member isValidUser: userName: UserName -> bool
+    abstract member isValidUserOrEx: userName: UserName -> bool
 // ---------------------------------------------------------------------------------------------------------------------
