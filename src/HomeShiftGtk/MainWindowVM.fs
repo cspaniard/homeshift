@@ -9,17 +9,21 @@ open Model
 open DI.Interfaces
 
 
-type MainWindowVM(SnapshotsListStore : ListStore) =
+type MainWindowVM(SnapshotsListStore : ListStore) as this =
     inherit NotifyObject()
 
     let list = ServiceProvider.GetService<IList> ()
-    let listDevices = ServiceProvider.GetService<IListDevices> ()
     let usersService = ServiceProvider.GetService<IUsersService> ()
+    let configService = ServiceProvider.GetService<IConfigService> ()
+    let devicesService = ServiceProvider.GetService<IDevicesService> ()
 
-    let mutable devices = Seq.empty<DeviceDataChild>
     let mutable deviceSelected = Unchecked.defaultof<DeviceDataChild>
+    let mutable configData = Unchecked.defaultof<ConfigData>
 
     let mutable userName = try Environment.GetCommandLineArgs()[1] with _ -> ""
+
+    do
+        this.Init()
 
     //------------------------------------------------------------------------------------------------------------------
     member this.UserName
@@ -30,6 +34,31 @@ type MainWindowVM(SnapshotsListStore : ListStore) =
                 this.NotifyPropertyChanged()
                 this.NotifyPropertyChanged(nameof this.IsValidUser)
                 this.NotifyPropertyChanged(nameof this.IsInvalidUser)
+    //------------------------------------------------------------------------------------------------------------------
+
+    //------------------------------------------------------------------------------------------------------------------
+    member this.DeviceSelected
+        with get() = deviceSelected
+        and set value =
+            deviceSelected <- value
+            this.NotifyPropertyChanged()
+            this.NotifyPropertyChanged(nameof this.AvailableAmount)
+            this.NotifyPropertyChanged(nameof this.DeviceName)
+    //------------------------------------------------------------------------------------------------------------------
+
+    //------------------------------------------------------------------------------------------------------------------
+    member this.SnapshotCount
+        with get() = SnapshotsListStore.IterNChildren().ToString()
+    //------------------------------------------------------------------------------------------------------------------
+
+    //------------------------------------------------------------------------------------------------------------------
+    member this.AvailableAmount
+        with get() = deviceSelected.Available
+    //------------------------------------------------------------------------------------------------------------------
+
+    //------------------------------------------------------------------------------------------------------------------
+    member this.DeviceName
+        with get() = deviceSelected.Path
     //------------------------------------------------------------------------------------------------------------------
 
     //------------------------------------------------------------------------------------------------------------------
@@ -62,9 +91,12 @@ type MainWindowVM(SnapshotsListStore : ListStore) =
 
         SnapshotsListStore.Clear()
         getSnapshots()
+
+        this.NotifyPropertyChanged(nameof this.SnapshotCount)
     //------------------------------------------------------------------------------------------------------------------
 
     //------------------------------------------------------------------------------------------------------------------
-    member this.GetDeviceList() =
-        devices <- listDevices.getDeviceListOrEx ()
+    member private this.Init() =
+        configData <- configService.getConfigDataOrEx ()
+        this.DeviceSelected <- devicesService.findDeviceOrEx configData.SnapshotDevice.value
     //------------------------------------------------------------------------------------------------------------------

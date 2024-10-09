@@ -33,7 +33,7 @@ type MainWindow(WindowIdName : string) as this =
     let StatusMainLineLabel = this.Gui.GetObject("StatusMainLineLabel") :?> Label
     let StatusSubLineLabel = this.Gui.GetObject("StatusSubLineLabel") :?> Label
 
-    let SnapshotCounterLabel = this.Gui.GetObject("SnapshotCounterLabel") :?> Label
+    let SnapshotCountLabel = this.Gui.GetObject("SnapshotCountLabel") :?> Label
     let SnapshotsLabel = this.Gui.GetObject("SnapshotsLabel") :?> Label
 
     let AvailableAmountLabel = this.Gui.GetObject("AvailableAmountLabel") :?> Label
@@ -52,6 +52,9 @@ type MainWindow(WindowIdName : string) as this =
         binder
             .AddBinding(UserNameSearchEntry, "text", nameof VM.UserName)
             .AddBinding(InvalidUserNameImage, "visible", nameof VM.IsInvalidUser)
+            .AddBinding(SnapshotCountLabel, "label", nameof VM.SnapshotCount, BindingProperties.OneWay)
+            .AddBinding(AvailableAmountLabel, "label", nameof VM.AvailableAmount, BindingProperties.OneWay)
+            .AddBinding(DeviceNameLabel, "label", nameof VM.DeviceName, BindingProperties.OneWay)
         |> ignore
 
         CreateToolButton.Label <- GuiPhrases.Create
@@ -70,12 +73,8 @@ type MainWindow(WindowIdName : string) as this =
         StatusMainLineLabel.Text <- "Este es un mensaje de estado."
         StatusSubLineLabel.Text <- "Este es un mensaje de estado, pero pequeño."
 
-        SnapshotCounterLabel.Text <- "47"
         SnapshotsLabel.Text <- GuiPhrases.Snapshots
-
-        AvailableAmountLabel.Text <- "5.0 TB"
         AvailableLabel.Text <- GuiPhrases.Available
-        DeviceNameLabel.Text <- "/dev/dummy/device"            // TODO: Temp. Move to VM.
 
         // -------------------------------------------------------------------------------------------------------------
         // Prepara y muestra la ventana.
