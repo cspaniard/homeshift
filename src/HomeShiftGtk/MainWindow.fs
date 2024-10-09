@@ -8,7 +8,7 @@ open Localization
 open DI.Interfaces
 open Model
 open Motsoft.Binder
-open Motsoft.Binder.BindingProperties
+
 
 type MainWindow(WindowIdName : string, iListService : IList) as this =
     inherit BaseWindow(WindowIdName)
@@ -43,7 +43,7 @@ type MainWindow(WindowIdName : string, iListService : IList) as this =
 
     let SnapshotsListStore = this.Gui.GetObject("SnapshotsListStore") :?> ListStore
 
-    let VM = MainWindowVM()
+    let VM = MainWindowVM(SnapshotsListStore, iListService)
 
     let binder = Binder(VM)
     // -----------------------------------------------------------------------------------------------------------------
@@ -107,18 +107,7 @@ type MainWindow(WindowIdName : string, iListService : IList) as this =
 
     member _.CreateToolButtonClicked (_ : System.Object) (_ : EventArgs) =
 
-        SnapshotsListStore.Clear()
-
-        let listData = { UserName = UserName.create UserNameSearchEntry.Text } : ListData
-        let snapshots = iListService.getSnapshotListOrEx listData
-
-        snapshots
-        |> Seq.iter (fun s ->
-            SnapshotsListStore.AppendValues [|
-                s.Name
-                s.Comments.value
-                s.CreationDateTime.LocalDateTime.ToString()
-            |] |> ignore)
+        VM.getSnapshotList()
 
     member _.RestoreToolButtonClicked (_ : System.Object) (_ : EventArgs) =
         VM.UserName <- "Juanito"
