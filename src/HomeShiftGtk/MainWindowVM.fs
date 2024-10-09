@@ -7,7 +7,7 @@ open Motsoft.Binder.NotifyObject
 type MainWindowVM() =
     inherit NotifyObject()
 
-    let mutable userName = Environment.GetCommandLineArgs()[1]
+    let mutable userName = try Environment.GetCommandLineArgs()[1] with _ -> ""
 
     //------------------------------------------------------------------------------------------------------------------
     member this.UserName
