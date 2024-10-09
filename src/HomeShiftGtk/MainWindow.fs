@@ -5,8 +5,12 @@ open GLib        // Necesario. Ambiguedad entre System.Object y GLib.Object
 open Gtk
 open Localization
 
+open DI.Interfaces
+open Model
+open Motsoft.Binder
+open Motsoft.Binder.BindingProperties
 
-type MainWindow(WindowIdName : string) as this =
+type MainWindow(WindowIdName : string, iListService : IList) as this =
     inherit BaseWindow(WindowIdName)
 
     //------------------------------------------------------------------------------------------------------------------
@@ -37,12 +41,18 @@ type MainWindow(WindowIdName : string) as this =
     let AvailableLabel = this.Gui.GetObject("AvailableLabel") :?> Label
     let DeviceNameLabel = this.Gui.GetObject("DeviceNameLabel") :?> Label
 
+    let SnapshotsListStore = this.Gui.GetObject("SnapshotsListStore") :?> ListStore
+
     let VM = MainWindowVM()
 
+    let binder = Binder(VM)
     // -----------------------------------------------------------------------------------------------------------------
     // Inicializa el formulario.
     // -----------------------------------------------------------------------------------------------------------------
     do
+        binder.AddBinding(UserNameSearchEntry, "text", "UserName")
+        |> ignore
+
         CreateToolButton.Label <- GuiPhrases.Create
         RestoreToolButton.Label <- GuiPhrases.Restore
         DeleteToolButton.Label <- GuiPhrases.Delete
@@ -51,7 +61,6 @@ type MainWindow(WindowIdName : string) as this =
         MenuToolButton.Label <- GuiPhrases.Menu
 
         SnapshotsForUserLabel.Text <- GuiPhrases.SnapshotsForUser
-        UserNameSearchEntry.Text <- Environment.GetEnvironmentVariable("USER")   // TODO: Temp. Move to VM.
 
         SnapshotColumn.Title <- GuiPhrases.Snapshot
         CommentColumn.Title <- GuiPhrases.Comment
@@ -66,9 +75,6 @@ type MainWindow(WindowIdName : string) as this =
         AvailableAmountLabel.Text <- "5.0 TB"
         AvailableLabel.Text <- GuiPhrases.Available
         DeviceNameLabel.Text <- "/dev/dummy/device"            // TODO: Temp. Move to VM.
-
-
-        DynamicCssManager.addOrUpdate "status_main_text" "color" "yellow" |> ignore
 
         // -------------------------------------------------------------------------------------------------------------
         // Prepara y muestra la ventana.
@@ -99,13 +105,23 @@ type MainWindow(WindowIdName : string) as this =
         Application.Quit()
     //------------------------------------------------------------------------------------------------------------------
 
-    member _.TestButtonClicked (_ : System.Object) (_ : EventArgs) =
-        ()
-
     member _.CreateToolButtonClicked (_ : System.Object) (_ : EventArgs) =
-        ()
+
+        SnapshotsListStore.Clear()
+
+        let listData = { UserName = UserName.create UserNameSearchEntry.Text } : ListData
+        let snapshots = iListService.getSnapshotListOrEx listData
+
+        snapshots
+        |> Seq.iter (fun s ->
+            SnapshotsListStore.AppendValues [|
+                s.Name
+                s.Comments.value
+                s.CreationDateTime.LocalDateTime.ToString()
+            |] |> ignore)
 
     member _.RestoreToolButtonClicked (_ : System.Object) (_ : EventArgs) =
+        VM.UserName <- "Juanito"
         ()
 
     member _.DeleteToolButtonClicked (_ : System.Object) (_ : EventArgs) =

@@ -1,5 +1,6 @@
 namespace HomeShiftGtk
 
+open System
 open Gtk
 open System.Text.RegularExpressions
 
@@ -16,6 +17,40 @@ type DynamicCssManager() =
 
         cssProvider.LoadFromPath(cssFilePath) |> ignore
         cssContent <- System.IO.File.ReadAllText(cssFilePath)
+    //------------------------------------------------------------------------------------------------------------------
+
+    //------------------------------------------------------------------------------------------------------------------
+    static member formatCSS (css: string) : string =
+        let mutable indentLevel = 0
+        let mutable formattedCSS = ""
+        let lines = Regex.Split(css.Trim(), @"\s*([{}])\s*")
+
+        let isProperty (line: string) =
+            let propertyPattern = @"[a-zA-Z-]+\s*:\s*[^;]+;"
+            Regex.IsMatch(line, propertyPattern)
+
+        for line in lines do
+            match line with
+            | "{" ->
+                formattedCSS <- formattedCSS.TrimEnd() + " {\n"
+                indentLevel <- indentLevel + 1
+            | "}" ->
+                indentLevel <- indentLevel - 1
+                formattedCSS <- formattedCSS.TrimEnd() + "\n" + String.replicate (4 * indentLevel) " " + "}\n\n"
+            | _ when line.Trim() <> "" ->
+                if isProperty line then
+                    // Es una propiedad CSS o conjunto de propiedades
+                    let properties = Regex.Matches(line, @"([a-zA-Z-]+)\s*:\s*([^;]+);")
+                    for prop in properties do
+                        let name = prop.Groups[1].Value.Trim()
+                        let value = prop.Groups[2].Value.Trim()
+                        formattedCSS <- formattedCSS + String.replicate (4 * indentLevel) " " + name + ": " + value + ";\n"
+                else
+                    // Es un selector CSS (incluyendo pseudo-clases)
+                    formattedCSS <- formattedCSS + (if indentLevel > 0 then "\n" else "") + String.replicate (4 * indentLevel) " " + line.Trim() + "\n"
+            | _ -> ()
+
+        formattedCSS.TrimEnd()
     //------------------------------------------------------------------------------------------------------------------
 
     //------------------------------------------------------------------------------------------------------------------
