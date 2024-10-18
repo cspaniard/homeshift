@@ -40,7 +40,7 @@ type MainWindow(VM : MainWindowVM) as this =
     let AvailableLabel = this.Gui.GetObject("AvailableLabel") :?> Label
     let DeviceNameLabel = this.Gui.GetObject("DeviceNameLabel") :?> Label
 
-    let SnapshotsListStore = this.Gui.GetObject("SnapshotsListStore") :?> ListStore
+    let SnapshotsTreeView = this.Gui.GetObject("SnapshotsTreeView") :?> TreeView
 
     let binder = Binder(VM)
 
@@ -48,7 +48,6 @@ type MainWindow(VM : MainWindowVM) as this =
     // Inicializa el formulario.
     // -----------------------------------------------------------------------------------------------------------------
     do
-        VM.Init SnapshotsListStore
 
         binder
             .AddBinding(UserNameSearchEntry, "text", nameof VM.UserName)
@@ -56,6 +55,7 @@ type MainWindow(VM : MainWindowVM) as this =
             .AddBinding(SnapshotCountLabel, "label", nameof VM.SnapshotCount, BindingProperties.OneWay)
             .AddBinding(AvailableAmountLabel, "label", nameof VM.AvailableAmount, BindingProperties.OneWay)
             .AddBinding(DeviceNameLabel, "label", nameof VM.DeviceName, BindingProperties.OneWay)
+            .AddBinding(SnapshotsTreeView, "model", nameof VM.SnapshotsListStore, BindingProperties.OneWay)
         |> ignore
 
         CreateToolButton.Label <- GuiPhrases.Create

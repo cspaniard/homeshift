@@ -15,21 +15,26 @@ type MainWindowVM(list : IList, usersService : IUsersService, configService : IC
     let mutable deviceSelected = Unchecked.defaultof<DeviceDataChild>
     let mutable configData = Unchecked.defaultof<ConfigData>
 
-    let mutable snapshotsListStore = Unchecked.defaultof<ListStore>
+    let mutable snapshotsListStore = new ListStore(typeof<string>, typeof<string>, typeof<string>)
     let mutable userName = try Environment.GetCommandLineArgs()[1] with _ -> ""
 
     do
-        this.SetInitialState()
+        this.Init()
 
     //------------------------------------------------------------------------------------------------------------------
-    member private this.SetInitialState() =
+    member private this.Init() =
+
         configData <- configService.getConfigDataOrEx ()
         this.DeviceSelected <- devicesService.findDeviceOrEx configData.SnapshotDevice.value
     //------------------------------------------------------------------------------------------------------------------
 
     //------------------------------------------------------------------------------------------------------------------
-    member this.Init(newSnapshotsListStore : ListStore) =
-        snapshotsListStore <- newSnapshotsListStore
+    member this.SnapshotsListStore
+        with get() = snapshotsListStore
+        and set value =
+            if snapshotsListStore <> value then
+                snapshotsListStore <- value
+                this.NotifyPropertyChanged()
     //------------------------------------------------------------------------------------------------------------------
 
     //------------------------------------------------------------------------------------------------------------------
