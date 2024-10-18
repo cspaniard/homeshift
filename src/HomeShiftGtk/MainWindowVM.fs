@@ -1,7 +1,6 @@
 namespace HomeShiftGtk
 
 open System
-open DI.Providers
 open Gtk
 open Motsoft.Binder.NotifyObject
 
@@ -9,21 +8,29 @@ open Model
 open DI.Interfaces
 
 
-type MainWindowVM(SnapshotsListStore : ListStore) as this =
+type MainWindowVM(list : IList, usersService : IUsersService, configService : IConfigService,
+                  devicesService : IDevicesService) as this =
     inherit NotifyObject()
-
-    let list = ServiceProvider.GetService<IList> ()
-    let usersService = ServiceProvider.GetService<IUsersService> ()
-    let configService = ServiceProvider.GetService<IConfigService> ()
-    let devicesService = ServiceProvider.GetService<IDevicesService> ()
 
     let mutable deviceSelected = Unchecked.defaultof<DeviceDataChild>
     let mutable configData = Unchecked.defaultof<ConfigData>
 
+    let mutable snapshotsListStore = Unchecked.defaultof<ListStore>
     let mutable userName = try Environment.GetCommandLineArgs()[1] with _ -> ""
 
     do
-        this.Init()
+        this.SetInitialState()
+
+    //------------------------------------------------------------------------------------------------------------------
+    member private this.SetInitialState() =
+        configData <- configService.getConfigDataOrEx ()
+        this.DeviceSelected <- devicesService.findDeviceOrEx configData.SnapshotDevice.value
+    //------------------------------------------------------------------------------------------------------------------
+
+    //------------------------------------------------------------------------------------------------------------------
+    member this.Init(newSnapshotsListStore : ListStore) =
+        snapshotsListStore <- newSnapshotsListStore
+    //------------------------------------------------------------------------------------------------------------------
 
     //------------------------------------------------------------------------------------------------------------------
     member this.UserName
@@ -48,7 +55,7 @@ type MainWindowVM(SnapshotsListStore : ListStore) as this =
 
     //------------------------------------------------------------------------------------------------------------------
     member this.SnapshotCount
-        with get() = SnapshotsListStore.IterNChildren().ToString()
+        with get() = snapshotsListStore.IterNChildren().ToString()
     //------------------------------------------------------------------------------------------------------------------
 
     //------------------------------------------------------------------------------------------------------------------
@@ -83,20 +90,14 @@ type MainWindowVM(SnapshotsListStore : ListStore) as this =
 
             snapshots
             |> Seq.iter (fun s ->
-                SnapshotsListStore.AppendValues [|
+                snapshotsListStore.AppendValues [|
                     s.Name
                     s.Comments.value
                     s.CreationDateTime.LocalDateTime.ToString()
                 |] |> ignore)
 
-        SnapshotsListStore.Clear()
+        snapshotsListStore.Clear()
         getSnapshots()
 
         this.NotifyPropertyChanged(nameof this.SnapshotCount)
-    //------------------------------------------------------------------------------------------------------------------
-
-    //------------------------------------------------------------------------------------------------------------------
-    member private this.Init() =
-        configData <- configService.getConfigDataOrEx ()
-        this.DeviceSelected <- devicesService.findDeviceOrEx configData.SnapshotDevice.value
     //------------------------------------------------------------------------------------------------------------------

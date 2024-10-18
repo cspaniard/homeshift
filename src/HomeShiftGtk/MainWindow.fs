@@ -8,8 +8,8 @@ open Motsoft.Binder
 open Localization
 
 
-type MainWindow(WindowIdName : string) as this =
-    inherit BaseWindow(WindowIdName)
+type MainWindow(VM : MainWindowVM) as this =
+    inherit BaseWindow(nameof MainWindow)
 
     //------------------------------------------------------------------------------------------------------------------
     // Referencias a controles.
@@ -42,13 +42,14 @@ type MainWindow(WindowIdName : string) as this =
 
     let SnapshotsListStore = this.Gui.GetObject("SnapshotsListStore") :?> ListStore
 
-    let VM = MainWindowVM(SnapshotsListStore)
-
     let binder = Binder(VM)
+
     // -----------------------------------------------------------------------------------------------------------------
     // Inicializa el formulario.
     // -----------------------------------------------------------------------------------------------------------------
     do
+        VM.Init SnapshotsListStore
+
         binder
             .AddBinding(UserNameSearchEntry, "text", nameof VM.UserName)
             .AddBinding(InvalidUserNameImage, "visible", nameof VM.IsInvalidUser)

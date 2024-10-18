@@ -7,11 +7,13 @@ open DI.Interfaces
 open DI.Providers
 open Microsoft.Extensions.DependencyInjection
 
+
 ServiceProvider
     .AddSingleton<IHelpers, AppCore.Helpers>()
     .AddSingleton<IList, AppCore.List>()
     .AddSingleton<IListDevices, AppCore.ListDevices>()
-    .AddSingleton<MainWindow>(fun sp -> MainWindow("MainWindow"))
+    .AddSingleton<MainWindowVM>()
+    .AddSingleton<MainWindow>()
 |> ignore
 
 ServiceProvider.Rebuild()
