@@ -50,12 +50,17 @@ type MainWindow(VM : MainWindowVM) as this =
     do
 
         binder
-            .AddBinding(UserNameSearchEntry, "text", nameof VM.UserName)
-            .AddBinding(InvalidUserNameImage, "visible", nameof VM.IsInvalidUser)
-            .AddBinding(SnapshotCountLabel, "label", nameof VM.SnapshotCount, BindingProperties.OneWay)
-            .AddBinding(AvailableAmountLabel, "label", nameof VM.AvailableAmount, BindingProperties.OneWay)
-            .AddBinding(DeviceNameLabel, "label", nameof VM.DeviceName, BindingProperties.OneWay)
-            .AddBinding(SnapshotsTreeView, "model", nameof VM.SnapshotsListStore, BindingProperties.OneWay)
+            .AddBinding(UserNameSearchEntry, nameof UserNameSearchEntry.Text, nameof VM.UserName)
+            .AddBinding(InvalidUserNameImage, nameof InvalidUserNameImage.Visible,
+                        nameof VM.IsInvalidUser, BindingProperties.OneWay)
+            .AddBinding(SnapshotCountLabel, nameof SnapshotsLabel.LabelProp,
+                        nameof VM.SnapshotCount, BindingProperties.OneWay)
+            .AddBinding(AvailableAmountLabel, nameof AvailableLabel.LabelProp,
+                        nameof VM.AvailableAmount, BindingProperties.OneWay)
+            .AddBinding(DeviceNameLabel, nameof DeviceNameLabel.LabelProp,
+                        nameof VM.DeviceName, BindingProperties.OneWay)
+            .AddBinding(SnapshotsTreeView, nameof SnapshotsTreeView.Model,
+                        nameof VM.SnapshotsListStore, BindingProperties.OneWay)
         |> ignore
 
         CreateToolButton.Label <- GuiPhrases.Create
